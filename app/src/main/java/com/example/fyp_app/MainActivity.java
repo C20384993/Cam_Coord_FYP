@@ -23,7 +23,15 @@ public class MainActivity extends AppCompatActivity {
         btnSensorManage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, SensorManagementActivity.class));
+                startActivity(new Intent(MainActivity.this, CameraListActivity.class));
+            }
+        });
+
+        btnRecordings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,
+                        RecordingsOptionsActivity.class));
             }
         });
 
