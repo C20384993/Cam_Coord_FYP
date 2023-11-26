@@ -1,57 +1,49 @@
 package com.example.fyp_app;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.media3.common.MediaItem;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.exoplayer.DefaultRenderersFactory;
 import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.exoplayer.rtsp.RtspMediaSource;
+import androidx.media3.exoplayer.source.MediaSource;
 import androidx.media3.ui.PlayerView;
 
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.arthenica.mobileffmpeg.FFmpeg;
 
-import org.json.JSONObject;
-
-import java.io.DataOutputStream;
 import java.io.File;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
-import okhttp3.FormBody;
+import clients.RecordingAPIClient;
+import models.Recording;
+import models.RecordingResponse;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-//TODO: Find out what is stopping RF Camera from making viewable recordings.
-//TODO: Decide on location to save recordings.
-//TODO: Save file information to SQL db, e.g. FileID. May need a File class?
-public class StreamViewingActivity extends AppCompatActivity {
+
+@UnstableApi public class StreamViewingActivity extends AppCompatActivity {
 
     OkHttpClient client;
-    String getURL;
-    private static final String postURL = "https://localhost:8443/Files";
-
-    RecordingAPIService recordingAPIService;
     ExoPlayer player;
-    private MediaRecorder mediaRecorder;
     private boolean isRecording = false;
     private String outputFile;
     Button recordButton;
-
-    Connection connection;
     File directory;
+
+    // Create an RTSP media source pointing to an RTSP uri.
+    //TODO: Use a GET request to find the camera IP, username, and password. Remove hardcoding.
+    MediaSource mediaSource =
+            new RtspMediaSource.Factory()
+                    .createMediaSource(MediaItem.fromUri("rtsp://admin:majugarzet@192.168.68.142:554"));
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,30 +52,30 @@ public class StreamViewingActivity extends AppCompatActivity {
 
         client = new OkHttpClient();
         PlayerView playerView = findViewById(R.id.playerView);
-        // Create a player instance.
-        player = new ExoPlayer.Builder(StreamViewingActivity.this).build();
+
+        //Inside your onCreate method before player.prepare()
+        DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(this)
+                .setEnableDecoderFallback(true)
+                .setEnableAudioTrackPlaybackParams(true);
+
+        //Prepare the player.
+        player = new ExoPlayer.Builder(this, renderersFactory).build();
         playerView.setPlayer(player);
-        // Set the media item to be played.
-        //player.setMediaItem(MediaItem.fromUri("rtsp://admin:password@<ip address:554>"));
-        player.setMediaItem(MediaItem.fromUri("rtsp://admin:majugarzet@192.168.68.142:554")); //Amcrest
-        //player.setMediaItem(MediaItem.fromUri("rtsp://admin:password@192.168.68.144:554")); //RFCam
-        // Prepare the player.
+        player.setMediaSource(mediaSource);
         player.prepare();
         player.play();
 
+
         recordButton = findViewById(R.id.recordButton);
-        recordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isRecording) {
-                    try {
-                        stopRecording();
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
-                } else {
-                    startRecording();
+        recordButton.setOnClickListener(view -> {
+            if (isRecording) {
+                try {
+                    stopRecording();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
                 }
+            } else {
+                startRecording();
             }
         });
     }//end onCreate
@@ -100,20 +92,22 @@ public class StreamViewingActivity extends AppCompatActivity {
         }
 
         // Generate a unique file name for each recording
-        outputFile = directory.getAbsolutePath() + "/recording_" + System.currentTimeMillis() + ".mkv";
+        outputFile = directory
+                .getAbsolutePath() + "/recording_" + System.currentTimeMillis() + ".mkv";
 
         // FFmpeg command to record the RTSP stream
         //Amcrest, make sure to switch actual Player stream above as well.
-        String[] command = {"-y", "-i", "rtsp://admin:majugarzet@192.168.68.142:554", "-acodec", "copy", "-vcodec", "copy","-t","00:00:20", outputFile.toString() };
-        //RFCam
-        //String[] command = {"-y", "-i", "rtsp://admin:password@192.168.68.144:554", "-acodec", "copy", "-vcodec", "copy","-t","00:00:20", outputFile.toString() };
+        String[] command = {"-y", "-i", "rtsp://admin:majugarzet@192.168.68.142:554",
+                "-acodec", "copy", "-vcodec", "copy","-t", "-fflags", "nobuffer",
+                outputFile.toString()};
 
         // Run FFmpeg command
         int recordingStatus = FFmpeg.execute(command);
+
         if (recordingStatus == 0) {
-            // Command succeeded
+            Toast.makeText(this, "Recording Successfull", Toast.LENGTH_SHORT).show();
         } else {
-            // Command failed
+            Toast.makeText(this, "Recording Failed", Toast.LENGTH_SHORT).show();
         }
     }//end startRecording
 
@@ -141,29 +135,34 @@ public class StreamViewingActivity extends AppCompatActivity {
         recordingRequest.setCamerasid(1);
 
         return recordingRequest;
-    }
+    }//end createRecordingRequest
 
     public void Post(Recording recordingRequest){
         Call<RecordingResponse> recordingCall = RecordingAPIClient.getRecordingService()
                 .sendRecording(recordingRequest);
         recordingCall.enqueue(new Callback<RecordingResponse>() {
             @Override
-            public void onResponse(Call<RecordingResponse> call, Response<RecordingResponse> response) {
+            public void onResponse(@NonNull Call<RecordingResponse> call,
+                                   @NonNull Response<RecordingResponse> response) {
+
                 if(response.isSuccessful()){
-                    Toast.makeText(StreamViewingActivity.this, "saved to db",Toast.LENGTH_LONG);
+                    Toast.makeText(StreamViewingActivity.this,
+                            "Saved recording",Toast.LENGTH_LONG).show();
                 }
                 else{
-                    Toast.makeText(StreamViewingActivity.this, "failed to save",Toast.LENGTH_LONG);
+                    Toast.makeText(StreamViewingActivity.this,
+                            "Failed to save recording",Toast.LENGTH_LONG).show();
 
                 }
-            }
+            }//end onResponse
 
             @Override
-            public void onFailure(Call<RecordingResponse> call, Throwable t) {
-                Toast.makeText(StreamViewingActivity.this, "failed"+t.getLocalizedMessage(),Toast.LENGTH_LONG);
-            }
+            public void onFailure(@NonNull Call<RecordingResponse> call, @NonNull Throwable t) {
+                Toast.makeText(StreamViewingActivity.this,
+                        "failed"+t.getLocalizedMessage(),Toast.LENGTH_LONG).show();
+            }//end onFailure
         });
-    }
+    }//end Post
 
 
 }

@@ -1,39 +1,120 @@
 package com.example.fyp_app;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import clients.UserAPIClient;
+import models.UserResponse;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btnSensorManage;
-    private Button btnRecordings;
+    EditText edtTextAccountUsername;
+    EditText edtTextAccountPassword;
+
+    Button btnLogin;
+    Button btnRegister;
+
+    final private String RESTURL = "http://192.168.68.131:8081";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btnSensorManage = findViewById(R.id.btnMainActivity_SensorManage);
-        btnRecordings = findViewById(R.id.btnMainActivity_Recordings);
+        edtTextAccountUsername = findViewById(R.id.editText_accountname);
+        edtTextAccountPassword = findViewById(R.id.editText_accountpassword);
+        btnLogin = findViewById(R.id.button_Login);
+        btnRegister = findViewById(R.id.button_register);
 
-        btnSensorManage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, CameraListActivity.class));
-            }
+        btnLogin.setOnClickListener(v -> {
+            //Get username and password from editText field,
+            //Check db for them,
+            //If match is found, login with info.
+            //login();
+
+            //DEBUG
+            startActivity(new Intent(MainActivity.this,
+                    VLCAct.class));
         });
 
-        btnRecordings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,
-                        RecordingsOptionsActivity.class));
-            }
-        });
+        btnRegister.setOnClickListener(v -> {
+            //Show CreateAccountActivity.
+            startActivity(new Intent(MainActivity.this,
+                    CreateAccountActivity.class));
 
+        });
     }
+
+    public void login(){
+        //Get username and password from editText field,
+        String enteredUsername = edtTextAccountUsername.getText().toString();
+        String enteredPassword = edtTextAccountPassword.getText().toString();
+
+        //Check username and password fields aren't empty.
+        if(enteredUsername.isEmpty()){
+            edtTextAccountUsername.setError("Please enter a username");
+            return;
+        }
+        if(enteredPassword.isEmpty()){
+            edtTextAccountPassword.setError("Please enter a password");
+            return;
+        }
+
+        //Check db for username entered, GET request with entered username.
+        Call<UserResponse> userCall = UserAPIClient.getUserService()
+                .getUser(RESTURL+"/Users/username?username="+enteredUsername);
+
+        userCall.enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<UserResponse> call,
+                                   @NonNull Response<UserResponse> response) {
+                if(response.isSuccessful()){
+                    String responseUsername = response.body().getUsername();
+                    String responsePassword = response.body().getPassword();
+                    int responseUserid = response.body().getUserid();
+
+                    //Check passwords match.
+                    if(enteredPassword.equals(responsePassword)){
+                        Intent intentHomeScreen = new Intent(getApplicationContext(),
+                                HomeScreen.class);
+
+                        intentHomeScreen.putExtra("username",responseUsername);
+                        intentHomeScreen.putExtra("password",responsePassword);
+                        intentHomeScreen.putExtra("userid",responseUserid);
+                        startActivity(intentHomeScreen);
+                    }
+                    else{
+                        Toast.makeText(MainActivity.this,
+                                "Incorrect password.",Toast.LENGTH_LONG).show();
+                    }
+
+                }
+                else{
+                    Toast.makeText(MainActivity.this,
+                            "Invalid username",Toast.LENGTH_LONG).show();
+
+                }
+            }
+
+
+            @Override
+            public void onFailure(@NonNull Call<UserResponse> call, @NonNull Throwable t) {
+                Toast.makeText(MainActivity.this,
+                        "GET failed."+t.getLocalizedMessage(),Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }//end login
 }
