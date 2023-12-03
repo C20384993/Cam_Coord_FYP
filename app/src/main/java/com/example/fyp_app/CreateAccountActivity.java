@@ -10,10 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import clients.UserAPIClient;
-import models.Recording;
-import models.User;
-import models.UserResponse;
+import clients.AccountAPIClient;
+import models.Account;
+import models.AccountResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -61,7 +60,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
         //Else, send POST request.
         else{
-            post(createUserRequest(enteredUsername, enteredPassword));
+            post(createAccountRequest(enteredUsername, enteredPassword));
             Toast.makeText(CreateAccountActivity.this,
                     "Account Created",Toast.LENGTH_LONG).show();
             startActivity(new Intent(CreateAccountActivity.this, MainActivity.class));
@@ -70,20 +69,20 @@ public class CreateAccountActivity extends AppCompatActivity {
     }//end register
 
     //Create a model containing the values to be put into the JSON object for the POST request.
-    public User createUserRequest(String enteredUsername, String enteredPassword){
-        User userRequest = new User();
-        userRequest.setUsername(enteredUsername);
-        userRequest.setPassword(enteredPassword);
+    public Account createAccountRequest(String enteredUsername, String enteredPassword){
+        Account accountRequest = new Account();
+        accountRequest.setUsername(enteredUsername);
+        accountRequest.setPassword(enteredPassword);
 
-        return userRequest;
+        return accountRequest;
     }
 
     //Send POST request containing the model.
-    public void post(User userRequest){
-        Call<UserResponse> userCall = UserAPIClient.getUserService().sendUser(userRequest);
-        userCall.enqueue(new Callback<UserResponse>() {
+    public void post(Account userRequest){
+        Call<AccountResponse> userCall = AccountAPIClient.getUserService().sendAccount(userRequest);
+        userCall.enqueue(new Callback<AccountResponse>() {
             @Override
-            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+            public void onResponse(Call<AccountResponse> call, Response<AccountResponse> response) {
                 if(response.isSuccessful()){
                     Toast.makeText(CreateAccountActivity.this,
                             "saved to db",Toast.LENGTH_LONG).show();
@@ -96,7 +95,7 @@ public class CreateAccountActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<UserResponse> call, Throwable t) {
+            public void onFailure(Call<AccountResponse> call, Throwable t) {
                 Toast.makeText(CreateAccountActivity.this,
                         "failed to save",Toast.LENGTH_LONG);
             }

@@ -1,26 +1,17 @@
 package models;
 //Data Model, used when sending a POST request to save a recording to SQL.
 public class Recording {
-    private String filename;
-    private String creationdate;
+    private String recordingname;
     private int userid;
     private String relativefilepath;
-    private int camerasid;
+    private int cameraid;
 
-    public String getFilename() {
-        return filename;
+    public String getRecordingname() {
+        return recordingname;
     }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
-
-    public String getCreationdate() {
-        return creationdate;
-    }
-
-    public void setCreationdate(String creationdate) {
-        this.creationdate = creationdate;
+    public void setRecordingname(String recordingname) {
+        this.recordingname = recordingname;
     }
 
     public int getUserid() {
@@ -39,12 +30,12 @@ public class Recording {
         this.relativefilepath = relativefilepath;
     }
 
-    public int getCamerasid() {
-        return camerasid;
+    public int getCameraid() {
+        return cameraid;
     }
 
-    public void setCamerasid(int camerasid) {
-        this.camerasid = camerasid;
+    public void setCameraid(int cameraid) {
+        this.cameraid = cameraid;
     }
 
 }

@@ -9,7 +9,6 @@ import android.widget.Button;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-//TODO: Add user/account system.
 //TODO: Retrieve list of cameras associated with user for recycler view from SQL database.
 //TODO: Add recycler view of cameras.
 public class CameraListActivity extends AppCompatActivity {

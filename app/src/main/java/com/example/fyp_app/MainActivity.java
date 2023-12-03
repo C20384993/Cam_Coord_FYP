@@ -5,13 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import clients.UserAPIClient;
-import models.UserResponse;
+import clients.AccountAPIClient;
+import models.AccountResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -24,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnLogin;
     Button btnRegister;
 
+    //Change this to the IP of your local machine.
     final private String RESTURL = "http://192.168.68.131:8081";
 
 
@@ -42,11 +42,7 @@ public class MainActivity extends AppCompatActivity {
             //Get username and password from editText field,
             //Check db for them,
             //If match is found, login with info.
-            //login();
-
-            //DEBUG
-            startActivity(new Intent(MainActivity.this,
-                    VLCAct.class));
+            login();
         });
 
         btnRegister.setOnClickListener(v -> {
@@ -73,13 +69,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //Check db for username entered, GET request with entered username.
-        Call<UserResponse> userCall = UserAPIClient.getUserService()
-                .getUser(RESTURL+"/Users/username?username="+enteredUsername);
+        Call<AccountResponse> userCall = AccountAPIClient.getUserService()
+                .getAccount(RESTURL+"/Accounts/username?username="+enteredUsername);
 
-        userCall.enqueue(new Callback<UserResponse>() {
+        userCall.enqueue(new Callback<AccountResponse>() {
             @Override
-            public void onResponse(@NonNull Call<UserResponse> call,
-                                   @NonNull Response<UserResponse> response) {
+            public void onResponse(@NonNull Call<AccountResponse> call,
+                                   @NonNull Response<AccountResponse> response) {
                 if(response.isSuccessful()){
                     String responseUsername = response.body().getUsername();
                     String responsePassword = response.body().getPassword();
@@ -110,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             @Override
-            public void onFailure(@NonNull Call<UserResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<AccountResponse> call, @NonNull Throwable t) {
                 Toast.makeText(MainActivity.this,
                         "GET failed."+t.getLocalizedMessage(),Toast.LENGTH_LONG).show();
             }

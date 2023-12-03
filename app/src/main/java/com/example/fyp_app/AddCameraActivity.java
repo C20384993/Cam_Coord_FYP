@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
+//TODO: Implement adding of camera entries.
 public class AddCameraActivity extends AppCompatActivity {
 
     int cameraID;

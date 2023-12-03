@@ -3,27 +3,27 @@ package models;
 //Sending recording info doesn't include a fileid, as the db auto-increments the field.
 public class RecordingResponse {
 
-    private int fileid;
-    private String filename;
+    private int recordingid;
+    private String recordingname;
     private String creationdate;
     private int userid;
     private String relativefilepath;
-    private int camerasid;
+    private int cameraid;
 
-    public int getFileid() {
-        return fileid;
+    public int getRecordingid() {
+        return recordingid;
     }
 
-    public void setFileid(int fileid) {
-        this.fileid = fileid;
+    public void setRecordingid(int recordingid) {
+        this.recordingid = recordingid;
     }
 
-    public String getFilename() {
-        return filename;
+    public String getRecordingname() {
+        return recordingname;
     }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
+    public void setRecordingname(String recordingname) {
+        this.recordingname = recordingname;
     }
 
     public String getCreationdate() {
@@ -50,11 +50,11 @@ public class RecordingResponse {
         this.relativefilepath = relativefilepath;
     }
 
-    public int getCamerasid() {
-        return camerasid;
+    public int getCameraid() {
+        return cameraid;
     }
 
-    public void setCamerasid(int camerasid) {
-        this.camerasid = camerasid;
+    public void setCameraid(int cameraid) {
+        this.cameraid = cameraid;
     }
 }
