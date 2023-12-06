@@ -194,8 +194,7 @@ public class StreamViewingActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<RecordingResponse> call, @NonNull Throwable t) {
-                Toast.makeText(StreamViewingActivity.this,
-                        "failed"+t.getLocalizedMessage(),Toast.LENGTH_LONG).show();
+
             }//end onFailure
         });
     }//end Post
