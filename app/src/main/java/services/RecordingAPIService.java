@@ -1,12 +1,23 @@
 package services;
 
+import models.CameraResponse;
 import models.RecordingResponse;
 
 import models.Recording;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Url;
+
 public interface RecordingAPIService {
-    @POST("Recordings")
+
+    @GET
+    Call<RecordingResponse> getRecording(@Url String url);
+    @POST("/Recordings/create")
     Call<RecordingResponse> sendRecording(@Body Recording recording);
+
+    @PUT("/Recordings/update")
+    Call<RecordingResponse> updateRecording(@Body RecordingResponse recordingResponse);
 }

@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnLogin;
     Button btnRegister;
 
+    //TODO: Host REST API on Azure and connect to it from this line.
     //Change this to the IP of your local machine.
     final private String RESTURL = "http://192.168.68.131:8081";
 
@@ -46,12 +47,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btnRegister.setOnClickListener(v -> {
-            //Show CreateAccountActivity.
             startActivity(new Intent(MainActivity.this,
                     CreateAccountActivity.class));
-
         });
-    }
+    }//end OnCreate
 
     public void login(){
         //Get username and password from editText field,
@@ -70,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Check db for username entered, GET request with entered username.
         Call<AccountResponse> userCall = AccountAPIClient.getUserService()
-                .getAccount(RESTURL+"/Accounts/username?username="+enteredUsername);
+                .getAccount(RESTURL+"/Accounts/getbyusername?username="+enteredUsername);
 
         userCall.enqueue(new Callback<AccountResponse>() {
             @Override
@@ -83,12 +82,12 @@ public class MainActivity extends AppCompatActivity {
 
                     //Check passwords match.
                     if(enteredPassword.equals(responsePassword)){
-                        Intent intentHomeScreen = new Intent(getApplicationContext(),
+                        Intent intentHomeScreen = new Intent(MainActivity.this,
                                 HomeScreen.class);
 
                         intentHomeScreen.putExtra("username",responseUsername);
-                        intentHomeScreen.putExtra("password",responsePassword);
-                        intentHomeScreen.putExtra("userid",responseUserid);
+                        //intentHomeScreen.putExtra("password",responsePassword);
+                        intentHomeScreen.putExtra("currentuserid",String.valueOf(responseUserid));
                         startActivity(intentHomeScreen);
                     }
                     else{

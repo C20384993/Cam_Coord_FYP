@@ -10,10 +10,22 @@
         android:id="@+id/btnViewStream"
         android:layout_width="221dp"
         android:layout_height="66dp"
-        android:text="View Stream"
+        android:text="View Streams"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.127" />
+
+    <Button
+        android:id="@+id/btnViewRecordings"
+        android:layout_width="220dp"
+        android:layout_height="72dp"
+        android:text="View Recordings"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.339" />
 </androidx.constraintlayout.widget.ConstraintLayout>

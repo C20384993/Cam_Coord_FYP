@@ -1,18 +1,20 @@
 package models;
 
 public class Camera {
-    private String cameraname;
+    private String customname;
     private String camusername;
     private String campassword;
+    private String rtspurl;
+    private String streampath;
     private int userid;
 
 
-    public String getCameraname() {
-        return cameraname;
+    public String getCustomname() {
+        return customname;
     }
 
-    public void setCameraname(String cameraname) {
-        this.cameraname = cameraname;
+    public void setCustomname(String customname) {
+        this.customname = customname;
     }
 
     public String getCamusername() {
@@ -30,6 +32,14 @@ public class Camera {
     public void setCampassword(String campassword) {
         this.campassword = campassword;
     }
+
+    public String getRtspurl() {return rtspurl;}
+
+    public void setRtspurl(String rtspurl) {this.rtspurl = rtspurl;}
+
+    public String getStreampath() {return streampath;}
+
+    public void setStreampath(String streampath) {this.streampath = streampath;}
 
     public int getUserid() {
         return userid;

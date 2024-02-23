@@ -20,9 +20,7 @@ import retrofit2.Response;
 public class CreateAccountActivity extends AppCompatActivity {
 
     EditText editTextRegUsername;
-
     EditText editTextRegPassword;
-
     Button btnRegAccount;
 
     @Override
@@ -61,8 +59,6 @@ public class CreateAccountActivity extends AppCompatActivity {
         //Else, send POST request.
         else{
             post(createAccountRequest(enteredUsername, enteredPassword));
-            Toast.makeText(CreateAccountActivity.this,
-                    "Account Created",Toast.LENGTH_LONG).show();
             startActivity(new Intent(CreateAccountActivity.this, MainActivity.class));
         }//end else
 
@@ -73,7 +69,6 @@ public class CreateAccountActivity extends AppCompatActivity {
         Account accountRequest = new Account();
         accountRequest.setUsername(enteredUsername);
         accountRequest.setPassword(enteredPassword);
-
         return accountRequest;
     }
 
@@ -83,21 +78,15 @@ public class CreateAccountActivity extends AppCompatActivity {
         userCall.enqueue(new Callback<AccountResponse>() {
             @Override
             public void onResponse(Call<AccountResponse> call, Response<AccountResponse> response) {
-                if(response.isSuccessful()){
                     Toast.makeText(CreateAccountActivity.this,
-                            "saved to db",Toast.LENGTH_LONG).show();
-                }
-                else{
-                    Toast.makeText(CreateAccountActivity.this,
-                            "failed to save",Toast.LENGTH_LONG).show();
+                            "Account created.",Toast.LENGTH_LONG).show();
 
-                }
             }
 
             @Override
             public void onFailure(Call<AccountResponse> call, Throwable t) {
                 Toast.makeText(CreateAccountActivity.this,
-                        "failed to save",Toast.LENGTH_LONG);
+                        "Account not created.",Toast.LENGTH_LONG);
             }
         });
     }//end post

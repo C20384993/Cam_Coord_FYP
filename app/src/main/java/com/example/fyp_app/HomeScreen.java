@@ -17,8 +17,7 @@ public class HomeScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
 
-        Intent signInIntent = getIntent();
-        //signInIntent.getStringExtra("username");
+        String userid = getIntent().getStringExtra("currentuserid");
 
         btnSensorManage = findViewById(R.id.btnMainActivity_SensorManage);
         btnRecordings = findViewById(R.id.btnMainActivity_Recordings);
@@ -26,17 +25,23 @@ public class HomeScreen extends AppCompatActivity {
         btnSensorManage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(HomeScreen.this, CameraListActivity.class));
+                Intent intentCameraList = new Intent(HomeScreen.this,
+                        CameraListActivity.class);
+
+                intentCameraList.putExtra("currentuserid",userid);
+                startActivity(intentCameraList);
             }
         });
 
         btnRecordings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HomeScreen.this,
-                        RecordingsOptionsActivity.class));
+                Intent intentRecOpt = new Intent(HomeScreen.this,
+                        RecordingsOptionsActivity.class);
+
+                intentRecOpt.putExtra("currentuserid",userid);
+                startActivity(intentRecOpt);
             }
         });
-
-    }
-}
+    }//end OnCreate
+}//end Class

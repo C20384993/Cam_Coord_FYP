@@ -13,6 +13,6 @@ public interface AccountAPIService {
     @GET
     Call<AccountResponse> getAccount(@Url String url);
 
-    @POST("Accounts")
+    @POST("/Accounts/create")
     Call<AccountResponse> sendAccount(@Body Account account);
 }
