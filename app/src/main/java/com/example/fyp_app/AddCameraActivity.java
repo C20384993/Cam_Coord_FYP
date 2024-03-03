@@ -82,8 +82,7 @@ public class AddCameraActivity extends AppCompatActivity {
         cameraRequest.setCampassword(edtTextCamPassword.getText().toString());
         cameraRequest.setRtspurl(fullRtspUrl);
         //TODO: Remove streampath VM IP hardcoding.
-        //TODO: Add streampath after camera is made. Trigger?
-        cameraRequest.setStreampath("rtsp://172.166.189.197:8554/stream/");
+        cameraRequest.setStreampath("https://172.166.189.197:8888/cam");
         cameraRequest.setUserid(Integer.parseInt(userid));
 
         //TODO: DB checks to ensure camera isn't already added.
@@ -100,8 +99,8 @@ public class AddCameraActivity extends AppCompatActivity {
                 cameraRequest.setCamusername(edtTextCamUsername.getText().toString());
                 cameraRequest.setCampassword(edtTextCamPassword.getText().toString());
                 cameraRequest.setRtspurl(fullRtspUrl);
-                cameraRequest.setStreampath("rtsp://172.166.189.197:8554/cam"+Integer
-                        .toString(response.body().getCameraid()));
+                cameraRequest.setStreampath("https://172.166.189.197:8888/cam"+Integer
+                        .toString(response.body().getCameraid())+"/index.m3u8");
                 cameraRequest.setUserid(Integer.parseInt(userid));
 
                 //Send the cameraRequest object.

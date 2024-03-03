@@ -42,7 +42,7 @@ public class StreamListActivity extends AppCompatActivity {
         camerasAdapter = new CamerasAdapter(cameraList, new CamerasAdapter.ItemClickListener() {
             @Override
             public void onItemClick(CameraRecyclerItem cameraRecyclerItem) {
-                //TODO: Display stream when camera is clicked.
+                //Play locally first.
                 Intent intentStreamView = new Intent(StreamListActivity.this,
                         StreamViewingActivity.class);
 

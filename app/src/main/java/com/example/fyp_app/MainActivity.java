@@ -5,12 +5,27 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.InputStream;
+import java.security.KeyStore;
+import java.security.SecureRandom;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
+
 import clients.AccountAPIClient;
 import models.AccountResponse;
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -19,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     EditText edtTextAccountUsername;
     EditText edtTextAccountPassword;
+    OkHttpClient okHttpClient;
 
     Button btnLogin;
     Button btnRegister;
@@ -49,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this,
                     CreateAccountActivity.class));
+            finish();
         });
     }//end OnCreate
 
@@ -89,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
                         //intentHomeScreen.putExtra("password",responsePassword);
                         intentHomeScreen.putExtra("currentuserid",String.valueOf(responseUserid));
                         startActivity(intentHomeScreen);
+                        finish();
                     }
                     else{
                         Toast.makeText(MainActivity.this,

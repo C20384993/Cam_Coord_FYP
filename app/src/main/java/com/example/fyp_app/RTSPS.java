@@ -3,46 +3,53 @@ package com.example.fyp_app;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.widget.TextView;
+import android.util.Log;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.ui.StyledPlayerView;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
 
 public class RTSPS extends AppCompatActivity {
 
+    private ExoPlayer player;
+    String videoURL="https://172.166.189.197:8888/cam1/index.m3u8";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rtsps);
 
-        // Call the method to run FFmpeg command
-        runFFmpegCommand();
-    }
+        HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                // Retrieve the actual hostname from the SSL session
+                String actualHostname = session.getPeerHost();
+                Log.e("AZURE","actualHostname = "+actualHostname);
+                Log.e("AZURE","hostname = "+hostname);
 
-    private void runFFmpegCommand() {
-        try {
-            // Replace this command with your FFmpeg command
-            String[] ffmpegCommand = {"ffplay", "-rtsp_transport", "tcp", "-i", "rtsps://localhost:8322/cam1"};
-            ProcessBuilder processBuilder = new ProcessBuilder(ffmpegCommand);
-            Process process = processBuilder.start();
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line;
-            StringBuilder output = new StringBuilder();
-            while ((line = reader.readLine()) != null) {
-                output.append(line).append("\n");
+                // Perform hostname verification by comparing actual hostname with expected hostname
+                return hostname.equalsIgnoreCase(actualHostname);
             }
+        });
 
-            int exitCode = process.waitFor();
-            output.append("FFmpeg command exited with code ").append(exitCode);
-
-            // Display output in TextView (optional)
-            TextView textView = findViewById(R.id.textView);
-            textView.setText(output.toString());
-
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
+        StyledPlayerView playerView = findViewById(R.id.player_view);
+        player = new ExoPlayer.Builder(RTSPS.this).build();
+        playerView.setPlayer(player);
+        MediaItem mediaItem = MediaItem.fromUri(videoURL);
+        player.setMediaItem(mediaItem);
+        player.prepare();
+        player.setPlayWhenReady(true);
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        player.setPlayWhenReady(false);
+        player.release();
+        player = null;
+    }
+
 }
