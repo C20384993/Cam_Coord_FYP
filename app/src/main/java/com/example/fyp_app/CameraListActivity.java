@@ -21,11 +21,10 @@ import models.CameraRecyclerItem;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-//TODO: Refresh after clicking back on add and edit pages.
+
 public class CameraListActivity extends AppCompatActivity {
 
     FloatingActionButton addCameraBtn;
-    Button returnButton;
     RecyclerView recyclerView;
     ProgressBar progressBar;
     LinearLayoutManager linearLayoutManager;
@@ -38,10 +37,12 @@ public class CameraListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_camera_list);
 
         String userid = getIntent().getStringExtra("currentuserid");
+        String username = getIntent().getStringExtra("username");
+        String password = getIntent().getStringExtra("password");
+
         recyclerView = findViewById(R.id.recyclerViewCamList);
         progressBar = findViewById(R.id.progressBarCamList);
         addCameraBtn = findViewById(R.id.addCameraBtn);
-        returnButton = findViewById(R.id.btn_returnHome);
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         camerasAdapter = new CamerasAdapter(cameraList, new CamerasAdapter.ItemClickListener() {
@@ -51,6 +52,8 @@ public class CameraListActivity extends AppCompatActivity {
                         new Intent(CameraListActivity.this, EditCameraActivity.class);
 
                 intentEditCamera.putExtra("userid",userid);
+                intentEditCamera.putExtra("username",username);
+                intentEditCamera.putExtra("password",password);
                 intentEditCamera.putExtra("cameraid",Integer.toString(cameraRecyclerItem.getCameraid()));
                 intentEditCamera.putExtra("customname",cameraRecyclerItem.getCustomname());
                 intentEditCamera.putExtra("camusername",cameraRecyclerItem.getCamusername());
@@ -58,6 +61,7 @@ public class CameraListActivity extends AppCompatActivity {
                 intentEditCamera.putExtra("rtspurl",cameraRecyclerItem.getRtspurl());
                 intentEditCamera.putExtra("streampath",cameraRecyclerItem.getStreampath());
 
+                finish();
                 startActivity(intentEditCamera);
             }
         });
@@ -72,17 +76,7 @@ public class CameraListActivity extends AppCompatActivity {
                         new Intent(CameraListActivity.this, AddCameraActivity.class);
 
                 intentAddCamera.putExtra("userid",userid);
-                startActivity(intentAddCamera);
-            }
-        });
-
-        returnButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentAddCamera =
-                        new Intent(CameraListActivity.this, HomeScreen.class);
-
-                intentAddCamera.putExtra("currentuserid",userid);
+                finish();
                 startActivity(intentAddCamera);
             }
         });
@@ -113,4 +107,10 @@ public class CameraListActivity extends AppCompatActivity {
                     }
             });
     }//end fetchCameras
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
 }//end class

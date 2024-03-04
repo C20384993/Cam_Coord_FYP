@@ -1,7 +1,9 @@
 package com.example.fyp_app;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,23 +27,36 @@ public class EditCameraActivity extends AppCompatActivity {
     TextView edtTextCamPassword;
     TextView edtTextRTSPURL;
     Button saveCamBtn;
+    Button deleteCamBtn;
+
+
+    String userid;
+    String username;
+    String password;
+    String cameraid;
+    String localIp;
+    String streampath;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_camera);
 
-        String userid = getIntent().getStringExtra("userid");
-        String cameraid = getIntent().getStringExtra("cameraid");
+        userid = getIntent().getStringExtra("userid");
+        username = getIntent().getStringExtra("username");
+        password = getIntent().getStringExtra("password");
 
-        String localIp = getIntent().getStringExtra("rtspurl");
-        String streampath = getIntent().getStringExtra("streampath");
+        cameraid = getIntent().getStringExtra("cameraid");
+        localIp = getIntent().getStringExtra("rtspurl");
+        streampath = getIntent().getStringExtra("streampath");
 
         edtTextCamName = findViewById(R.id.editText_EditCamName);
         edtTextCamUsername = findViewById(R.id.editText_EditCamUsername);
         edtTextCamPassword = findViewById(R.id.editText_EditCamPassword);
         edtTextRTSPURL = findViewById(R.id.editText_Editrtspurl);
         saveCamBtn = findViewById(R.id.button_SaveCamera);
+        deleteCamBtn = findViewById(R.id.button_deleteCamera);
 
         edtTextCamName.setText(getIntent().getStringExtra("customname"));
         edtTextCamUsername.setText(getIntent().getStringExtra("camusername"));
@@ -61,7 +76,33 @@ public class EditCameraActivity extends AppCompatActivity {
                 saveChanges(cameraid, userid);
             }
         });
+
+        deleteCamBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateAlertDialogue();
+            }
+        });
     }//end onCreate
+
+    private void CreateAlertDialogue() {
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to delete this camera?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteCamEntry(cameraid, userid);
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.create();
+        builder.show();
+    }//end CreateAlertDialogue
 
     public void saveChanges(String cameraid, String userid){
         //Get new custom cameraname, username, password, and IP, from editText fields.
@@ -90,7 +131,7 @@ public class EditCameraActivity extends AppCompatActivity {
             return;
         }
 
-        //Create the Camera object that will be update the one in the database.
+        //Create the Camera object that will update the one in the database.
         CameraResponse cameraRequest = new CameraResponse();
         cameraRequest.setCameraid(Integer.parseInt(cameraid));
         cameraRequest.setCustomname(edtTextCamName.getText().toString());
@@ -100,7 +141,6 @@ public class EditCameraActivity extends AppCompatActivity {
         cameraRequest.setStreampath(getIntent().getStringExtra("streampath"));
         cameraRequest.setUserid(Integer.parseInt(userid));
 
-        //TODO: DB checks to ensure camera isn't already added.
         //Send the cameraRequest object.
         Call<CameraResponse> cameraCall = CameraAPIClient.getCameraService()
                 .updateCamera(cameraRequest);
@@ -114,6 +154,9 @@ public class EditCameraActivity extends AppCompatActivity {
                         new Intent(EditCameraActivity.this, CameraListActivity.class);
 
                 intentCameraList.putExtra("currentuserid",userid);
+                intentCameraList.putExtra("username",username);
+                intentCameraList.putExtra("password",password);
+                finish();
                 startActivity(intentCameraList);
             }
 
@@ -124,4 +167,40 @@ public class EditCameraActivity extends AppCompatActivity {
             }
         });
     }//end saveChanges
+
+    public void deleteCamEntry(String cameraid, String userid){
+
+        //Send the cameraRequest object.
+        Call<Void> cameraCall = CameraAPIClient.getCameraService()
+                .deleteCamera(cameraid);
+
+        cameraCall.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Toast.makeText(EditCameraActivity.this,
+                        "Camera deleted.",Toast.LENGTH_LONG).show();
+
+                Intent intentCamList = new Intent(EditCameraActivity.this,
+                        CameraListActivity.class);
+
+                intentCamList.putExtra("currentuserid",userid);
+                intentCamList.putExtra("username",username);
+                intentCamList.putExtra("password",password);
+                finish();
+                startActivity(intentCamList);
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(EditCameraActivity.this,
+                        "Cam not deleted.",Toast.LENGTH_LONG).show();
+            }
+        });
+    }//end deleteCamEntry
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
 }

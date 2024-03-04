@@ -5,12 +5,14 @@ import models.Camera;
 import models.CameraResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import retrofit2.http.Url;
 
 public interface CameraAPIService {
@@ -22,4 +24,6 @@ public interface CameraAPIService {
     Call<CameraResponse> sendCamera(@Body Camera camera);
     @PUT("/Cameras/update")
     Call<CameraResponse> updateCamera(@Body CameraResponse camera);
+    @DELETE("/Cameras/delete")
+    Call<Void> deleteCamera(@Query("cameraid") String cameraid);
 }

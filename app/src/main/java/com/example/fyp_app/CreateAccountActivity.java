@@ -59,7 +59,6 @@ public class CreateAccountActivity extends AppCompatActivity {
         //Else, send POST request.
         else{
             post(createAccountRequest(enteredUsername, enteredPassword));
-            startActivity(new Intent(CreateAccountActivity.this, MainActivity.class));
         }//end else
 
     }//end register
@@ -80,7 +79,8 @@ public class CreateAccountActivity extends AppCompatActivity {
             public void onResponse(Call<AccountResponse> call, Response<AccountResponse> response) {
                     Toast.makeText(CreateAccountActivity.this,
                             "Account created.",Toast.LENGTH_LONG).show();
-
+                    finish();
+                    startActivity(new Intent(CreateAccountActivity.this, MainActivity.class));
             }
 
             @Override

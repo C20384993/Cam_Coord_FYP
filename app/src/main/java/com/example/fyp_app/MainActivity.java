@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                                 HomeScreen.class);
 
                         intentHomeScreen.putExtra("username",responseUsername);
-                        //intentHomeScreen.putExtra("password",responsePassword);
+                        intentHomeScreen.putExtra("password",responsePassword);
                         intentHomeScreen.putExtra("currentuserid",String.valueOf(responseUserid));
                         startActivity(intentHomeScreen);
                         finish();
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<AccountResponse> call, @NonNull Throwable t) {
                 Toast.makeText(MainActivity.this,
-                        "GET failed."+t.getLocalizedMessage(),Toast.LENGTH_LONG).show();
+                        "No account with that username found.",Toast.LENGTH_LONG).show();
             }
         });
 

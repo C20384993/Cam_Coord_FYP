@@ -18,7 +18,9 @@ public class RecordingsOptionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recordings_options);
 
         String userid = getIntent().getStringExtra("currentuserid");
-        //TODO: Allow selecting of streams from RecyclerView list similar to CameraListActivity.
+        String username = getIntent().getStringExtra("username");
+        String password = getIntent().getStringExtra("password");
+
         btnViewStream = findViewById(R.id.btnViewStream);
         btnViewRecordings = findViewById(R.id.btnViewRecordings);
 
@@ -29,6 +31,8 @@ public class RecordingsOptionsActivity extends AppCompatActivity {
                         StreamListActivity.class);
 
                 intentStreamList.putExtra("currentuserid",userid);
+                intentStreamList.putExtra("username",userid);
+                intentStreamList.putExtra("password",userid);
                 startActivity(intentStreamList);
             }
         });
@@ -40,8 +44,16 @@ public class RecordingsOptionsActivity extends AppCompatActivity {
                         RecordingListActivity.class);
 
                 intentRecordingList.putExtra("currentuserid",userid);
+                intentRecordingList.putExtra("username",userid);
+                intentRecordingList.putExtra("password",userid);
                 startActivity(intentRecordingList);
             }
         });
     }//end onCreate
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
 }//end Class

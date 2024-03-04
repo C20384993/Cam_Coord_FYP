@@ -81,11 +81,10 @@ public class AddCameraActivity extends AppCompatActivity {
         cameraRequest.setCamusername(edtTextCamUsername.getText().toString());
         cameraRequest.setCampassword(edtTextCamPassword.getText().toString());
         cameraRequest.setRtspurl(fullRtspUrl);
-        //TODO: Remove streampath VM IP hardcoding.
         cameraRequest.setStreampath("https://172.166.189.197:8888/cam");
         cameraRequest.setUserid(Integer.parseInt(userid));
 
-        //TODO: DB checks to ensure camera isn't already added.
+
         //Send the cameraRequest object.
         Call<CameraResponse> cameraCall = CameraAPIClient.getCameraService().sendCamera(cameraRequest);
 
@@ -116,6 +115,7 @@ public class AddCameraActivity extends AppCompatActivity {
                                 CameraListActivity.class);
 
                         intentCameraList.putExtra("currentuserid",userid);
+                        finish();
                         startActivity(intentCameraList);
                     }
 
@@ -135,4 +135,10 @@ public class AddCameraActivity extends AppCompatActivity {
         });
         
     }//end AddCamera
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
 }

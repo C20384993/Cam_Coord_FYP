@@ -27,7 +27,7 @@ public class RecordingRecyclerItem {
     }
 
     public int getRecordingid() {
-        return userid;
+        return recordingid;
     }
     public int getUserid() {
         return userid;

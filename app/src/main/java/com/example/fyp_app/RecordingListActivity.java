@@ -36,6 +36,9 @@ public class RecordingListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recording_list);
 
         String userid = getIntent().getStringExtra("currentuserid");
+        String username = getIntent().getStringExtra("username");
+        String password = getIntent().getStringExtra("password");
+
         recyclerView = findViewById(R.id.recyclerViewRecList);
         progressBar = findViewById(R.id.progressBarRecList);
         linearLayoutManager = new LinearLayoutManager(this);
@@ -43,16 +46,18 @@ public class RecordingListActivity extends AppCompatActivity {
         recordingsAdapter = new RecordingsAdapter(recordingList, new RecordingsAdapter.ItemClickListener() {
             @Override
             public void onItemClick(RecordingRecyclerItem recordingRecyclerItem) {
-                //TODO: Store recordings online & download recording to folder on phone when clicked.
                 Intent intentEditCamera =
                         new Intent(RecordingListActivity.this, EditRecordingActivity.class);
 
                 intentEditCamera.putExtra("userid",userid);
+                intentEditCamera.putExtra("username",username);
+                intentEditCamera.putExtra("password",password);
                 intentEditCamera.putExtra("cameraid",Integer.toString(recordingRecyclerItem.getCameraid()));
                 intentEditCamera.putExtra("customname",recordingRecyclerItem.getCustomname());
                 intentEditCamera.putExtra("relativefilepath",recordingRecyclerItem.getRelativefilepath());
                 intentEditCamera.putExtra("creationdate",recordingRecyclerItem.getCreationDate());
-                intentEditCamera.putExtra("recordingid",Integer.toString(recordingRecyclerItem.getCameraid()));
+                intentEditCamera.putExtra("recordingid",Integer.toString(recordingRecyclerItem.getRecordingid()));
+                finish();
                 startActivity(intentEditCamera);
             }
         });
@@ -84,4 +89,10 @@ public class RecordingListActivity extends AppCompatActivity {
                     }//end onFailure
                 });
     }//end fetchRecordings
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
 }//end Class
