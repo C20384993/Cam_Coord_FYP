@@ -6,31 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".EditRecordingActivity">
 
-    <EditText
+    <TextView
         android:id="@+id/editText_recCustomName"
         android:layout_width="286dp"
         android:layout_height="73dp"
         android:ems="10"
-        android:hint="New custom name for recording"
-        android:inputType="text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.084" />
-
-    <EditText
-        android:id="@+id/textView_creationDate"
-        android:layout_width="286dp"
-        android:layout_height="73dp"
-        android:focusable="false"
+        android:hint="Recording Name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.247" />
+        app:layout_constraintVertical_bias="0.255" />
 
     <Button
         android:id="@+id/button_recDownload"
@@ -44,24 +31,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button_recSave"
-        android:layout_width="149dp"
-        android:layout_height="65dp"
-        android:text="Save changes"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.866"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
         android:id="@+id/btn_deleteRecording"
         android:layout_width="137dp"
         android:layout_height="59dp"
         android:text="Delete Recording"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.875"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.706" />
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

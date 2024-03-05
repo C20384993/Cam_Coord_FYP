@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 
 import com.arthenica.mobileffmpeg.FFmpeg;
+import com.google.android.material.slider.Slider;
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.blob.CloudBlobClient;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
@@ -45,9 +46,15 @@ public class StreamViewingActivity extends AppCompatActivity {
     Button recordButton;
     Button switchButton;
 
+    Button recordLengthButton;
+    Slider slider;
+
 
     private boolean isRecording = false; //Tracks recording state.
     private String outputFile; //The recording filename.
+
+    String timeRange = "10"; //How long the recording will be for. Starter values: 10 seconds, 20s , 30s.
+
     String currentUserId;
     String cameraid;
     Uri rtspUrl;
@@ -62,6 +69,12 @@ public class StreamViewingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_streamvlc);
         recordButton=findViewById(R.id.btn_record);
         switchButton=findViewById(R.id.btn_switch);
+
+        recordLengthButton=findViewById(R.id.btn_record_lengthVlc);
+        recordLengthButton.setClickable(false);
+
+        slider=findViewById(R.id.time_sliderVlc);
+        slider.addOnSliderTouchListener(touchListener);
 
         //Get intents.
         currentUserId = getIntent().getStringExtra("currentuserid");
@@ -103,10 +116,8 @@ public class StreamViewingActivity extends AppCompatActivity {
                     startRecording();
                 }//end if
                 else if(isRecording==true){
-                    FFmpeg.cancel(); //Stop the FFmpeg command executing, which stops the recording.
-                    isRecording=false; //Update recording state.
-                    Post(createRecordingRequest(Integer.parseInt(currentUserId), cameraid)); //Send the newly created recording info.
-                    recordButton.setText("Start rec");
+                    Toast.makeText(StreamViewingActivity.this,
+                            "Already recording.",Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -135,7 +146,25 @@ public class StreamViewingActivity extends AppCompatActivity {
 
     }//end onCreate
 
+    private final Slider.OnSliderTouchListener touchListener =
+            new Slider.OnSliderTouchListener() {
 
+                @Override
+                public void onStartTrackingTouch(Slider slider) {
+                    timeRange = String.valueOf(slider.getValue());
+                    recordLengthButton.setText("Record for (s): "+timeRange+" seconds");
+                    Log.e("AZURE", "timeRange slider = " + timeRange);
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(Slider slider) {
+                    timeRange = String.valueOf(slider.getValue());
+                    recordLengthButton.setText("Record for (s): "+timeRange+" seconds");
+                    Log.e("AZURE", "timeRange slider 2 = " + timeRange);
+
+                }
+            };
 
 
     //Inner class that performs the recording in the background, as FFmpeg commands block the
@@ -145,7 +174,7 @@ public class StreamViewingActivity extends AppCompatActivity {
         protected Integer doInBackground(Void... params) {
             // FFmpeg command to record the RTSP stream
             String[] command = {"-y", "-i", rtspUrl.toString(),
-                    "-acodec", "copy", "-vcodec", "copy", "-fflags", "nobuffer",
+                    "-t", timeRange, "-acodec", "copy", "-vcodec", "copy", "-fflags", "nobuffer",
                     directory.getAbsolutePath()+outputFile.toString()};
 
             // Run the FFmpeg command
@@ -155,6 +184,10 @@ public class StreamViewingActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Integer result) {
+            isRecording=false; //Update recording state.
+            Log.e("AZURE","isRecording in RecordTask onPostExecute= "+isRecording);
+            Post(createRecordingRequest(Integer.parseInt(currentUserId), cameraid)); //Send the newly created recording info.
+            recordButton.setText("Start rec");
             super.onPostExecute(result);
         }
     }//end RecordTask

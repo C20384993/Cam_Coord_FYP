@@ -16,7 +16,7 @@ import javax.net.ssl.SSLSession;
 public class RTSPS extends AppCompatActivity {
 
     private ExoPlayer player;
-    String videoURL="https://172.166.189.197:8888/cam1/index.m3u8";
+    String videoURL="https://172.166.189.197:8888/cam10/index.m3u8";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -75,6 +75,9 @@ public class HomeScreen extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         this.finish();
+        Intent intentEditAccount = new Intent(HomeScreen.this,
+                MainActivity.class);
+        startActivity(intentEditAccount);
     }
 
 }//end Class

@@ -34,9 +34,7 @@ import retrofit2.Response;
 public class EditRecordingActivity extends AppCompatActivity {
 
     TextView edtTextCustomName;
-    TextView txtViewCreationDate;
     Button btnDownload;
-    Button btnSave;
     Button btnDeleteRecording;
     String storageConnectionString = "DefaultEndpointsProtocol=https;AccountName=c20384993fypstorage;AccountKey=0/AH0LCag12HGTA1hw+kXlCdj/0fJ9sew5o9nytBW3tac4gFiwpmEgwWOqlA+c4C4hHKg5SdgSCm+ASt4ij9LQ==;EndpointSuffix=core.windows.net";
 
@@ -70,26 +68,16 @@ public class EditRecordingActivity extends AppCompatActivity {
         originalCustname = customname;
 
         edtTextCustomName = findViewById(R.id.editText_recCustomName);
-        txtViewCreationDate = findViewById(R.id.textView_creationDate);
         btnDownload = findViewById(R.id.button_recDownload);
-        btnSave = findViewById(R.id.button_recSave);
         btnDeleteRecording = findViewById(R.id.btn_deleteRecording);
 
         edtTextCustomName.setText(getIntent().getStringExtra("customname"));
-        txtViewCreationDate.setText(getIntent().getStringExtra("creationdate"));
         Log.e("AZURE","creationdate = "+creationdate);
 
         btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 downloadRecording(originalCustname);
-            }
-        });
-
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveChanges(cameraid, userid, recordingid, relativefilepath);
             }
         });
 
@@ -119,50 +107,6 @@ public class EditRecordingActivity extends AppCompatActivity {
         builder.create();
         builder.show();
     }//end CreateAlertDialogue
-
-    public void saveChanges(String cameraid, String userid, String recordingid, String relativefilepath){
-        //Get new custom cameraname, username, password, and IP, from editText fields.
-        String enteredCustomName = edtTextCustomName.getText().toString();
-
-
-        //Check fields aren't empty.
-        if(enteredCustomName.isEmpty()){
-            edtTextCustomName.setError("Please enter a custom name for your recording.");
-            return;
-        }
-
-        //Create the Recording object that will be update the one in the database.
-        RecordingResponse recordingRequest = new RecordingResponse();
-        recordingRequest.setCustomname(edtTextCustomName.getText().toString());
-        recordingRequest.setCreationdate(txtViewCreationDate.getText().toString());
-        recordingRequest.setRelativefilepath(relativefilepath);
-        recordingRequest.setUserid(Integer.parseInt(userid));
-        recordingRequest.setRecordingid(Integer.parseInt(recordingid));
-        recordingRequest.setCameraid(Integer.parseInt(cameraid));
-
-        //Send the recordingRequest object.
-        Call<RecordingResponse> recordingCall = RecordingAPIClient.getRecordingService()
-                .updateRecording(recordingRequest);
-
-        recordingCall.enqueue(new Callback<RecordingResponse>() {
-            @Override
-            public void onResponse(Call<RecordingResponse> call, Response<RecordingResponse> response) {
-                Toast.makeText(EditRecordingActivity.this,
-                        "Changes Saved.",Toast.LENGTH_LONG).show();
-                Intent intentCameraList =
-                        new Intent(EditRecordingActivity.this, RecordingListActivity.class);
-
-                intentCameraList.putExtra("currentuserid",userid);
-                startActivity(intentCameraList);
-            }
-
-            @Override
-            public void onFailure(Call<RecordingResponse> call, Throwable t) {
-                Toast.makeText(EditRecordingActivity.this,
-                        "Changes not Saved.",Toast.LENGTH_LONG).show();
-            }
-        });
-    }//end saveChanges
 
     public void downloadRecording(String originalCustomname){
         String userid = getIntent().getStringExtra("userid");

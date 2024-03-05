@@ -17,6 +17,7 @@ import com.arthenica.mobileffmpeg.FFmpeg;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
+import com.google.android.material.slider.Slider;
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.blob.CloudBlobClient;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
@@ -43,6 +44,7 @@ public class StreamViewingActivityRemote extends AppCompatActivity {
     Button recordButton;
     Button switchButton;
     Button recordLengthButton;
+    Slider slider;
 
 
 
@@ -63,7 +65,12 @@ public class StreamViewingActivityRemote extends AppCompatActivity {
         setContentView(R.layout.activity_stream_viewing_remote);
         recordButton=findViewById(R.id.btn_record);
         switchButton=findViewById(R.id.btn_switch);
+
         recordLengthButton=findViewById(R.id.btn_record_length);
+        recordLengthButton.setClickable(false);
+
+        slider=findViewById(R.id.time_slider);
+        slider.addOnSliderTouchListener(touchListener);
 
         //Get intents.
         currentUserId = getIntent().getStringExtra("currentuserid");
@@ -94,25 +101,6 @@ public class StreamViewingActivityRemote extends AppCompatActivity {
         player.prepare();
         player.setPlayWhenReady(true);
         playerView.setUseController(false);
-
-        recordLengthButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(timeRange == "10"){
-                    timeRange = "20";
-                    recordLengthButton.setText("Record Length: 20 Seconds");
-                }
-                else if(timeRange == "20"){
-                    timeRange = "30";
-                    recordLengthButton.setText("Record Length: 30 Seconds");
-                }
-                else{
-                    timeRange = "10";
-                    recordLengthButton.setText("Record Length: 10 Seconds");
-                }
-
-            }
-        });
 
         recordButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,6 +135,26 @@ public class StreamViewingActivityRemote extends AppCompatActivity {
             }
         });
     }//end onCreate
+
+    private final Slider.OnSliderTouchListener touchListener =
+            new Slider.OnSliderTouchListener() {
+
+                @Override
+                public void onStartTrackingTouch(Slider slider) {
+                    timeRange = String.valueOf(slider.getValue());
+                    recordLengthButton.setText("Record for (s): "+timeRange+" seconds");
+                    Log.e("AZURE", "timeRange slider = " + timeRange);
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(Slider slider) {
+                    timeRange = String.valueOf(slider.getValue());
+                    recordLengthButton.setText("Record for (s): "+timeRange+" seconds");
+                    Log.e("AZURE", "timeRange slider 2 = " + timeRange);
+
+                }
+            };
 
 
     //Inner class that performs the recording in the background, as FFmpeg commands block the
@@ -282,6 +290,18 @@ public class StreamViewingActivityRemote extends AppCompatActivity {
             }
         };
         task.execute();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(isRecording==false)
+            this.finish();
+        else{
+            Toast.makeText(StreamViewingActivityRemote.this,
+                    "Can't exit while recording.",Toast.LENGTH_LONG).show();
+        }
+
     }
 
 }//end StreamViewingActivityRemote

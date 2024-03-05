@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this,
                     CreateAccountActivity.class));
-            finish();
         });
     }//end OnCreate
 
