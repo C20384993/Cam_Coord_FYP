@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -67,8 +69,98 @@ public class EditCameraActivity extends AppCompatActivity {
         localIp = localIp.substring(0, localIp.indexOf(":"));
         edtTextRTSPURL.setText(localIp);
 
-        //TODO: Empty fields and db checks
-        //TODO: Delete Camera option, can only be deleted though if there are not recordings associated
+        edtTextCamName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!edtTextCamName.getText().toString().trim().equals("") & !edtTextCamUsername.getText().toString().trim().equals("")
+                        & !edtTextCamPassword.getText().toString().trim().equals("") & !edtTextRTSPURL.getText().toString().trim().equals("")){
+                    saveCamBtn.setBackgroundColor(getResources().getColor(R.color.blue));
+                }
+                else{
+                    saveCamBtn.setBackgroundColor(getResources().getColor(R.color.grey));
+                }
+            }
+        });
+
+        edtTextCamUsername.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!edtTextCamName.getText().toString().trim().equals("") & !edtTextCamUsername.getText().toString().trim().equals("")
+                        & !edtTextCamPassword.getText().toString().trim().equals("") & !edtTextRTSPURL.getText().toString().trim().equals("")){
+                    saveCamBtn.setBackgroundColor(getResources().getColor(R.color.blue));
+                }
+                else{
+                    saveCamBtn.setBackgroundColor(getResources().getColor(R.color.grey));
+                }
+            }
+        });
+
+        edtTextCamPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!edtTextCamName.getText().toString().trim().equals("") & !edtTextCamUsername.getText().toString().trim().equals("")
+                        & !edtTextCamPassword.getText().toString().trim().equals("") & !edtTextRTSPURL.getText().toString().trim().equals("")){
+                    saveCamBtn.setBackgroundColor(getResources().getColor(R.color.blue));
+                }
+                else{
+                    saveCamBtn.setBackgroundColor(getResources().getColor(R.color.grey));
+                }
+            }
+        });
+
+        edtTextRTSPURL.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!edtTextCamName.getText().toString().trim().equals("") & !edtTextCamUsername.getText().toString().trim().equals("")
+                        & !edtTextCamPassword.getText().toString().trim().equals("") & !edtTextRTSPURL.getText().toString().trim().equals("")){
+                    saveCamBtn.setBackgroundColor(getResources().getColor(R.color.blue));
+                }
+                else{
+                    saveCamBtn.setBackgroundColor(getResources().getColor(R.color.grey));
+                }
+            }
+        });
+
         //Send update request to change entry.
         saveCamBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,6 +293,13 @@ public class EditCameraActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Intent intentCamList = new Intent(EditCameraActivity.this,
+                CameraListActivity.class);
+
+        intentCamList.putExtra("currentuserid",userid);
+        intentCamList.putExtra("username",username);
+        intentCamList.putExtra("password",password);
         this.finish();
+        startActivity(intentCamList);
     }
 }

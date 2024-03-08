@@ -34,9 +34,11 @@ public class CamerasAdapter extends RecyclerView.Adapter<CamerasAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
+        String hiddenPassword = cameraList.get(position).getCampassword().replaceAll(".","*");
+
         holder.cameraName.setText(cameraList.get(position).getCustomname());
-        holder.camUsername.setText(cameraList.get(position).getCamusername());
-        holder.camPassword.setText(cameraList.get(position).getCampassword());
+        holder.camUsername.setText("Username: "+cameraList.get(position).getCamusername());
+        holder.camPassword.setText("Password: "+hiddenPassword);
 
         holder.itemView.setOnClickListener(view -> {
             mItemListener.onItemClick(cameraList.get(position)); //Returns item position.

@@ -8,72 +8,81 @@
 
     <EditText
         android:id="@+id/editText_AddCamName"
-        android:layout_width="286dp"
-        android:layout_height="73dp"
+        android:layout_width="267dp"
+        android:layout_height="83dp"
         android:ems="10"
         android:hint="Custom name for camera"
         android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.063" />
+        app:layout_constraintVertical_bias="0.257" />
 
     <EditText
         android:id="@+id/editText_AddCamUsername"
-        android:layout_width="286dp"
-        android:layout_height="73dp"
-        android:layout_marginTop="36dp"
+        android:layout_width="267dp"
+        android:layout_height="83dp"
         android:ems="10"
-        android:hint="Camera pre-configured username"
+        android:hint="Camera preset username"
         android:inputType="text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_AddCamName"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <EditText
-        android:id="@+id/editText_AddCamPassword"
-        android:layout_width="286dp"
-        android:layout_height="73dp"
-        android:layout_marginTop="44dp"
-        android:ems="10"
-        android:hint="Camera pre-configured password"
-        android:inputType="text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_AddCamUsername"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <Button
-        android:id="@+id/button_CreateCamClass"
-        android:layout_width="153dp"
-        android:layout_height="64dp"
-        android:text="Add Camera Entry"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.884" />
+        app:layout_constraintVertical_bias="0.385" />
+
+    <EditText
+        android:id="@+id/editText_AddCamPassword"
+        android:layout_width="267dp"
+        android:layout_height="83dp"
+        android:ems="10"
+        android:hint="Camera preset password"
+        android:inputType="text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.513" />
+
+    <Button
+        android:id="@+id/button_CreateCamClass"
+        android:layout_width="164dp"
+        android:layout_height="72dp"
+        android:backgroundTint="@color/grey"
+        android:text="Add Camera"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.824" />
 
     <EditText
         android:id="@+id/editText_rtspurl"
-        android:layout_width="286dp"
-        android:layout_height="73dp"
-        android:layout_marginTop="36dp"
+        android:layout_width="267dp"
+        android:layout_height="83dp"
         android:ems="10"
         android:hint="Camera Local IP"
         android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_AddCamPassword"
-        app:layout_constraintVertical_bias="0.003" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.641" />
+
+    <TextView
+        android:id="@+id/textView_addCameraTitle"
+        android:layout_width="267dp"
+        android:layout_height="83dp"
+        android:gravity="center"
+        android:text="New Camera"
+        android:textSize="32dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.128" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

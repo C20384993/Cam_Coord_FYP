@@ -9,35 +9,44 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="100dp"
+        android:background="@color/light_blue">
+
+
         <TextView
             android:id="@+id/camPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
             android:text="Pass text"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/camUsername"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/camUsername" />
 
         <TextView
             android:id="@+id/camUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Usern text"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:text="User text"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cameraName"
-            />
-
+            app:layout_constraintTop_toBottomOf="@+id/cameraName" />
 
         <TextView
             android:id="@+id/cameraName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="182dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
             android:text="Title"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

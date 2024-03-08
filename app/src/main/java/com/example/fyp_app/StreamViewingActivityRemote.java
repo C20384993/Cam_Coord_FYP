@@ -164,7 +164,7 @@ public class StreamViewingActivityRemote extends AppCompatActivity {
         protected Integer doInBackground(Void... params) {
             // FFmpeg command to record the RTSP stream
             String[] command = {"-ss", "0", "-i", streamPath,
-                    "-t", timeRange, directory.getAbsolutePath()+outputFile.toString()};
+                    "-t", timeRange, directory.getAbsolutePath()+"/"+outputFile.toString()};
 
             Log.e("AZURE","isRecording in RecordTask = "+isRecording);
 
@@ -196,7 +196,7 @@ public class StreamViewingActivityRemote extends AppCompatActivity {
 
         //Generate a unique file name for each recording from the current time.
         //Uses .MKV, as not all cameras can save to .MP4.
-        outputFile = "/r_" + System.currentTimeMillis() + ".mkv";
+        outputFile = "r_" + System.currentTimeMillis() + ".mkv";
 
         //Run the FFmpeg command in the background.
         new RecordTask().execute();
@@ -244,7 +244,6 @@ public class StreamViewingActivityRemote extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<RecordingResponse> call, @NonNull Throwable t) {
-                //TODO: Appropriate message here.
                 Toast.makeText(StreamViewingActivityRemote.this,
                         "Failed to save recording.",Toast.LENGTH_LONG).show();
             }//end onFailure
@@ -271,14 +270,14 @@ public class StreamViewingActivityRemote extends AppCompatActivity {
                     Log.e("AZURE","userid = "+userid);
                     CloudBlobContainer container = blobClient.getContainerReference("cont"+userid);
 
-                    //create blob if it doesn't exist - hopefully resolves bugs
+                    //create blob if it doesn't exist
                     container.createIfNotExists();
 
-                    // Create or overwrite the "myimage.jpg" blob with contents from a local file.
+                    // Create or overwrite the blob with contents from a local file.
                     CloudBlockBlob blob = container.getBlockBlobReference(name);
-                    File source = new File(filePath);
+
                     blob.uploadFromFile(directory.getAbsolutePath()+"/"+name);
-                    Log.d("AZURE","upload function completed");
+
                 }
                 catch (Exception e)
                 {

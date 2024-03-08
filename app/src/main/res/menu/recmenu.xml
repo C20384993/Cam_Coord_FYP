@@ -2,9 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/recordStart"
-        android:title="Start Recording"/>
+        android:id="@+id/myAccount"
+        android:title="My Account"
+        android:theme="@style/Base.Theme.FYP_App"/>
     <item
-        android:id="@+id/changeSource"
-        android:title="View stream remotely"/>
+        android:id="@+id/signOut"
+        android:title="Sign out"
+        android:theme="@style/Base.Theme.FYP_App"/>
 </menu>

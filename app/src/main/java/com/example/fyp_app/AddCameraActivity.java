@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +19,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-//TODO: Implement adding of camera entries.
 public class AddCameraActivity extends AppCompatActivity {
     final private String RESTURL = "http://192.168.68.131:8081";
     TextView edtTextCamName;
@@ -26,12 +27,18 @@ public class AddCameraActivity extends AppCompatActivity {
     TextView edtTextRTSPURL;
     Button createCamBtn;
 
-    //TODO: Take username and password, insert into a hardcoded string for the RTSP URL, and just ask for camera local IP.
+    String userid;
+    String username;
+    String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_camera);
+
+        userid = getIntent().getStringExtra("userid");
+        username = getIntent().getStringExtra("username");
+        password = getIntent().getStringExtra("password");
 
         String userid = getIntent().getStringExtra("userid");
         edtTextCamName = findViewById(R.id.editText_AddCamName);
@@ -40,12 +47,107 @@ public class AddCameraActivity extends AppCompatActivity {
         edtTextRTSPURL = findViewById(R.id.editText_rtspurl);
         createCamBtn = findViewById(R.id.button_CreateCamClass);
 
+        edtTextCamName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!edtTextCamName.getText().toString().trim().equals("") & !edtTextCamUsername.getText().toString().trim().equals("")
+                        & !edtTextCamPassword.getText().toString().trim().equals("") & !edtTextRTSPURL.getText().toString().trim().equals("")){
+                    createCamBtn.setBackgroundColor(getResources().getColor(R.color.blue));
+                }
+                else {
+                    createCamBtn.setBackgroundColor(getResources().getColor(R.color.grey));
+                }
+            }
+        });
+
+        edtTextCamUsername.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!edtTextCamName.getText().toString().trim().equals("") & !edtTextCamUsername.getText().toString().trim().equals("")
+                        & !edtTextCamPassword.getText().toString().trim().equals("") & !edtTextRTSPURL.getText().toString().trim().equals("")){
+                    createCamBtn.setBackgroundColor(getResources().getColor(R.color.blue));
+                }
+                else {
+                    createCamBtn.setBackgroundColor(getResources().getColor(R.color.grey));
+                }
+            }
+        });
+
+        edtTextCamPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!edtTextCamName.getText().toString().trim().equals("") & !edtTextCamUsername.getText().toString().trim().equals("")
+                        & !edtTextCamPassword.getText().toString().trim().equals("") & !edtTextRTSPURL.getText().toString().trim().equals("")){
+                    createCamBtn.setBackgroundColor(getResources().getColor(R.color.blue));
+                }
+                else {
+                    createCamBtn.setBackgroundColor(getResources().getColor(R.color.grey));
+                }
+            }
+        });
+
+        edtTextRTSPURL.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!edtTextCamName.getText().toString().trim().equals("") & !edtTextCamUsername.getText().toString().trim().equals("")
+                        & !edtTextCamPassword.getText().toString().trim().equals("") & !edtTextRTSPURL.getText().toString().trim().equals("")){
+                    createCamBtn.setBackgroundColor(getResources().getColor(R.color.blue));
+                }
+                else {
+                    createCamBtn.setBackgroundColor(getResources().getColor(R.color.grey));
+                }
+            }
+        });
+
+
         createCamBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AddCamera(userid);
             }
         });
+
+
     }//end OnCreate
 
     
@@ -139,6 +241,13 @@ public class AddCameraActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Intent intentCamList = new Intent(AddCameraActivity.this,
+                CameraListActivity.class);
+
+        intentCamList.putExtra("currentuserid",userid);
+        intentCamList.putExtra("username",username);
+        intentCamList.putExtra("password",password);
         this.finish();
+        startActivity(intentCamList);
     }
 }

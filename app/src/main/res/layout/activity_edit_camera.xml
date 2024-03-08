@@ -8,85 +8,94 @@
 
     <EditText
         android:id="@+id/editText_EditCamName"
-        android:layout_width="286dp"
-        android:layout_height="73dp"
+        android:layout_width="267dp"
+        android:layout_height="83dp"
         android:ems="10"
-        android:hint="New custom name for camera"
+        android:hint="Change camera name"
         android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.063" />
+        app:layout_constraintVertical_bias="0.271" />
 
     <EditText
         android:id="@+id/editText_EditCamUsername"
-        android:layout_width="286dp"
-        android:layout_height="73dp"
-        android:layout_marginTop="36dp"
+        android:layout_width="267dp"
+        android:layout_height="83dp"
         android:ems="10"
-        android:hint="Change Camera pre-configured username"
+        android:hint="Change camera username"
         android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_EditCamName"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.399" />
 
     <EditText
         android:id="@+id/editText_EditCamPassword"
-        android:layout_width="286dp"
-        android:layout_height="73dp"
-        android:layout_marginTop="44dp"
+        android:layout_width="267dp"
+        android:layout_height="83dp"
         android:ems="10"
-        android:hint="Change camera pre-configured password"
+        android:hint="Change camera password"
         android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_EditCamUsername"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.527" />
 
     <Button
         android:id="@+id/button_SaveCamera"
-        android:layout_width="153dp"
-        android:layout_height="64dp"
+        android:layout_width="164dp"
+        android:layout_height="72dp"
         android:text="Save"
+        android:backgroundTint="@color/blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.899"
+        app:layout_constraintHorizontal_bias="0.935"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.953" />
+        app:layout_constraintVertical_bias="0.834" />
 
     <EditText
         android:id="@+id/editText_Editrtspurl"
-        android:layout_width="286dp"
-        android:layout_height="73dp"
-        android:layout_marginTop="36dp"
+        android:layout_width="267dp"
+        android:layout_height="83dp"
         android:ems="10"
         android:hint="Change camera RTSP URL"
         android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_EditCamPassword"
-        app:layout_constraintVertical_bias="0.003" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.655" />
 
     <Button
         android:id="@+id/button_deleteCamera"
-        android:layout_width="153dp"
-        android:layout_height="64dp"
+        android:layout_width="164dp"
+        android:layout_height="72dp"
         android:text="Delete Camera"
+        android:backgroundTint="@color/red"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.059"
+        app:layout_constraintHorizontal_bias="0.064"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.954" />
+        app:layout_constraintVertical_bias="0.834" />
+
+    <TextView
+        android:id="@+id/textView_editCameraTitle"
+        android:layout_width="267dp"
+        android:layout_height="83dp"
+        android:gravity="center"
+        android:text="Edit Camera"
+        android:textSize="32dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.143" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

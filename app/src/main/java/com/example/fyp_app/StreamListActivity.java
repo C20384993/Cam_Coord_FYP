@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -22,7 +23,7 @@ import retrofit2.Response;
 
 public class StreamListActivity extends AppCompatActivity {
 
-    FloatingActionButton addCameraBtn;
+    TextView noDataMessage;
     RecyclerView recyclerView;
     ProgressBar progressBar;
     LinearLayoutManager linearLayoutManager;
@@ -39,6 +40,7 @@ public class StreamListActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBarStreamList);
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
+        noDataMessage = findViewById(R.id.textView_noStreams);
         camerasAdapter = new CamerasAdapter(cameraList, new CamerasAdapter.ItemClickListener() {
             @Override
             public void onItemClick(CameraRecyclerItem cameraRecyclerItem) {
@@ -69,11 +71,17 @@ public class StreamListActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<List<CameraRecyclerItem>> call,
                                            Response<List<CameraRecyclerItem>> response) {
-                        if(response.isSuccessful() && response.body() != null){
+                        if(response.isSuccessful() && !response.body().isEmpty()){
                             cameraList.addAll(response.body());
                             camerasAdapter.notifyDataSetChanged();
                             progressBar.setVisibility(View.GONE);
                         }//end if
+                        else if(response.body().isEmpty()){
+                            cameraList.addAll(response.body());
+                            camerasAdapter.notifyDataSetChanged();
+                            progressBar.setVisibility(View.GONE);
+                            noDataMessage.setVisibility(View.VISIBLE);
+                        }
 
                     }//end onResponse
 

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -24,6 +25,7 @@ import retrofit2.Response;
 
 public class CameraListActivity extends AppCompatActivity {
 
+    TextView noDataMessage;
     FloatingActionButton addCameraBtn;
     RecyclerView recyclerView;
     ProgressBar progressBar;
@@ -45,6 +47,7 @@ public class CameraListActivity extends AppCompatActivity {
         addCameraBtn = findViewById(R.id.addCameraBtn);
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
+        noDataMessage = findViewById(R.id.textView_noCameras);
         camerasAdapter = new CamerasAdapter(cameraList, new CamerasAdapter.ItemClickListener() {
             @Override
             public void onItemClick(CameraRecyclerItem cameraRecyclerItem) {
@@ -76,6 +79,9 @@ public class CameraListActivity extends AppCompatActivity {
                         new Intent(CameraListActivity.this, AddCameraActivity.class);
 
                 intentAddCamera.putExtra("userid",userid);
+                intentAddCamera.putExtra("username",username);
+                intentAddCamera.putExtra("password",password);
+
                 finish();
                 startActivity(intentAddCamera);
             }
@@ -91,11 +97,17 @@ public class CameraListActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<List<CameraRecyclerItem>> call,
                                            Response<List<CameraRecyclerItem>> response) {
-                        if(response.isSuccessful() && response.body() != null){
+                        if(response.isSuccessful() && !response.body().isEmpty()){
                             cameraList.addAll(response.body());
                             camerasAdapter.notifyDataSetChanged();
                             progressBar.setVisibility(View.GONE);
                         }//end if
+                        else if(response.body().isEmpty()){
+                            cameraList.addAll(response.body());
+                            camerasAdapter.notifyDataSetChanged();
+                            progressBar.setVisibility(View.GONE);
+                            noDataMessage.setVisibility(View.VISIBLE);
+                        }
 
                     }//end onResponse
 

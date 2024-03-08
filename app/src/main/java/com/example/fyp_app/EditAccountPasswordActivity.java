@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -41,6 +43,76 @@ public class EditAccountPasswordActivity extends AppCompatActivity {
         userid = getIntent().getStringExtra("currentuserid");
         username = getIntent().getStringExtra("username");
         password = getIntent().getStringExtra("password");
+
+        editTextOldPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!editTextOldPassword.getText().toString().trim().equals("") & !editTextEditPassword.getText().toString().trim().equals("")
+                        & !editTextConfirmPassword.getText().toString().trim().equals("") ){
+                    btnSaveAccount.setBackgroundColor(getResources().getColor(R.color.blue));
+                }
+                else{
+                    btnSaveAccount.setBackgroundColor(getResources().getColor(R.color.grey));
+                }
+            }
+        });
+
+        editTextEditPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!editTextOldPassword.getText().toString().trim().equals("") & !editTextEditPassword.getText().toString().trim().equals("")
+                        & !editTextConfirmPassword.getText().toString().trim().equals("") ){
+                    btnSaveAccount.setBackgroundColor(getResources().getColor(R.color.blue));
+                }
+                else{
+                    btnSaveAccount.setBackgroundColor(getResources().getColor(R.color.grey));
+                }
+            }
+        });
+
+        editTextConfirmPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!editTextOldPassword.getText().toString().trim().equals("") & !editTextEditPassword.getText().toString().trim().equals("")
+                        & !editTextConfirmPassword.getText().toString().trim().equals("") ){
+                    btnSaveAccount.setBackgroundColor(getResources().getColor(R.color.blue));
+                }
+                else{
+                    btnSaveAccount.setBackgroundColor(getResources().getColor(R.color.grey));
+                }
+            }
+        });
+
 
         btnSaveAccount.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,6 +204,13 @@ public class EditAccountPasswordActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Intent intentViewAccount = new Intent(EditAccountPasswordActivity.this,
+                ViewAccountActivity.class);
+
+        intentViewAccount.putExtra("currentuserid",userid);
+        intentViewAccount.putExtra("username",username);
+        intentViewAccount.putExtra("password",password);
         this.finish();
+        startActivity(intentViewAccount);
     }
 }

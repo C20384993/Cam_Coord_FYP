@@ -2,7 +2,6 @@ package services;
 
 import models.Account;
 import models.AccountResponse;
-import models.CameraResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;

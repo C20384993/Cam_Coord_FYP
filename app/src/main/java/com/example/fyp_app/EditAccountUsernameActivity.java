@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,7 +21,6 @@ import retrofit2.Response;
 public class EditAccountUsernameActivity extends AppCompatActivity {
 
     TextView editTextEditUsername;
-    TextView textViewCurrentUsername;
     Button btnSaveAccount;
 
 
@@ -35,14 +36,34 @@ public class EditAccountUsernameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_account_username);
 
         editTextEditUsername = findViewById(R.id.editText_editUsername);
-        textViewCurrentUsername = findViewById(R.id.textView_currentUsername);
         btnSaveAccount = findViewById(R.id.btn_saveAccount);
 
         userid = getIntent().getStringExtra("currentuserid");
         username = getIntent().getStringExtra("username");
         password = getIntent().getStringExtra("password");
 
-        textViewCurrentUsername.setText(username);
+        editTextEditUsername.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!editTextEditUsername.getText().toString().trim().equals("")){
+                    btnSaveAccount.setBackgroundColor(getResources().getColor(R.color.blue));
+                }
+                else{
+                    btnSaveAccount.setBackgroundColor(getResources().getColor(R.color.grey));
+                }
+            }
+        });
+
         btnSaveAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,6 +137,13 @@ public class EditAccountUsernameActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Intent intentViewAccount = new Intent(EditAccountUsernameActivity.this,
+                ViewAccountActivity.class);
+
+        intentViewAccount.putExtra("currentuserid",userid);
+        intentViewAccount.putExtra("username",username);
+        intentViewAccount.putExtra("password",password);
         this.finish();
+        startActivity(intentViewAccount);
     }
 }

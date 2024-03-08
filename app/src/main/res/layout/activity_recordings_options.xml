@@ -8,24 +8,44 @@
 
     <Button
         android:id="@+id/btnViewStream"
-        android:layout_width="221dp"
-        android:layout_height="66dp"
+        android:layout_width="271dp"
+        android:layout_height="84dp"
+        android:backgroundTint="@color/blue"
         android:text="View Streams"
+        android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.518"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.127" />
+        app:layout_constraintVertical_bias="0.399" />
 
     <Button
         android:id="@+id/btnViewRecordings"
-        android:layout_width="220dp"
-        android:layout_height="72dp"
+        android:layout_width="271dp"
+        android:layout_height="84dp"
+        android:backgroundTint="@color/blue"
         android:text="View Recordings"
+        android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintHorizontal_bias="0.528"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.339" />
+        app:layout_constraintVertical_bias="0.655" />
+
+    <TextView
+        android:id="@+id/textView_recOptionsTitle"
+        android:layout_width="391dp"
+        android:layout_height="74dp"
+        android:gravity="center"
+        android:text="Streams and Recordings"
+        android:textSize="32dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.243" />
 </androidx.constraintlayout.widget.ConstraintLayout>

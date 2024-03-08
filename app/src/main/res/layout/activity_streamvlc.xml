@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity">
 
     <org.videolan.libvlc.util.VLCVideoLayout
@@ -12,38 +13,50 @@
 
         <Button
             android:id="@+id/btn_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="View remotely" />
+            android:layout_width="164dp"
+            android:layout_height="72dp"
+            android:layout_marginTop="62dp"
+            android:text="View remotely"
+            android:textSize="18dp"
+            android:backgroundTint="@color/blue"/>
     </org.videolan.libvlc.util.VLCVideoLayout>
 
     <Button
         android:id="@+id/btn_record"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="164dp"
+        android:layout_height="72dp"
+        android:backgroundTint="@color/blue"
+        android:textSize="18dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="112dp"
         android:text="Start Recording" />
 
     <Button
         android:id="@+id/btn_record_lengthVlc"
         android:layout_width="221dp"
-        android:layout_height="37dp"
+        android:layout_height="47dp"
         android:layout_above="@id/time_sliderVlc"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="95dp"
-        android:text="Record for (s): 10" />
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="92dp"
+        android:text="Record for (s): 10"
+        android:backgroundTint="@color/blue"
+        android:textSize="18dp"/>
 
     <com.google.android.material.slider.Slider
         android:id="@+id/time_sliderVlc"
         android:layout_width="match_parent"
         android:layout_height="113dp"
         android:layout_above="@id/btn_record"
-        android:layout_marginBottom="56dp"
+        android:layout_marginBottom="26dp"
         android:stepSize="10"
         android:value="10"
         android:valueFrom="10"
-        android:valueTo="120" />
+        android:valueTo="120"
+        app:thumbColor="@color/blue"
+        app:tickColor="#13161d"
+        app:thumbStrokeColor="@color/blue"
+        app:trackColorActive="#599cff"
+        app:haloColor="@color/blue"/>
 
 </RelativeLayout>

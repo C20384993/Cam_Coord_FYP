@@ -9,26 +9,33 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="82dp"
+        android:background="@color/light_blue">
+
         <TextView
             android:id="@+id/recordingPath"
-            android:layout_width="wrap_content"
+            android:layout_width="342dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
             android:text="Rec Path"
+            android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/recordingName"
-            />
+            app:layout_constraintTop_toBottomOf="@id/recordingName" />
 
 
         <TextView
             android:id="@+id/recordingName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Rec Name"
+            android:layout_width="342dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            android:text="Title"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

@@ -1,9 +1,13 @@
 package com.example.fyp_app;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -12,7 +16,7 @@ public class HomeScreen extends AppCompatActivity {
 
     private Button btnSensorManage;
     private Button btnRecordings;
-    private ImageButton btnEditAccount;
+    Toolbar toolbar;
 
     String userid;
     String username;
@@ -29,7 +33,8 @@ public class HomeScreen extends AppCompatActivity {
 
         btnSensorManage = findViewById(R.id.btnMainActivity_SensorManage);
         btnRecordings = findViewById(R.id.btnMainActivity_Recordings);
-        btnEditAccount = findViewById(R.id.btn_editAccount);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         btnSensorManage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,19 +62,34 @@ public class HomeScreen extends AppCompatActivity {
             }
         });
 
-        btnEditAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentEditAccount = new Intent(HomeScreen.this,
-                        ViewAccountActivity.class);
-
-                intentEditAccount.putExtra("currentuserid",userid);
-                intentEditAccount.putExtra("username",username);
-                intentEditAccount.putExtra("password",password);
-                startActivity(intentEditAccount);
-            }
-        });
     }//end OnCreate
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.recmenu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.myAccount){
+            Intent intentEditAccount = new Intent(HomeScreen.this,
+                    ViewAccountActivity.class);
+
+            intentEditAccount.putExtra("currentuserid",userid);
+            intentEditAccount.putExtra("username",username);
+            intentEditAccount.putExtra("password",password);
+            startActivity(intentEditAccount);
+        }
+        if(id == R.id.signOut){
+            this.finish();
+            Intent intentEditAccount = new Intent(HomeScreen.this,
+                    MainActivity.class);
+            startActivity(intentEditAccount);
+        }
+        return true;
+    }//end onOptionItemSelected
 
     @Override
     public void onBackPressed() {

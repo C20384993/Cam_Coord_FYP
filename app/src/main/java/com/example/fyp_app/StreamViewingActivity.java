@@ -175,7 +175,7 @@ public class StreamViewingActivity extends AppCompatActivity {
             // FFmpeg command to record the RTSP stream
             String[] command = {"-y", "-i", rtspUrl.toString(),
                     "-t", timeRange, "-acodec", "copy", "-vcodec", "copy", "-fflags", "nobuffer",
-                    directory.getAbsolutePath()+outputFile.toString()};
+                    directory.getAbsolutePath()+"/"+outputFile.toString()};
 
             // Run the FFmpeg command
             return FFmpeg.execute(command);
@@ -204,7 +204,7 @@ public class StreamViewingActivity extends AppCompatActivity {
 
         //Generate a unique file name for each recording from the current time.
         //Uses .MKV, as not all cameras can save to .MP4.
-        outputFile = "/r_" + System.currentTimeMillis() + ".mkv";
+        outputFile = "r_" + System.currentTimeMillis() + ".mkv";
 
         //Run the FFmpeg command in the background.
         new StreamViewingActivity.RecordTask().execute();
@@ -256,7 +256,6 @@ public class StreamViewingActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<RecordingResponse> call, @NonNull Throwable t) {
-                //TODO: Appropriate message here.
                 Toast.makeText(StreamViewingActivity.this,
                         "Failed to save recording.",Toast.LENGTH_LONG).show();
             }//end onFailure
@@ -280,27 +279,15 @@ public class StreamViewingActivity extends AppCompatActivity {
                     CloudBlobClient blobClient = storageAccount.createCloudBlobClient();
 
                     // Retrieve reference to a previously created container.
-                    Log.e("AZURE","userid = "+userid);
                     CloudBlobContainer container = blobClient.getContainerReference("cont"+userid);
 
                     //create blob if it doesn't exist - hopefully resolves bugs
                     container.createIfNotExists();
-                    /*
-                    // Create a permissions object.
-                    BlobContainerPermissions containerPermissions = new BlobContainerPermissions();
-
-                    // Include public access in the permissions object.
-                    containerPermissions.setPublicAccess(BlobContainerPublicAccessType.CONTAINER);
-
-                    // Set the permissions on the container.
-                    container.uploadPermissions(containerPermissions);
-                    */
 
                     // Create or overwrite the "myimage.jpg" blob with contents from a local file.
                     CloudBlockBlob blob = container.getBlockBlobReference(name);
-                    File source = new File(filePath);
+
                     blob.uploadFromFile(directory.getAbsolutePath()+"/"+name);
-                    Log.d("AZURE","upload function completed");
                 }
                 catch (Exception e)
                 {

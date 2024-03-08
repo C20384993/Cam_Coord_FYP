@@ -7,63 +7,101 @@
     tools:context=".ViewAccountActivity">
 
     <TextView
-        android:id="@+id/viewAccount_title"
-        android:layout_width="196dp"
-        android:layout_height="43dp"
-        android:text="My Account"
+        android:id="@+id/viewAccount_username"
+        android:layout_width="179dp"
+        android:layout_height="62dp"
+        android:text=""
+        android:gravity="center"
+        android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.073"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.066" />
+        app:layout_constraintVertical_bias="0.215" />
 
     <TextView
-        android:id="@+id/viewAccount_username"
-        android:layout_width="185dp"
-        android:layout_height="58dp"
-        android:text="TextView"
+        android:id="@+id/viewAccount_password"
+        android:layout_width="179dp"
+        android:layout_height="62dp"
+        android:text=""
+        android:gravity="center"
+        android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.451"
+        app:layout_constraintHorizontal_bias="0.072"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.175" />
+        app:layout_constraintVertical_bias="0.384" />
 
     <Button
         android:id="@+id/btn_editUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="173dp"
+        android:layout_height="65dp"
         android:text="Change Username"
+        android:textSize="18dp"
+        android:backgroundTint="@color/blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.065"
+        app:layout_constraintHorizontal_bias="0.953"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.37" />
+        app:layout_constraintVertical_bias="0.211" />
 
     <Button
         android:id="@+id/btn_deleteAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="173dp"
+        android:layout_height="65dp"
+        android:backgroundTint="@color/red"
         android:text="Delete Account"
+        android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.534" />
+        app:layout_constraintVertical_bias="0.659" />
 
     <Button
         android:id="@+id/btn_editPassword"
-        android:layout_width="165dp"
-        android:layout_height="49dp"
+        android:layout_width="173dp"
+        android:layout_height="65dp"
         android:text="Change Password"
+        android:textSize="18dp"
+        android:backgroundTint="@color/blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.861"
+        app:layout_constraintHorizontal_bias="0.952"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.374" />
+        app:layout_constraintVertical_bias="0.384" />
+
+    <TextView
+        android:id="@+id/textView_editAccountTitle"
+        android:layout_width="193dp"
+        android:layout_height="56dp"
+        android:gravity="center"
+        android:text="My Account"
+        android:textSize="32dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.097" />
+
+    <TextView
+        android:id="@+id/textView_revealPass"
+        android:layout_width="148dp"
+        android:layout_height="35dp"
+        android:clickable="true"
+        android:gravity="center"
+        android:onClick="onClick"
+        android:text="Click to show"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.133"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.461" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

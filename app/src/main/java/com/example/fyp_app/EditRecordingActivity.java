@@ -7,6 +7,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -36,6 +40,7 @@ public class EditRecordingActivity extends AppCompatActivity {
     TextView edtTextCustomName;
     Button btnDownload;
     Button btnDeleteRecording;
+    Button btnSaveRecording;
     String storageConnectionString = "DefaultEndpointsProtocol=https;AccountName=c20384993fypstorage;AccountKey=0/AH0LCag12HGTA1hw+kXlCdj/0fJ9sew5o9nytBW3tac4gFiwpmEgwWOqlA+c4C4hHKg5SdgSCm+ASt4ij9LQ==;EndpointSuffix=core.windows.net";
 
 
@@ -48,8 +53,9 @@ public class EditRecordingActivity extends AppCompatActivity {
     String relativefilepath;
     String creationdate;
     String originalCustname;
+    String newCustomName;
+    File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS); //The file object the recording is saved to.
 
-    //TODO: Fix creationdate textview not displaying.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,9 +76,38 @@ public class EditRecordingActivity extends AppCompatActivity {
         edtTextCustomName = findViewById(R.id.editText_recCustomName);
         btnDownload = findViewById(R.id.button_recDownload);
         btnDeleteRecording = findViewById(R.id.btn_deleteRecording);
+        btnSaveRecording = findViewById(R.id.button_saveRecording);
 
-        edtTextCustomName.setText(getIntent().getStringExtra("customname"));
+        edtTextCustomName.setText(getIntent().getStringExtra("customname")
+                .substring(0, getIntent().getStringExtra("customname").length() - 4));
         Log.e("AZURE","creationdate = "+creationdate);
+
+        edtTextCustomName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!edtTextCustomName.getText().toString().trim().equals("")){
+                    btnSaveRecording.setBackgroundColor(getResources().getColor(R.color.blue));
+                }
+                else if(edtTextCustomName.getText().toString().equals(originalCustname)){
+                    btnSaveRecording.setBackgroundColor(getResources().getColor(R.color.grey));
+                }
+                else{
+                    btnSaveRecording.setBackgroundColor(getResources().getColor(R.color.grey));
+                }
+            }
+        });
+
+
 
         btnDownload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +122,137 @@ public class EditRecordingActivity extends AppCompatActivity {
                 CreateAlertDialogue();
             }
         });
+
+        btnSaveRecording.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newCustomName = edtTextCustomName.getText().toString()+".mkv";
+                Log.e("AZURE","newCustomName = "+newCustomName);
+                RenameRecording(originalCustname, newCustomName, edtTextCustomName.getText().toString());
+            }
+        });
     }//end onCreate
+
+    private void RenameRecording(String originalCustomname, String newRecordingName, String newNameNoExtension) {
+
+        if(TextUtils.isEmpty(newNameNoExtension)){
+            edtTextCustomName.setError("Enter a name for the file.");
+            return;
+        }//end if
+
+        if(originalCustomname.equals(newRecordingName)){
+            edtTextCustomName.setError("File already has this name.");
+            return;
+        }
+
+        //Download, Delete, Upload
+        String userid = getIntent().getStringExtra("userid");
+        Log.d("AZURE","newRecordingName = "+newRecordingName);
+
+        //Download
+        AsyncTask<Void,Void,Boolean> task = new AsyncTask<Void,Void,Boolean>(){
+            @Override
+            protected Boolean doInBackground(Void... params) {
+                boolean success = false;
+                try
+                {
+                    // Retrieve storage account from connection-string.
+                    CloudStorageAccount storageAccount = CloudStorageAccount.parse(storageConnectionString);
+
+                    // Create the blob client.
+                    CloudBlobClient blobClient = storageAccount.createCloudBlobClient();
+
+                    // Retrieve reference to a previously created container.
+                    CloudBlobContainer container = blobClient.getContainerReference("cont"+userid);
+
+                    CloudBlockBlob blob = container.getBlockBlobReference(originalCustomname);
+
+                    File file = new File("/storage/emulated/0/Download/" + originalCustomname);
+                    blob.downloadToFile("/storage/emulated/0/Download/" + originalCustomname);
+
+                    //Downloaded, now delete from cloud.
+                    blob.delete();
+
+                    //Rename file + upload
+                    File fileNewName = new File("/storage/emulated/0/Download/" + newRecordingName);
+                    file.renameTo(fileNewName);
+
+                    // Create the blob client.
+                    CloudBlobClient blobClientRename = storageAccount.createCloudBlobClient();
+
+                    // Retrieve reference to a previously created container.
+                    CloudBlobContainer containerRename = blobClientRename.getContainerReference("cont"+userid);
+
+                    //create blob if it doesn't exist - hopefully resolves bugs
+                    containerRename.createIfNotExists();
+
+                    // Create or overwrite the "myimage.jpg" blob with contents from a local file.
+                    CloudBlockBlob blobRename = container.getBlockBlobReference(newRecordingName);
+
+                    blobRename.uploadFromFile(directory.getAbsolutePath()+"/"+newRecordingName);
+                    Log.d("AZURE","upload function completed");
+
+                    success = true;
+                }
+                catch (Exception e)
+                {
+                    // Output the stack trace.
+                    e.printStackTrace();
+                    Log.e("AZURE","upload failed: "+e);
+                    success = false;
+                }
+                return success;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean success) {
+                super.onPostExecute(success);
+                if (success) {
+                    Toast.makeText(EditRecordingActivity.this, "Recording renamed.", Toast.LENGTH_LONG).show();
+                    //Update DB
+                    //Create the Recording object that will be update the one in the database.
+                    RecordingResponse recordingRequest = new RecordingResponse();
+                    recordingRequest.setCustomname(newRecordingName);
+                    recordingRequest.setCreationdate(creationdate);
+                    recordingRequest.setRelativefilepath(relativefilepath);
+                    recordingRequest.setUserid(Integer.parseInt(userid));
+                    recordingRequest.setRecordingid(Integer.parseInt(recordingid));
+                    recordingRequest.setCameraid(Integer.parseInt(cameraid));
+
+                    //Send the recordingRequest object.
+                    Call<RecordingResponse> recordingCall = RecordingAPIClient.getRecordingService()
+                            .updateRecording(recordingRequest);
+
+                    recordingCall.enqueue(new Callback<RecordingResponse>() {
+                        @Override
+                        public void onResponse(Call<RecordingResponse> call, Response<RecordingResponse> response) {
+                            Toast.makeText(EditRecordingActivity.this,
+                                    "Changes Saved.",Toast.LENGTH_LONG).show();
+                            Intent intentRecList =
+                                    new Intent(EditRecordingActivity.this, RecordingListActivity.class);
+
+                            intentRecList.putExtra("currentuserid",userid);
+                            intentRecList.putExtra("username",username);
+                            intentRecList.putExtra("password",password);
+                            finish();
+                            startActivity(intentRecList);
+                        }
+
+                        @Override
+                        public void onFailure(Call<RecordingResponse> call, Throwable t) {
+                            Toast.makeText(EditRecordingActivity.this,
+                                    "Changes not Saved.",Toast.LENGTH_LONG).show();
+                        }
+                    });
+                } else {
+                    Toast.makeText(EditRecordingActivity.this, "Server unavailable.", Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+
+        task.execute();
+
+    }//end RenameRecording
 
     private void CreateAlertDialogue() {
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
@@ -245,6 +410,13 @@ public class EditRecordingActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Intent intentRecList = new Intent(EditRecordingActivity.this,
+                RecordingListActivity.class);
+
+        intentRecList.putExtra("currentuserid",userid);
+        intentRecList.putExtra("username",username);
+        intentRecList.putExtra("password",password);
         this.finish();
+        startActivity(intentRecList);
     }
 }

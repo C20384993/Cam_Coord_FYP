@@ -6,38 +6,72 @@
     android:layout_height="match_parent"
     tools:context=".EditRecordingActivity">
 
-    <TextView
+    <EditText
         android:id="@+id/editText_recCustomName"
-        android:layout_width="286dp"
+        android:layout_width="386dp"
         android:layout_height="73dp"
         android:ems="10"
         android:hint="Recording Name"
+        android:textSize="22dp"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.255" />
+        app:layout_constraintVertical_bias="0.308" />
 
     <Button
         android:id="@+id/button_recDownload"
-        android:layout_width="149dp"
+        android:layout_width="173dp"
         android:layout_height="65dp"
+        android:backgroundTint="@color/blue"
         android:text="Download Recording"
+        android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.122"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.698" />
 
     <Button
         android:id="@+id/btn_deleteRecording"
-        android:layout_width="137dp"
-        android:layout_height="59dp"
+        android:layout_width="173dp"
+        android:layout_height="65dp"
+        android:backgroundTint="@color/red"
         android:text="Delete Recording"
+        android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.875"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.846" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="267dp"
+        android:layout_height="83dp"
+        android:gravity="center"
+        android:text="Recording Details"
+        android:textSize="32dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.154" />
+
+    <Button
+        android:id="@+id/button_saveRecording"
+        android:layout_width="164dp"
+        android:layout_height="72dp"
+        android:backgroundTint="@color/grey"
+        android:text="Save Changes"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.512"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.546" />
 </androidx.constraintlayout.widget.ConstraintLayout>

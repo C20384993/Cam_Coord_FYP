@@ -5,9 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.InputStream;
@@ -34,16 +38,12 @@ public class MainActivity extends AppCompatActivity {
 
     EditText edtTextAccountUsername;
     EditText edtTextAccountPassword;
-    OkHttpClient okHttpClient;
-
+    TextView textViewRegisterLink;
     Button btnLogin;
-    Button btnRegister;
 
-    //TODO: Host REST API on Azure and connect to it from this line.
-    //Change this to the IP of your local machine.
+
+    //final private String RESTURL = "http://172.166.189.197:8081";
     final private String RESTURL = "http://192.168.68.131:8081";
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +52,60 @@ public class MainActivity extends AppCompatActivity {
 
         edtTextAccountUsername = findViewById(R.id.editText_accountname);
         edtTextAccountPassword = findViewById(R.id.editText_accountpassword);
+        textViewRegisterLink = findViewById(R.id.textView_registerTitle);
         btnLogin = findViewById(R.id.button_Login);
-        btnRegister = findViewById(R.id.button_register);
+
+        edtTextAccountUsername.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!edtTextAccountPassword.getText().toString().trim().equals("") & !edtTextAccountUsername.getText().toString().trim().equals("")){
+                    btnLogin.setBackgroundColor(getResources().getColor(R.color.blue));
+                }
+                else{
+                    btnLogin.setBackgroundColor(getResources().getColor(R.color.grey));
+                }
+            }
+        });
+
+        edtTextAccountPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!edtTextAccountPassword.getText().toString().trim().equals("") & !edtTextAccountUsername.getText().toString().trim().equals("")){
+                    btnLogin.setBackgroundColor(getResources().getColor(R.color.blue));
+                }
+                else{
+                    btnLogin.setBackgroundColor(getResources().getColor(R.color.grey));
+                }
+            }
+        });
+
+        textViewRegisterLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,
+                        CreateAccountActivity.class));
+            }
+        });
 
         btnLogin.setOnClickListener(v -> {
             //Get username and password from editText field,
@@ -62,10 +114,6 @@ public class MainActivity extends AppCompatActivity {
             login();
         });
 
-        btnRegister.setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this,
-                    CreateAccountActivity.class));
-        });
     }//end OnCreate
 
     public void login(){
@@ -91,10 +139,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<AccountResponse> call,
                                    @NonNull Response<AccountResponse> response) {
+
                 if(response.isSuccessful()){
                     String responseUsername = response.body().getUsername();
                     String responsePassword = response.body().getPassword();
                     int responseUserid = response.body().getUserid();
+
+                    //Check username
+                    if(responseUserid == 0){
+                        Toast.makeText(MainActivity.this,
+                                "Invalid username",Toast.LENGTH_LONG).show();
+                        return;
+                    }
 
                     //Check passwords match.
                     if(enteredPassword.equals(responsePassword)){
@@ -113,18 +169,13 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 }
-                else{
-                    Toast.makeText(MainActivity.this,
-                            "Invalid username",Toast.LENGTH_LONG).show();
-
-                }
             }
 
 
             @Override
             public void onFailure(@NonNull Call<AccountResponse> call, @NonNull Throwable t) {
                 Toast.makeText(MainActivity.this,
-                        "No account with that username found.",Toast.LENGTH_LONG).show();
+                        "Could not connect to server.",Toast.LENGTH_LONG).show();
             }
         });
 

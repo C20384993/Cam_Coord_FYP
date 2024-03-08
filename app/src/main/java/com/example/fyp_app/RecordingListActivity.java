@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -22,7 +23,7 @@ import retrofit2.Response;
 
 public class RecordingListActivity extends AppCompatActivity {
 
-    //TODO: Allow user to click on a recording in the RecyclerView, then play/download that recording.
+    TextView noDataMessage;
     RecyclerView recyclerView;
     ProgressBar progressBar;
     LinearLayoutManager linearLayoutManager;
@@ -39,6 +40,7 @@ public class RecordingListActivity extends AppCompatActivity {
         String username = getIntent().getStringExtra("username");
         String password = getIntent().getStringExtra("password");
 
+        noDataMessage = findViewById(R.id.textView_noRecordings);
         recyclerView = findViewById(R.id.recyclerViewRecList);
         progressBar = findViewById(R.id.progressBarRecList);
         linearLayoutManager = new LinearLayoutManager(this);
@@ -73,11 +75,18 @@ public class RecordingListActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<List<RecordingRecyclerItem>> call,
                                            Response<List<RecordingRecyclerItem>> response) {
-                        if(response.isSuccessful() && response.body() != null){
+                        if(response.isSuccessful() && !response.body().isEmpty()){
                             recordingList.addAll(response.body());
                             recordingsAdapter.notifyDataSetChanged();
                             progressBar.setVisibility(View.GONE);
+                            noDataMessage.setVisibility(View.INVISIBLE);
                         }//end if
+                        else if(response.body().isEmpty()){
+                            recordingList.addAll(response.body());
+                            recordingsAdapter.notifyDataSetChanged();
+                            progressBar.setVisibility(View.GONE);
+                            noDataMessage.setVisibility(View.VISIBLE);
+                        }
                     }//end onResponse
 
                     @Override

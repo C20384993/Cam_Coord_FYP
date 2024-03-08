@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,7 +21,8 @@ import retrofit2.Response;
 public class ViewAccountActivity extends AppCompatActivity {
 
     TextView accountUsername;
-    TextView pageTitle;
+    TextView accountPassword;
+    TextView revealPass;
     Button btnDeleteAccount;
     Button btnEditUsername;
     Button btnEditPassword;
@@ -37,16 +39,20 @@ public class ViewAccountActivity extends AppCompatActivity {
         btnDeleteAccount = findViewById(R.id.btn_deleteAccount);
         btnEditUsername = findViewById(R.id.btn_editUsername);
         btnEditPassword = findViewById(R.id.btn_editPassword);
+        revealPass = findViewById(R.id.textView_revealPass);
 
-        pageTitle = findViewById(R.id.viewAccount_title);
         accountUsername = findViewById(R.id.viewAccount_username);
+        accountPassword = findViewById(R.id.viewAccount_password);
 
         userid = getIntent().getStringExtra("currentuserid");
         username = getIntent().getStringExtra("username");
         password = getIntent().getStringExtra("password");
 
+        String hiddenPassword = password.replaceAll(".","*");
+
         //Display username
-        accountUsername.setText(username);
+        accountUsername.setText("Username: "+username);
+        accountPassword.setText("Password: "+hiddenPassword);
 
         btnEditUsername.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,11 +90,29 @@ public class ViewAccountActivity extends AppCompatActivity {
             }
         });
 
+        revealPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(accountPassword.getText().equals("Password: "+hiddenPassword)){
+                    Log.e("AZURE","in if");
+                    Log.e("AZURE","gettext = "+accountPassword.getText());
+                    accountPassword.setText("Password: "+password);
+                    revealPass.setText("Click to hide");
+                }
+                else{
+                    Log.e("AZURE","in else");
+                    Log.e("AZURE","gettext = "+accountPassword.getText());
+                    accountPassword.setText("Password: "+hiddenPassword);
+                    revealPass.setText("Click to show");
+                }
+            }
+        });
+
     }//end onCreate
 
     private void CreateAlertDialogue() {
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
-        builder.setMessage("Are you sure you want to delete your account?");
+        builder.setMessage("Are you sure you want to delete this account?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
