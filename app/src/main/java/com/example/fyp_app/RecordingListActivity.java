@@ -3,12 +3,14 @@ package com.example.fyp_app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,56 +23,104 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+//Show a list of recordings to the user. They are the recordings the user has made.
 public class RecordingListActivity extends AppCompatActivity {
 
-    TextView noDataMessage;
+    //Layout items
+    TextView textViewNoDataMessage;
     RecyclerView recyclerView;
     ProgressBar progressBar;
     LinearLayoutManager linearLayoutManager;
     RecordingsAdapter recordingsAdapter;
+    Button buttonDarkMode;
+
+    //Activity Variables
+    String currentUserId;
+    String currentUsername;
+    String currentPassword;
+    boolean darkMode = false;
     List<RecordingRecyclerItem> recordingList = new ArrayList<>();
-    final private String RESTURL = "http://192.168.68.131:8081";
+    final private String restUrl = "http://172.166.189.197:8081";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recording_list);
 
-        String userid = getIntent().getStringExtra("currentuserid");
-        String username = getIntent().getStringExtra("username");
-        String password = getIntent().getStringExtra("password");
+        //Get intent values
+        currentUserId = getIntent().getStringExtra("currentuserid");
+        currentUsername = getIntent().getStringExtra("username");
+        currentPassword = getIntent().getStringExtra("password");
 
-        noDataMessage = findViewById(R.id.textView_noRecordings);
+        //Locate items from layout.
+        textViewNoDataMessage = findViewById(R.id.textView_NoRecordings);
         recyclerView = findViewById(R.id.recyclerViewRecList);
         progressBar = findViewById(R.id.progressBarRecList);
+        buttonDarkMode = findViewById(R.id.button_DarkMode);
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
+
+        //When a recording from the list is clicked, show the options page for it.
         recordingsAdapter = new RecordingsAdapter(recordingList, new RecordingsAdapter.ItemClickListener() {
             @Override
             public void onItemClick(RecordingRecyclerItem recordingRecyclerItem) {
-                Intent intentEditCamera =
+                Intent intentRecordingCamera =
                         new Intent(RecordingListActivity.this, EditRecordingActivity.class);
 
-                intentEditCamera.putExtra("userid",userid);
-                intentEditCamera.putExtra("username",username);
-                intentEditCamera.putExtra("password",password);
-                intentEditCamera.putExtra("cameraid",Integer.toString(recordingRecyclerItem.getCameraid()));
-                intentEditCamera.putExtra("customname",recordingRecyclerItem.getCustomname());
-                intentEditCamera.putExtra("relativefilepath",recordingRecyclerItem.getRelativefilepath());
-                intentEditCamera.putExtra("creationdate",recordingRecyclerItem.getCreationDate());
-                intentEditCamera.putExtra("recordingid",Integer.toString(recordingRecyclerItem.getRecordingid()));
+                intentRecordingCamera.putExtra("userid", currentUserId);
+                intentRecordingCamera.putExtra("username", currentUsername);
+                intentRecordingCamera.putExtra("password", currentPassword);
+                intentRecordingCamera.putExtra("cameraid",Integer.toString(recordingRecyclerItem.getCameraid()));
+                intentRecordingCamera.putExtra("customname",recordingRecyclerItem.getCustomname());
+                intentRecordingCamera.putExtra("relativefilepath",recordingRecyclerItem.getRelativefilepath());
+                intentRecordingCamera.putExtra("creationdate",recordingRecyclerItem.getCreationDate());
+                intentRecordingCamera.putExtra("recordingid",Integer.toString(recordingRecyclerItem.getRecordingid()));
                 finish();
-                startActivity(intentEditCamera);
+                startActivity(intentRecordingCamera);
             }
         });
+
         recyclerView.setAdapter(recordingsAdapter);
-        fetchRecordings(userid);
+
+        //Retrieve the list of recordings for the user's account.
+        fetchRecordings(currentUserId);
+
+        //Dark Mode checks.
+        if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO){
+            darkMode = false;
+            buttonDarkMode.setText("Dark mode");
+            buttonDarkMode.setBackgroundColor(getResources().getColor(R.color.dark));
+        }
+        else if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES){
+            darkMode = true;
+            buttonDarkMode.setText("Light mode");
+            buttonDarkMode.setBackgroundColor(getResources().getColor(R.color.light_blue));
+        }
+        else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+        buttonDarkMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(darkMode){
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    buttonDarkMode.setText("Dark mode");
+                    darkMode = false;
+                }
+                else{
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    darkMode=true;
+                    buttonDarkMode.setText("Light mode");
+                }
+            }
+        });
     }//end OnCreate
 
+    //Fills the RecyclerView with all the recordings associated with the current User ID.
     private void fetchRecordings(String userid){
         progressBar.setVisibility(View.VISIBLE);
         RetrofitClient.getRetrofitClient()
-                .getRecordings(RESTURL+"/Recordings/findall?userid="+userid)
+                .getRecordings(restUrl +"/Recordings/findall?userid="+userid)
                 .enqueue(new Callback<List<RecordingRecyclerItem>>() {
                     @Override
                     public void onResponse(Call<List<RecordingRecyclerItem>> call,
@@ -79,21 +129,20 @@ public class RecordingListActivity extends AppCompatActivity {
                             recordingList.addAll(response.body());
                             recordingsAdapter.notifyDataSetChanged();
                             progressBar.setVisibility(View.GONE);
-                            noDataMessage.setVisibility(View.INVISIBLE);
+                            textViewNoDataMessage.setVisibility(View.INVISIBLE);
                         }//end if
                         else if(response.body().isEmpty()){
                             recordingList.addAll(response.body());
                             recordingsAdapter.notifyDataSetChanged();
                             progressBar.setVisibility(View.GONE);
-                            noDataMessage.setVisibility(View.VISIBLE);
+                            textViewNoDataMessage.setVisibility(View.VISIBLE);
                         }
                     }//end onResponse
 
                     @Override
                     public void onFailure(Call<List<RecordingRecyclerItem>> call, Throwable t) {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(RecordingListActivity.this,
-                                "Error:"+t.getMessage(),
+                        Toast.makeText(RecordingListActivity.this, "Server unavailable",
                                 Toast.LENGTH_SHORT).show();
                     }//end onFailure
                 });

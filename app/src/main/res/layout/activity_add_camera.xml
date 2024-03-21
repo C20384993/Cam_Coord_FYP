@@ -6,44 +6,60 @@
     android:layout_height="match_parent"
     tools:context=".AddCameraActivity">
 
-    <EditText
-        android:id="@+id/editText_AddCamName"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout_AddCamName"
         android:layout_width="267dp"
-        android:layout_height="83dp"
-        android:ems="10"
-        android:hint="Custom name for camera"
-        android:inputType="text"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.257" />
+        app:layout_constraintVertical_bias="0.257">
 
-    <EditText
-        android:id="@+id/editText_AddCamUsername"
-        android:layout_width="267dp"
-        android:layout_height="83dp"
-        android:ems="10"
-        android:hint="Camera preset username"
-        android:inputType="text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.385" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editText_AddCamName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Custom name for camera"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/editText_AddCamPassword"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout_AddCamUsername"
         android:layout_width="267dp"
-        android:layout_height="83dp"
-        android:ems="10"
-        android:hint="Camera preset password"
-        android:inputType="text"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.513" />
+        app:layout_constraintVertical_bias="0.385">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editText_AddCamUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Camera preset username"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout_AddCamPassword"
+        android:layout_width="267dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.513"
+        app:passwordToggleEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editText_AddCamPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Camera preset password"
+            android:inputType="textPassword" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/button_CreateCamClass"
@@ -58,18 +74,23 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.824" />
 
-    <EditText
-        android:id="@+id/editText_rtspurl"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout_rtspurl"
         android:layout_width="267dp"
-        android:layout_height="83dp"
-        android:ems="10"
-        android:hint="Camera Local IP"
-        android:inputType="text"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.641" />
+        app:layout_constraintVertical_bias="0.641">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editText_rtspurl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Camera Local IP"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/textView_addCameraTitle"

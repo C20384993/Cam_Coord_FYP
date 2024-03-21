@@ -1,5 +1,5 @@
 package models;
-//Data Model, used when sending a POST request to save a recording to SQL.
+//Data Model for recordings.
 public class Recording {
     private String customname;
     private String relativefilepath;

@@ -6,44 +6,60 @@
     android:layout_height="match_parent"
     tools:context=".EditCameraActivity">
 
-    <EditText
-        android:id="@+id/editText_EditCamName"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout_EditCamName"
         android:layout_width="267dp"
-        android:layout_height="83dp"
-        android:ems="10"
+        android:layout_height="wrap_content"
         android:hint="Change camera name"
-        android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.271" />
+        app:layout_constraintVertical_bias="0.271">
 
-    <EditText
-        android:id="@+id/editText_EditCamUsername"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editText_EditCamName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout_EditCamUsername"
         android:layout_width="267dp"
-        android:layout_height="83dp"
-        android:ems="10"
+        android:layout_height="wrap_content"
         android:hint="Change camera username"
-        android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.399" />
+        app:layout_constraintVertical_bias="0.399">
 
-    <EditText
-        android:id="@+id/editText_EditCamPassword"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editText_EditCamUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout_EditCamPassword"
         android:layout_width="267dp"
-        android:layout_height="83dp"
-        android:ems="10"
+        android:layout_height="wrap_content"
         android:hint="Change camera password"
-        android:inputType="text"
+        app:passwordToggleEnabled="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.527" />
+        app:layout_constraintVertical_bias="0.527">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editText_EditCamPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/button_SaveCamera"
@@ -58,21 +74,26 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.834" />
 
-    <EditText
-        android:id="@+id/editText_Editrtspurl"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout_Editrtspurl"
         android:layout_width="267dp"
-        android:layout_height="83dp"
-        android:ems="10"
+        android:layout_height="wrap_content"
         android:hint="Change camera RTSP URL"
-        android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.655" />
+        app:layout_constraintVertical_bias="0.655">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editText_EditRtspUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/button_deleteCamera"
+        android:id="@+id/button_DeleteCamera"
         android:layout_width="164dp"
         android:layout_height="72dp"
         android:text="Delete Camera"
@@ -85,7 +106,7 @@
         app:layout_constraintVertical_bias="0.834" />
 
     <TextView
-        android:id="@+id/textView_editCameraTitle"
+        android:id="@+id/textView_EditCameraTitle"
         android:layout_width="267dp"
         android:layout_height="83dp"
         android:gravity="center"

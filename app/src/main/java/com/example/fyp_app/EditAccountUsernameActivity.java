@@ -12,36 +12,40 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import clients.AccountAPIClient;
-import clients.CameraAPIClient;
 import models.AccountResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+//User can change his account username from this activity.
 public class EditAccountUsernameActivity extends AppCompatActivity {
 
+    //Layout items
     TextView editTextEditUsername;
-    Button btnSaveAccount;
+    Button buttonSaveAccount;
 
-
-    String userid;
-    String username;
-    String password;
-
-    final private String RESTURL = "http://192.168.68.131:8081";
+    //Activity Variables
+    String currentUserId;
+    String currentUsername;
+    String currentPassword;
+    final private String restUrl = "http://172.166.189.197:8081";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_account_username);
 
-        editTextEditUsername = findViewById(R.id.editText_editUsername);
-        btnSaveAccount = findViewById(R.id.btn_saveAccount);
+        //Locate items from layout
+        editTextEditUsername = findViewById(R.id.editText_EditUsername);
+        buttonSaveAccount = findViewById(R.id.button_SaveAccount);
 
-        userid = getIntent().getStringExtra("currentuserid");
-        username = getIntent().getStringExtra("username");
-        password = getIntent().getStringExtra("password");
+        //Get intent values
+        currentUserId = getIntent().getStringExtra("currentuserid");
+        currentUsername = getIntent().getStringExtra("username");
+        currentPassword = getIntent().getStringExtra("password");
 
+        //TextWatcher, tracks if the username textfield is empty.
+        //If it is empty, the button turns grey.
         editTextEditUsername.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -56,18 +60,22 @@ public class EditAccountUsernameActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if(!editTextEditUsername.getText().toString().trim().equals("")){
-                    btnSaveAccount.setBackgroundColor(getResources().getColor(R.color.blue));
+                    buttonSaveAccount.setBackgroundColor(getResources().getColor(R.color.blue));
                 }
                 else{
-                    btnSaveAccount.setBackgroundColor(getResources().getColor(R.color.grey));
+                    buttonSaveAccount.setBackgroundColor(getResources().getColor(R.color.grey));
                 }
             }
         });
 
-        btnSaveAccount.setOnClickListener(new View.OnClickListener() {
+        //Attempt to save the new username for the account when this button is pressed.
+        buttonSaveAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveChanges(userid);
+                //Get the new username,
+                //Check it is not the same or taken,
+                //Update the user's account.
+                saveChanges(currentUserId);
             }
         });
 
@@ -83,66 +91,93 @@ public class EditAccountUsernameActivity extends AppCompatActivity {
             return;
         }//end if
 
-        //Create the Account object that will be update the one in the database.
+        //Check fields aren't empty.
+        if(enteredUsername.equals(currentUsername)) {
+            editTextEditUsername.setError("Already using this username.");
+            return;
+        }//end if
+
+        //Check username isn't too short.
+        else if(enteredUsername.length() < 6){
+            editTextEditUsername.setError("Username is too short.");
+            return;
+        }
+
+        //Create the Account object that will update the one in the database.
         AccountResponse accountRequest = new AccountResponse();
         accountRequest.setUserid(Integer.parseInt(userid));
         accountRequest.setUsername(enteredUsername);
-        accountRequest.setPassword(password);
+        accountRequest.setPassword(currentPassword);
 
         //Check username isn't already being used.
         Call<AccountResponse> userCall = AccountAPIClient.getUserService()
-                .getAccount(RESTURL+"/Accounts/getbyusername?username="+enteredUsername);
+                .getAccount(restUrl +"/Accounts/getbyusername?username="+enteredUsername);
 
         userCall.enqueue(new Callback<AccountResponse>() {
-            @Override //If an account with the entered username is found, then don't allow it to be used.
+            //If a reponse is gotten from userCall, the server is up.
+            //If the response.userid == 0, an account with that username doesn't exist.
+            //If an account with the entered username is found, then don't allow it to be used.
+            @Override
             public void onResponse(Call<AccountResponse> call, Response<AccountResponse> response) {
-                Toast.makeText(EditAccountUsernameActivity.this,
-                        "Username already taken.",Toast.LENGTH_LONG).show();
+                if(response.body().getUserid()==0){
+                    Call<AccountResponse> usernameUpdateCall = AccountAPIClient.getUserService()
+                            .updateAccount(accountRequest);
+
+                    usernameUpdateCall.enqueue(new Callback<AccountResponse>() {
+                        @Override
+                        public void onResponse(Call<AccountResponse> call,
+                                               Response<AccountResponse> response) {
+
+                            Toast.makeText(EditAccountUsernameActivity.this,
+                                    "Username updated.", Toast.LENGTH_LONG).show();
+
+                            currentUsername = response.body().getUsername();
+                            //Return user to My Account page.
+                            Intent intentViewAccount = new Intent(
+                                    EditAccountUsernameActivity.this,
+                                    ViewAccountActivity.class);
+
+                            intentViewAccount.putExtra("currentuserid",userid);
+                            intentViewAccount.putExtra("username", currentUsername);
+                            intentViewAccount.putExtra("password", currentPassword);
+                            finish();
+                            startActivity(intentViewAccount);
+                        }
+
+                        @Override
+                        public void onFailure(Call<AccountResponse> call, Throwable t) {
+                            Toast.makeText(EditAccountUsernameActivity.this,
+                                    "Username failed to update.",Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+                }//end if
+                else {
+                    Toast.makeText(EditAccountUsernameActivity.this,
+                            "Username is taken.",Toast.LENGTH_LONG).show();
+                }
             }
 
-            @Override //Otherwise, update the username.
+            //Otherwise, update the username.
+            @Override
             public void onFailure(Call<AccountResponse> call, Throwable t) {
-                Call<AccountResponse> userCall2 = AccountAPIClient.getUserService()
-                        .updateAccount(accountRequest);
-
-                userCall2.enqueue(new Callback<AccountResponse>() {
-                    @Override
-                    public void onResponse(Call<AccountResponse> call, Response<AccountResponse> response) {
-
-                        Toast.makeText(EditAccountUsernameActivity.this,
-                                "Username updated.", Toast.LENGTH_LONG).show();
-
-                        username = response.body().getUsername();
-                        Intent intentViewAccount = new Intent(EditAccountUsernameActivity.this,
-                                ViewAccountActivity.class);
-
-                        intentViewAccount.putExtra("currentuserid",userid);
-                        intentViewAccount.putExtra("username",username);
-                        intentViewAccount.putExtra("password",password);
-                        finish();
-                        startActivity(intentViewAccount);
-                    }
-
-                    @Override
-                    public void onFailure(Call<AccountResponse> call, Throwable t) {
-                        Toast.makeText(EditAccountUsernameActivity.this,
-                                "Username failed to update.",Toast.LENGTH_LONG).show();
-                    }
-                });
+                Toast.makeText(EditAccountUsernameActivity.this,
+                        "Server unavailable.",Toast.LENGTH_LONG).show();
             }
         });
 
     }//end saveChanges
 
+    //Finish and return to previous activity.
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         Intent intentViewAccount = new Intent(EditAccountUsernameActivity.this,
                 ViewAccountActivity.class);
 
-        intentViewAccount.putExtra("currentuserid",userid);
-        intentViewAccount.putExtra("username",username);
-        intentViewAccount.putExtra("password",password);
+        intentViewAccount.putExtra("currentuserid", currentUserId);
+        intentViewAccount.putExtra("username", currentUsername);
+        intentViewAccount.putExtra("password", currentPassword);
         this.finish();
         startActivity(intentViewAccount);
     }

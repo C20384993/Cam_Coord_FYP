@@ -5,7 +5,6 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import services.CameraAPIService;
-import services.RecordingAPIService;
 
 public class CameraAPIClient {
     private static Retrofit getRetrofit(){
@@ -19,7 +18,7 @@ public class CameraAPIClient {
 
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.68.131:8081")
+                .baseUrl("http://172.166.189.197:8081")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
                 .build();

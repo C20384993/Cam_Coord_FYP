@@ -1,6 +1,5 @@
 package models;
-//When getting recording info from db, it will have a fileid field.
-//Sending recording info doesn't include a fileid, as the db auto-increments the field.
+//Data Model for recordings retrieved from the database.
 public class RecordingResponse {
 
     private int recordingid;

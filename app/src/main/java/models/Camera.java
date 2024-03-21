@@ -1,5 +1,5 @@
 package models;
-
+//Data Model for cameras.
 public class Camera {
     private String customname;
     private String camusername;

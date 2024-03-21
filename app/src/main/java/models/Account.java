@@ -1,5 +1,5 @@
 package models;
-//Data Model, used when sending a POST request to save a recording to SQL. UserRequest
+//Data Model for user accounts.
 public class Account {
     private String username;
     private String password;

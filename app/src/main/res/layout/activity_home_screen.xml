@@ -7,11 +7,12 @@
     tools:context=".HomeScreen">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/account_Toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:background="@color/white"
+        app:titleTextColor="@color/grey"
         app:theme="@style/Base.Theme.FYP_App"
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/Base.Theme.FYP_App"
@@ -19,7 +20,7 @@
         tools:layout_editor_absoluteX="0dp" />
 
     <Button
-        android:id="@+id/btnMainActivity_SensorManage"
+        android:id="@+id/button_CameraList"
         android:layout_width="274dp"
         android:layout_height="82dp"
         android:text="Manage Cameras"
@@ -33,7 +34,7 @@
         app:layout_constraintVertical_bias="0.399" />
 
     <Button
-        android:id="@+id/btnMainActivity_Recordings"
+        android:id="@+id/button_RecordingsAndStreams"
         android:layout_width="271dp"
         android:layout_height="84dp"
         android:backgroundTint="@color/blue"
@@ -60,5 +61,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.243" />
+
+    <Button
+        android:id="@+id/button_DarkMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/dark"
+        android:text="Darkmode"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.101"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.853" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

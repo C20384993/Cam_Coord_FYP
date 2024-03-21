@@ -7,7 +7,7 @@
     tools:context=".ViewAccountActivity">
 
     <TextView
-        android:id="@+id/viewAccount_username"
+        android:id="@+id/textView_Username"
         android:layout_width="179dp"
         android:layout_height="62dp"
         android:text=""
@@ -21,7 +21,7 @@
         app:layout_constraintVertical_bias="0.215" />
 
     <TextView
-        android:id="@+id/viewAccount_password"
+        android:id="@+id/textView_Password"
         android:layout_width="179dp"
         android:layout_height="62dp"
         android:text=""
@@ -35,7 +35,7 @@
         app:layout_constraintVertical_bias="0.384" />
 
     <Button
-        android:id="@+id/btn_editUsername"
+        android:id="@+id/button_EditUsername"
         android:layout_width="173dp"
         android:layout_height="65dp"
         android:text="Change Username"
@@ -49,7 +49,7 @@
         app:layout_constraintVertical_bias="0.211" />
 
     <Button
-        android:id="@+id/btn_deleteAccount"
+        android:id="@+id/button_DeleteAccount"
         android:layout_width="173dp"
         android:layout_height="65dp"
         android:backgroundTint="@color/red"
@@ -62,7 +62,7 @@
         app:layout_constraintVertical_bias="0.659" />
 
     <Button
-        android:id="@+id/btn_editPassword"
+        android:id="@+id/button_EditPassword"
         android:layout_width="173dp"
         android:layout_height="65dp"
         android:text="Change Password"
@@ -76,7 +76,7 @@
         app:layout_constraintVertical_bias="0.384" />
 
     <TextView
-        android:id="@+id/textView_editAccountTitle"
+        android:id="@+id/textView_EditAccountTitle"
         android:layout_width="193dp"
         android:layout_height="56dp"
         android:gravity="center"
@@ -90,7 +90,7 @@
         app:layout_constraintVertical_bias="0.097" />
 
     <TextView
-        android:id="@+id/textView_revealPass"
+        android:id="@+id/textView_RevealPass"
         android:layout_width="148dp"
         android:layout_height="35dp"
         android:clickable="true"
@@ -103,5 +103,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.461" />
+
+    <Button
+        android:id="@+id/button_DarkMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/dark"
+        android:text="Darkmode"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.101"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.853" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,6 +12,7 @@ import java.util.List;
 
 import models.RecordingRecyclerItem;
 
+//Used in the RecordingListActivity for the Recycler View.
 public class RecordingsAdapter extends RecyclerView.Adapter<RecordingsAdapter.ViewHolder> {
 
     private List<RecordingRecyclerItem> recordingList;
@@ -34,7 +35,6 @@ public class RecordingsAdapter extends RecyclerView.Adapter<RecordingsAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull RecordingsAdapter.ViewHolder holder, int position) {
         holder.recordingName.setText(recordingList.get(position).getCustomname());
-        holder.recordingPath.setText(recordingList.get(position).getRelativefilepath());
 
         holder.itemView.setOnClickListener(view -> {
             mItemListener.onItemClick(recordingList.get(position)); //Returns item position.
@@ -49,17 +49,12 @@ public class RecordingsAdapter extends RecyclerView.Adapter<RecordingsAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
         TextView recordingName;
-        TextView recordingPath;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             recordingName = itemView.findViewById(R.id.recordingName);
-            recordingPath = itemView.findViewById(R.id.recordingPath);
         }//end ViewHolder
     }//end class
-
-
 }//end RecordingsAdapter

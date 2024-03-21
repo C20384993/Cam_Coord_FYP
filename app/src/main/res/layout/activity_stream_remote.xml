@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#212121"
+    tools:context=".MainActivity">
+
+    <com.google.android.exoplayer2.ui.StyledPlayerView
+        android:id="@+id/player_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+    <Button
+        android:id="@+id/button_SwitchSource"
+        android:layout_width="164dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="62dp"
+        android:text="View locally"
+        android:textSize="18dp"
+        android:backgroundTint="@color/grey"/>
+
+    <Button
+        android:id="@+id/button_StartRecording"
+        android:layout_width="164dp"
+        android:layout_height="72dp"
+        android:backgroundTint="@color/blue"
+        android:textSize="18dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="112dp"
+        android:text="Start Recording" />
+
+</RelativeLayout>

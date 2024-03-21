@@ -18,71 +18,70 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.microsoft.azure.storage.CloudStorageAccount;
-import com.microsoft.azure.storage.blob.CloudBlob;
 import com.microsoft.azure.storage.blob.CloudBlobClient;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.microsoft.azure.storage.blob.CloudBlockBlob;
-import com.microsoft.azure.storage.blob.ListBlobItem;
 
 import java.io.File;
-import java.sql.Blob;
 
-import clients.CameraAPIClient;
 import clients.RecordingAPIClient;
-import models.CameraResponse;
 import models.RecordingResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+//Provides options to change the current recording name, play the recording, or delete it.
 public class EditRecordingActivity extends AppCompatActivity {
 
-    TextView edtTextCustomName;
-    Button btnDownload;
-    Button btnDeleteRecording;
-    Button btnSaveRecording;
-    String storageConnectionString = "DefaultEndpointsProtocol=https;AccountName=c20384993fypstorage;AccountKey=0/AH0LCag12HGTA1hw+kXlCdj/0fJ9sew5o9nytBW3tac4gFiwpmEgwWOqlA+c4C4hHKg5SdgSCm+ASt4ij9LQ==;EndpointSuffix=core.windows.net";
+    //Layout items.
+    TextView editTextCustomName;
+    Button buttonPlayRecording;
+    Button buttonDeleteRecording;
+    Button buttonSaveRecordingChanges;
 
-
-    String userid;
-    String username;
-    String password;
-    String recordingid;
-    String cameraid;
-    String customname;
-    String relativefilepath;
-    String creationdate;
-    String originalCustname;
+    //Activity Variables
+    String currentUserId;
+    String currentUsername;
+    String currentPassword;
+    String currentRecordingId;
+    String cameraId;
+    String creationDate;
+    String customName; //Used if the user wants to change the recording name.
+    String originalCustomName; //The recording name initially.
+    String relativeFilepath;
     String newCustomName;
     File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS); //The file object the recording is saved to.
+    String storageConnectionString = "DefaultEndpointsProtocol=https;AccountName=c20384993fypstorage;AccountKey=0/AH0LCag12HGTA1hw+kXlCdj/0fJ9sew5o9nytBW3tac4gFiwpmEgwWOqlA+c4C4hHKg5SdgSCm+ASt4ij9LQ==;EndpointSuffix=core.windows.net";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_recording);
 
-        userid = getIntent().getStringExtra("userid");
-        username = getIntent().getStringExtra("username");
-        password = getIntent().getStringExtra("password");
+        //Get intent values.
+        currentUserId = getIntent().getStringExtra("userid");
+        currentUsername = getIntent().getStringExtra("username");
+        currentPassword = getIntent().getStringExtra("password");
+        currentRecordingId = getIntent().getStringExtra("recordingid");
+        cameraId = getIntent().getStringExtra("cameraid");
+        customName = getIntent().getStringExtra("customname");
+        relativeFilepath = getIntent().getStringExtra("relativefilepath");
+        creationDate = getIntent().getStringExtra("creationDate");
+        originalCustomName = customName;
 
-        recordingid = getIntent().getStringExtra("recordingid");
-        Log.e("AZURE","initialrecordingid = "+recordingid);
-        cameraid = getIntent().getStringExtra("cameraid");
-        customname = getIntent().getStringExtra("customname");
-        relativefilepath = getIntent().getStringExtra("relativefilepath");
-        creationdate = getIntent().getStringExtra("creationdate");
-        originalCustname = customname;
+        editTextCustomName = findViewById(R.id.editText_recCustomName);
+        buttonPlayRecording = findViewById(R.id.button_PlayRecording);
+        buttonDeleteRecording = findViewById(R.id.button_deleteRecording);
+        buttonSaveRecordingChanges = findViewById(R.id.button_saveRecording);
 
-        edtTextCustomName = findViewById(R.id.editText_recCustomName);
-        btnDownload = findViewById(R.id.button_recDownload);
-        btnDeleteRecording = findViewById(R.id.btn_deleteRecording);
-        btnSaveRecording = findViewById(R.id.button_saveRecording);
-
-        edtTextCustomName.setText(getIntent().getStringExtra("customname")
+        //Remove the .mkv file extension when displaying the recording name.
+        editTextCustomName.setText(getIntent().getStringExtra("customname")
                 .substring(0, getIntent().getStringExtra("customname").length() - 4));
-        Log.e("AZURE","creationdate = "+creationdate);
 
-        edtTextCustomName.addTextChangedListener(new TextWatcher() {
+        //TextWatcher, tracks if the textfields are empty.
+        //If all are empty, the button turns grey.
+        editTextCustomName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -95,60 +94,67 @@ public class EditRecordingActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!edtTextCustomName.getText().toString().trim().equals("")){
-                    btnSaveRecording.setBackgroundColor(getResources().getColor(R.color.blue));
+                if(!editTextCustomName.getText().toString().trim().equals("")){
+                    buttonSaveRecordingChanges.setBackgroundColor(getResources().getColor(R.color.blue));
                 }
-                else if(edtTextCustomName.getText().toString().equals(originalCustname)){
-                    btnSaveRecording.setBackgroundColor(getResources().getColor(R.color.grey));
+                else if(editTextCustomName.getText().toString().equals(originalCustomName)){
+                    buttonSaveRecordingChanges.setBackgroundColor(getResources().getColor(R.color.grey));
                 }
                 else{
-                    btnSaveRecording.setBackgroundColor(getResources().getColor(R.color.grey));
+                    buttonSaveRecordingChanges.setBackgroundColor(getResources().getColor(R.color.grey));
                 }
             }
         });
 
-
-
-        btnDownload.setOnClickListener(new View.OnClickListener() {
+        //Play the recording in the app using ExoPlayer.
+        buttonPlayRecording.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadRecording(originalCustname);
+                //Download and play the recording.
+                playRecording(originalCustomName);
             }
         });
 
-        btnDeleteRecording.setOnClickListener(new View.OnClickListener() {
+        //Delete the recording from the database and Azure Blob Storage.
+        //Create an AlertDialogue so user must confirm the delete.
+        buttonDeleteRecording.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CreateAlertDialogue();
             }
         });
 
-        btnSaveRecording.setOnClickListener(new View.OnClickListener() {
+        //Check if the user has renamed the recording, then save the changes to the database and blob storage.
+        buttonSaveRecordingChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                newCustomName = edtTextCustomName.getText().toString()+".mkv";
-                Log.e("AZURE","newCustomName = "+newCustomName);
-                RenameRecording(originalCustname, newCustomName, edtTextCustomName.getText().toString());
+                newCustomName = editTextCustomName.getText().toString()+".mkv";
+                RenameRecording(originalCustomName, newCustomName,
+                        editTextCustomName.getText().toString());
             }
         });
     }//end onCreate
 
-    private void RenameRecording(String originalCustomname, String newRecordingName, String newNameNoExtension) {
+    //To rename the recording, it must be:
+    //Downloaded,
+    //Deleted from the Blob Storage,
+    //Reuploaded with the new name but the same details.
+    private void RenameRecording(String originalCustomname, String newRecordingName,
+                                 String newNameNoExtension) {
 
+        //Check filename isn't empty.
         if(TextUtils.isEmpty(newNameNoExtension)){
-            edtTextCustomName.setError("Enter a name for the file.");
+            editTextCustomName.setError("Enter a name for the file.");
             return;
         }//end if
 
+        //Check the same name isn't being used.
         if(originalCustomname.equals(newRecordingName)){
-            edtTextCustomName.setError("File already has this name.");
+            editTextCustomName.setError("File already has this name.");
             return;
         }
 
         //Download, Delete, Upload
-        String userid = getIntent().getStringExtra("userid");
-        Log.d("AZURE","newRecordingName = "+newRecordingName);
-
         //Download
         AsyncTask<Void,Void,Boolean> task = new AsyncTask<Void,Void,Boolean>(){
             @Override
@@ -156,42 +162,49 @@ public class EditRecordingActivity extends AppCompatActivity {
                 boolean success = false;
                 try
                 {
-                    // Retrieve storage account from connection-string.
+                    //Retrieve a storage account using the storageConnectionString.
                     CloudStorageAccount storageAccount = CloudStorageAccount.parse(storageConnectionString);
 
-                    // Create the blob client.
+                    //Create the blob client
                     CloudBlobClient blobClient = storageAccount.createCloudBlobClient();
 
-                    // Retrieve reference to a previously created container.
-                    CloudBlobContainer container = blobClient.getContainerReference("cont"+userid);
+                    //Find a reference for an existing container.
+                    CloudBlobContainer container = blobClient.getContainerReference("cont"+currentUserId);
 
+                    //Retrieve the blob from the recording name
                     CloudBlockBlob blob = container.getBlockBlobReference(originalCustomname);
 
+                    //Create and download the recording.
                     File file = new File("/storage/emulated/0/Download/" + originalCustomname);
                     blob.downloadToFile("/storage/emulated/0/Download/" + originalCustomname);
 
                     //Downloaded, now delete from cloud.
                     blob.delete();
 
-                    //Rename file + upload
+                    //Rename file and upload
                     File fileNewName = new File("/storage/emulated/0/Download/" + newRecordingName);
                     file.renameTo(fileNewName);
 
-                    // Create the blob client.
+                    //Create the blob client
                     CloudBlobClient blobClientRename = storageAccount.createCloudBlobClient();
 
-                    // Retrieve reference to a previously created container.
-                    CloudBlobContainer containerRename = blobClientRename.getContainerReference("cont"+userid);
+                    //Find a reference for an existing container.
+                    CloudBlobContainer containerRename = blobClientRename.getContainerReference("cont"+currentUserId);
 
-                    //create blob if it doesn't exist - hopefully resolves bugs
+                    //Create a blob if it doesn't already exist.
                     containerRename.createIfNotExists();
 
-                    // Create or overwrite the "myimage.jpg" blob with contents from a local file.
+                    //Overwrite the blob with the recording's new name.
                     CloudBlockBlob blobRename = container.getBlockBlobReference(newRecordingName);
 
+                    //Upload the renamed recording file.
                     blobRename.uploadFromFile(directory.getAbsolutePath()+"/"+newRecordingName);
-                    Log.d("AZURE","upload function completed");
+                    File recording = new File(directory.getAbsolutePath()+"/"+newRecordingName);
 
+                    //Delete the downloaded recording from the phone.
+                    recording.delete();
+
+                    //Recording was renamed in the blob storage, so continue with next part.
                     success = true;
                 }
                 catch (Exception e)
@@ -209,15 +222,15 @@ public class EditRecordingActivity extends AppCompatActivity {
                 super.onPostExecute(success);
                 if (success) {
                     Toast.makeText(EditRecordingActivity.this, "Recording renamed.", Toast.LENGTH_LONG).show();
-                    //Update DB
+                    //Update the database.
                     //Create the Recording object that will be update the one in the database.
                     RecordingResponse recordingRequest = new RecordingResponse();
                     recordingRequest.setCustomname(newRecordingName);
-                    recordingRequest.setCreationdate(creationdate);
-                    recordingRequest.setRelativefilepath(relativefilepath);
-                    recordingRequest.setUserid(Integer.parseInt(userid));
-                    recordingRequest.setRecordingid(Integer.parseInt(recordingid));
-                    recordingRequest.setCameraid(Integer.parseInt(cameraid));
+                    recordingRequest.setCreationdate(creationDate);
+                    recordingRequest.setRelativefilepath(relativeFilepath);
+                    recordingRequest.setUserid(Integer.parseInt(currentUserId));
+                    recordingRequest.setRecordingid(Integer.parseInt(currentRecordingId));
+                    recordingRequest.setCameraid(Integer.parseInt(cameraId));
 
                     //Send the recordingRequest object.
                     Call<RecordingResponse> recordingCall = RecordingAPIClient.getRecordingService()
@@ -231,9 +244,9 @@ public class EditRecordingActivity extends AppCompatActivity {
                             Intent intentRecList =
                                     new Intent(EditRecordingActivity.this, RecordingListActivity.class);
 
-                            intentRecList.putExtra("currentuserid",userid);
-                            intentRecList.putExtra("username",username);
-                            intentRecList.putExtra("password",password);
+                            intentRecList.putExtra("currentuserid",currentUserId);
+                            intentRecList.putExtra("username", currentUsername);
+                            intentRecList.putExtra("password", currentPassword);
                             finish();
                             startActivity(intentRecList);
                         }
@@ -254,13 +267,14 @@ public class EditRecordingActivity extends AppCompatActivity {
 
     }//end RenameRecording
 
+    //User must confirm deletion of recording in the Alert Dialogue.
     private void CreateAlertDialogue() {
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
         builder.setMessage("Are you sure you want to delete this recording?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                deleteRecording(originalCustname);
+                deleteRecording(originalCustomName);
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -273,42 +287,38 @@ public class EditRecordingActivity extends AppCompatActivity {
         builder.show();
     }//end CreateAlertDialogue
 
-    public void downloadRecording(String originalCustomname){
+    //Download the recording and play it using ExoPlayer.
+    public void playRecording(String originalCustomname){
         String userid = getIntent().getStringExtra("userid");
-        //cant perform network tasks on main thread
+
+        //AsyncTask as it is not possible to perform network tasks on main thread
             AsyncTask<Void,Void,Boolean> task = new AsyncTask<Void,Void,Boolean>(){
             @Override
             protected Boolean doInBackground(Void... params) {
                 boolean success = false;
                 try
                 {
-                    // Retrieve storage account from connection-string.
+                    //Retrieve a storage account using the storageConnectionString.
                     CloudStorageAccount storageAccount = CloudStorageAccount.parse(storageConnectionString);
 
-                    // Create the blob client.
+                    //Create the blob client
                     CloudBlobClient blobClient = storageAccount.createCloudBlobClient();
 
-                    // Retrieve reference to a previously created container.
-                    Log.e("AZURE","userid = "+userid);
-                    Log.e("AZURE","originalCustomname = "+originalCustomname);
+                    //Find a reference for an existing container.
+                    CloudBlobContainer container = blobClient.getContainerReference("cont"+currentUserId);
 
-                    Log.e("AZURE","blobClient.getContainerReference = cont"+userid);
-                    CloudBlobContainer container = blobClient.getContainerReference("cont"+userid);
-                    Log.e("AZURE","after the getContRef");
-
-                    Log.e("AZURE","container.getBlockBlobReference = /"+originalCustomname);
-                    CloudBlockBlob blob1 = container.getBlockBlobReference(originalCustomname);
-                    Log.e("AZURE","after the getBlockBlobRef");
+                    //Retrieve the blob with the recording blob.
+                    CloudBlockBlob playBlob = container.getBlockBlobReference(originalCustomname);
 
                     File file = new File("/storage/emulated/0/Download/" + originalCustomname);
-                    blob1.downloadToFile("/storage/emulated/0/Download/" + originalCustomname);
+                    playBlob.downloadToFile("/storage/emulated/0/Download/" + originalCustomname);
                     success = true;
                 }
                 catch (Exception e)
                 {
                     // Output the stack trace.
                     e.printStackTrace();
-                    Log.e("AZURE","upload failed: "+e);
+                    Toast.makeText(EditRecordingActivity.this, "Server Unavailable.", Toast.LENGTH_LONG).show();
                     success = false;
                 }
                 return success;
@@ -318,51 +328,60 @@ public class EditRecordingActivity extends AppCompatActivity {
                 protected void onPostExecute(Boolean success) {
                     super.onPostExecute(success);
                     if (success) {
-                        Toast.makeText(EditRecordingActivity.this, "Recording downloaded.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(EditRecordingActivity.this, "Playing Recording.", Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(EditRecordingActivity.this, "Failed to download recording.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(EditRecordingActivity.this, "Failed to get recording.", Toast.LENGTH_LONG).show();
                     }
+                    Intent intentViewRecording =
+                            new Intent(EditRecordingActivity.this, RecordingViewerActivity.class);
+
+                    intentViewRecording.putExtra("userid",userid);
+                    intentViewRecording.putExtra("username", currentUsername);
+                    intentViewRecording.putExtra("password", currentPassword);
+                    intentViewRecording.putExtra("cameraid", cameraId);
+                    intentViewRecording.putExtra("recordingname", originalCustomName);
+                    intentViewRecording.putExtra("recordingid", currentRecordingId);
+                    intentViewRecording.putExtra("relativefilepath", relativeFilepath);
+                    intentViewRecording.putExtra("creationdate", creationDate);
+                    Log.e("AZURE","OriginalCustomname: "+originalCustomname);
+                    finish();
+                    startActivity(intentViewRecording);
                 }
         };
 
         task.execute();
-    }//end downloadRecording
+    }//end playRecording
 
+    //Delete the recording from the Blob Storage and the database.
     public void deleteRecording(String originalCustomname){
-        String userid = getIntent().getStringExtra("userid");
-        //cant perform network tasks on main thread
+
+        //AsyncTask as it is not possible to perform network tasks on main thread
         AsyncTask<Void,Void,Boolean> task = new AsyncTask<Void,Void,Boolean>(){
             @Override
             protected Boolean doInBackground(Void... params) {
                 boolean success = false;
                 try
                 {
-                    // Retrieve storage account from connection-string.
+                    //Retrieve storage account from connection-string.
                     CloudStorageAccount storageAccount = CloudStorageAccount.parse(storageConnectionString);
 
-                    // Create the blob client.
+                    //Create the blob client.
                     CloudBlobClient blobClient = storageAccount.createCloudBlobClient();
 
-                    // Retrieve reference to a previously created container.
-                    Log.e("AZURE","userid = "+userid);
-                    Log.e("AZURE","originalCustomname = "+originalCustomname);
+                    //Retrieve reference to a previously created container.
+                    CloudBlobContainer container = blobClient.getContainerReference("cont"+currentUserId);
 
-                    Log.e("AZURE","blobClient.getContainerReference = cont"+userid);
-                    CloudBlobContainer container = blobClient.getContainerReference("cont"+userid);
-                    Log.e("AZURE","after the getContRef");
+                    //Retrieve the blob with the recording blob.
+                    CloudBlockBlob deleteBlob = container.getBlockBlobReference(originalCustomname);
 
-                    Log.e("AZURE","container.getBlockBlobReference = /"+originalCustomname);
-                    CloudBlockBlob blob1 = container.getBlockBlobReference(originalCustomname);
-                    Log.e("AZURE","after the getBlockBlobRef");
-
-                    blob1.delete();
+                    deleteBlob.delete();
                     success = true;
                 }
                 catch (Exception e)
                 {
                     // Output the stack trace.
                     e.printStackTrace();
-                    Log.e("AZURE","upload failed: "+e);
+                    Toast.makeText(EditRecordingActivity.this, "Server Unavailable.", Toast.LENGTH_LONG).show();
                     success = false;
                 }
                 return success;
@@ -373,8 +392,8 @@ public class EditRecordingActivity extends AppCompatActivity {
                 super.onPostExecute(success);
                 if (success) {
                     //Now delete from the database.
-                    Call<Void> recordingCall = RecordingAPIClient.getRecordingService().deleteRecording(recordingid);
-                    Log.e("AZURE","recordingid = "+recordingid);
+                    Call<Void> recordingCall = RecordingAPIClient.getRecordingService().deleteRecording(currentRecordingId);
+                    Log.e("AZURE","recordingid = "+ currentRecordingId);
 
                     recordingCall.enqueue(new Callback<Void>() {
                         @Override
@@ -384,9 +403,9 @@ public class EditRecordingActivity extends AppCompatActivity {
                             Intent intentRecList = new Intent(EditRecordingActivity.this,
                                     RecordingListActivity.class);
 
-                            intentRecList.putExtra("currentuserid",userid);
-                            intentRecList.putExtra("username",username);
-                            intentRecList.putExtra("password",password);
+                            intentRecList.putExtra("currentuserid",currentUserId);
+                            intentRecList.putExtra("username", currentUsername);
+                            intentRecList.putExtra("password", currentPassword);
                             finish();
                             startActivity(intentRecList);
                         }
@@ -405,7 +424,7 @@ public class EditRecordingActivity extends AppCompatActivity {
         };
 
         task.execute();
-    }//end downloadRecording
+    }//end deleteRecording
 
     @Override
     public void onBackPressed() {
@@ -413,9 +432,9 @@ public class EditRecordingActivity extends AppCompatActivity {
         Intent intentRecList = new Intent(EditRecordingActivity.this,
                 RecordingListActivity.class);
 
-        intentRecList.putExtra("currentuserid",userid);
-        intentRecList.putExtra("username",username);
-        intentRecList.putExtra("password",password);
+        intentRecList.putExtra("currentuserid", currentUserId);
+        intentRecList.putExtra("username", currentUsername);
+        intentRecList.putExtra("password", currentPassword);
         this.finish();
         startActivity(intentRecList);
     }

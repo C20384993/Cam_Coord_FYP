@@ -1,5 +1,5 @@
 package models;
-
+//Data Model for items in the Recycler View of the CameraListActivity.
 public class CameraRecyclerItem {
 
     int cameraid;

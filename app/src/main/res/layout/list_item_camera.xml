@@ -12,29 +12,6 @@
         android:layout_height="100dp"
         android:background="@color/light_blue">
 
-
-        <TextView
-            android:id="@+id/camPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
-            android:text="Pass text"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/camUsername" />
-
-        <TextView
-            android:id="@+id/camUsername"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
-            android:text="User text"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cameraName" />
-
         <TextView
             android:id="@+id/cameraName"
             android:layout_width="182dp"

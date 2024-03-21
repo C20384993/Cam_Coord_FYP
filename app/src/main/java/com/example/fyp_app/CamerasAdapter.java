@@ -12,6 +12,7 @@ import java.util.List;
 
 import models.CameraRecyclerItem;
 
+//Used in the CameraListActivity for the Recycler View.
 public class CamerasAdapter extends RecyclerView.Adapter<CamerasAdapter.ViewHolder> {
 
     private List<CameraRecyclerItem> cameraList;
@@ -34,11 +35,7 @@ public class CamerasAdapter extends RecyclerView.Adapter<CamerasAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        String hiddenPassword = cameraList.get(position).getCampassword().replaceAll(".","*");
-
         holder.cameraName.setText(cameraList.get(position).getCustomname());
-        holder.camUsername.setText("Username: "+cameraList.get(position).getCamusername());
-        holder.camPassword.setText("Password: "+hiddenPassword);
 
         holder.itemView.setOnClickListener(view -> {
             mItemListener.onItemClick(cameraList.get(position)); //Returns item position.
@@ -57,15 +54,11 @@ public class CamerasAdapter extends RecyclerView.Adapter<CamerasAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView cameraName;
-        TextView camUsername;
-        TextView camPassword;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             cameraName = itemView.findViewById(R.id.cameraName);
-            camUsername = itemView.findViewById(R.id.camUsername);
-            camPassword = itemView.findViewById(R.id.camPassword);
-        }//end ViewHolder
-    }//end class
-}
+        }
+    }//end ViewHolder
+}//end class

@@ -1,6 +1,5 @@
 package services;
 
-import models.AccountResponse;
 import models.Camera;
 import models.CameraResponse;
 import retrofit2.Call;
@@ -8,13 +7,12 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
-import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 
+//Define REST API paths.
 public interface CameraAPIService {
 
     @GET("/json.json")

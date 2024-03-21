@@ -1,5 +1,5 @@
 package models;
-
+//Data Model for user accounts retrieved from the database.
 public class AccountResponse {
 
     private int userid;

@@ -2,60 +2,53 @@ package com.example.fyp_app;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.InputStream;
-import java.security.KeyStore;
-import java.security.SecureRandom;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateFactory;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManagerFactory;
-import javax.net.ssl.X509TrustManager;
-
 import clients.AccountAPIClient;
 import models.AccountResponse;
-import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+//Landing page for the app. User can sign in or create an account.
 public class MainActivity extends AppCompatActivity {
 
-    EditText edtTextAccountUsername;
-    EditText edtTextAccountPassword;
-    TextView textViewRegisterLink;
-    Button btnLogin;
+    //Layout items
+    EditText editTextAccountUsername;   //Text box for entering username.
+    EditText editTextAccountPassword;   //Text box for entering password.
+    TextView textViewRegisterLink;  //Links to the Create Account page/activity.
+    Button buttonLogin; //Attempt to login with entered username and password.
+    Button buttonDarkMode;  //Switch dark mode on/off.
 
-
-    //final private String RESTURL = "http://172.166.189.197:8081";
-    final private String RESTURL = "http://192.168.68.131:8081";
+    //Activity variables
+    boolean darkMode = false; //Track if darkMode is on/off.
+    final private String restUrl = "http://172.166.189.197:8081"; //REST API URL.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        edtTextAccountUsername = findViewById(R.id.editText_accountname);
-        edtTextAccountPassword = findViewById(R.id.editText_accountpassword);
-        textViewRegisterLink = findViewById(R.id.textView_registerTitle);
-        btnLogin = findViewById(R.id.button_Login);
+        //Locate items from layout
+        editTextAccountUsername = findViewById(R.id.editText_AccountName);
+        editTextAccountPassword = findViewById(R.id.editText_AccountPassword);
+        textViewRegisterLink = findViewById(R.id.textView_RegisterLink);
+        buttonLogin = findViewById(R.id.button_Login);
+        buttonDarkMode = findViewById(R.id.button_DarkMode);
 
-        edtTextAccountUsername.addTextChangedListener(new TextWatcher() {
+        //TextWatcher, tracks if the username textfield is empty. If it is and/or the password field
+        //is empty, the login button turns grey.
+        editTextAccountUsername.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -68,16 +61,20 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!edtTextAccountPassword.getText().toString().trim().equals("") & !edtTextAccountUsername.getText().toString().trim().equals("")){
-                    btnLogin.setBackgroundColor(getResources().getColor(R.color.blue));
+                //Turn button blue if both text fields are filled in.
+                if(!editTextAccountPassword.getText().toString().trim().equals("")
+                        & !editTextAccountUsername.getText().toString().trim().equals("")){
+                    buttonLogin.setBackgroundColor(getResources().getColor(R.color.blue));
                 }
+                //Turn grey if one or both is empty.
                 else{
-                    btnLogin.setBackgroundColor(getResources().getColor(R.color.grey));
+                    buttonLogin.setBackgroundColor(getResources().getColor(R.color.grey));
                 }
             }
         });
 
-        edtTextAccountPassword.addTextChangedListener(new TextWatcher() {
+        //Same function as Username TextWatcher, but for the password field.
+        editTextAccountPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -90,15 +87,17 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!edtTextAccountPassword.getText().toString().trim().equals("") & !edtTextAccountUsername.getText().toString().trim().equals("")){
-                    btnLogin.setBackgroundColor(getResources().getColor(R.color.blue));
+                if(!editTextAccountPassword.getText().toString().trim().equals("")
+                        & !editTextAccountUsername.getText().toString().trim().equals("")){
+                    buttonLogin.setBackgroundColor(getResources().getColor(R.color.blue));
                 }
                 else{
-                    btnLogin.setBackgroundColor(getResources().getColor(R.color.grey));
+                    buttonLogin.setBackgroundColor(getResources().getColor(R.color.grey));
                 }
             }
         });
 
+        //When user clicks on this link, bring him to the CreateAccountActivity to make an account.
         textViewRegisterLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,77 +106,119 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnLogin.setOnClickListener(v -> {
+        buttonLogin.setOnClickListener(v -> {
             //Get username and password from editText field,
             //Check db for them,
             //If match is found, login with info.
             login();
         });
 
+        //Dark Mode checks.
+        if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO){
+            darkMode = false;
+            buttonDarkMode.setText("Dark mode");
+            buttonDarkMode.setBackgroundColor(getResources().getColor(R.color.dark));
+        }
+        else if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES){
+            darkMode = true;
+            buttonDarkMode.setText("Light mode");
+            buttonDarkMode.setBackgroundColor(getResources().getColor(R.color.light_blue));
+        }
+        else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+        buttonDarkMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(darkMode){
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    buttonDarkMode.setText("Dark mode");
+                    darkMode = false;
+                }
+                else{
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    darkMode=true;
+                    buttonDarkMode.setText("Light mode");
+                }
+            }
+        });
     }//end OnCreate
 
+    //login(): Checks for an account with matching details to the those the user has entered.
+    //If an account is found, and if the details are entered correctly, the user is logged in.
     public void login(){
         //Get username and password from editText field,
-        String enteredUsername = edtTextAccountUsername.getText().toString();
-        String enteredPassword = edtTextAccountPassword.getText().toString();
+        String enteredUsername = editTextAccountUsername.getText().toString();
+        String enteredPassword = editTextAccountPassword.getText().toString();
 
         //Check username and password fields aren't empty.
         if(enteredUsername.isEmpty()){
-            edtTextAccountUsername.setError("Please enter a username");
+            editTextAccountUsername.setError("Please enter a username");
             return;
         }
         if(enteredPassword.isEmpty()){
-            edtTextAccountPassword.setError("Please enter a password");
+            editTextAccountPassword.setError("Please enter a password");
             return;
         }
 
-        //Check db for username entered, GET request with entered username.
+        //Check database for username entered, GET request with entered username.
         Call<AccountResponse> userCall = AccountAPIClient.getUserService()
-                .getAccount(RESTURL+"/Accounts/getbyusername?username="+enteredUsername);
+                .getAccount(restUrl +"/Accounts/getbyusername?username="+enteredUsername);
 
+        //Returns the Account object from the database as a response.
         userCall.enqueue(new Callback<AccountResponse>() {
             @Override
             public void onResponse(@NonNull Call<AccountResponse> call,
                                    @NonNull Response<AccountResponse> response) {
 
+                //If an account object was returned, then the connection was successful.
                 if(response.isSuccessful()){
+                    //Get the username, password, and ID of the returned account.
                     String responseUsername = response.body().getUsername();
                     String responsePassword = response.body().getPassword();
                     int responseUserid = response.body().getUserid();
 
-                    //Check username
+                    //The REST API will return a userID of 0 if an account with the entered
+                    //username doesn't exist.
                     if(responseUserid == 0){
                         Toast.makeText(MainActivity.this,
                                 "Invalid username",Toast.LENGTH_LONG).show();
                         return;
                     }
 
-                    //Check passwords match.
+                    //Check passwords match, and if they do then pass user details to the
+                    //HomeScreen Activity.
                     if(enteredPassword.equals(responsePassword)){
                         Intent intentHomeScreen = new Intent(MainActivity.this,
                                 HomeScreen.class);
 
                         intentHomeScreen.putExtra("username",responseUsername);
                         intentHomeScreen.putExtra("password",responsePassword);
-                        intentHomeScreen.putExtra("currentuserid",String.valueOf(responseUserid));
+                        intentHomeScreen.putExtra("currentuserid",
+                                String.valueOf(responseUserid));
                         startActivity(intentHomeScreen);
                         finish();
                     }
+                    //Inform user the password was incorrect.
                     else{
                         Toast.makeText(MainActivity.this,
                                 "Incorrect password.",Toast.LENGTH_LONG).show();
                     }
 
                 }
+                //If no account was returned, connection failed.
+                else{
+                    Toast.makeText(MainActivity.this,
+                            "Could not connect to server.",Toast.LENGTH_LONG).show();
+                }
             }
 
-
+            //If there was no response, the connection failed.
             @Override
             public void onFailure(@NonNull Call<AccountResponse> call, @NonNull Throwable t) {
                 Toast.makeText(MainActivity.this,
                         "Could not connect to server.",Toast.LENGTH_LONG).show();
             }
         });
-
     }//end login
 }

@@ -17,33 +17,39 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+//User can change his account password from this activity.
 public class EditAccountPasswordActivity extends AppCompatActivity {
 
+    //Layout items
     TextView editTextOldPassword;
     TextView editTextEditPassword;
     TextView editTextConfirmPassword;
-    Button btnSaveAccount;
+    Button buttonSaveAccount;
 
-    String userid;
-    String username;
-    String password;
-
-    final private String RESTURL = "http://192.168.68.131:8081";
+    //Activity Variables
+    String currentUserId;
+    String currentUsername;
+    String currentPassword;
+    final private String restUrl = "http://172.166.189.197:8081";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_account_password);
 
-        editTextOldPassword = findViewById(R.id.editText_oldPassword);
-        editTextEditPassword = findViewById(R.id.editText_newPassword);
-        editTextConfirmPassword = findViewById(R.id.editText_confirmPassword);
-        btnSaveAccount = findViewById(R.id.btn_updatePassword);
+        //Locate items from layout
+        editTextOldPassword = findViewById(R.id.editText_OldPassword);
+        editTextEditPassword = findViewById(R.id.editText_NewPassword);
+        editTextConfirmPassword = findViewById(R.id.editText_ConfirmPassword);
+        buttonSaveAccount = findViewById(R.id.button_UpdatePassword);
 
-        userid = getIntent().getStringExtra("currentuserid");
-        username = getIntent().getStringExtra("username");
-        password = getIntent().getStringExtra("password");
+        //Get intent values
+        currentUserId = getIntent().getStringExtra("currentuserid");
+        currentUsername = getIntent().getStringExtra("username");
+        currentPassword = getIntent().getStringExtra("password");
 
+        //TextWatcher, tracks if the password textfields are empty.
+        //If all are empty, the button turns grey.
         editTextOldPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -57,12 +63,13 @@ public class EditAccountPasswordActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!editTextOldPassword.getText().toString().trim().equals("") & !editTextEditPassword.getText().toString().trim().equals("")
+                if(!editTextOldPassword.getText().toString().trim().equals("") &
+                        !editTextEditPassword.getText().toString().trim().equals("")
                         & !editTextConfirmPassword.getText().toString().trim().equals("") ){
-                    btnSaveAccount.setBackgroundColor(getResources().getColor(R.color.blue));
+                    buttonSaveAccount.setBackgroundColor(getResources().getColor(R.color.blue));
                 }
                 else{
-                    btnSaveAccount.setBackgroundColor(getResources().getColor(R.color.grey));
+                    buttonSaveAccount.setBackgroundColor(getResources().getColor(R.color.grey));
                 }
             }
         });
@@ -80,12 +87,13 @@ public class EditAccountPasswordActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!editTextOldPassword.getText().toString().trim().equals("") & !editTextEditPassword.getText().toString().trim().equals("")
+                if(!editTextOldPassword.getText().toString().trim().equals("") &
+                        !editTextEditPassword.getText().toString().trim().equals("")
                         & !editTextConfirmPassword.getText().toString().trim().equals("") ){
-                    btnSaveAccount.setBackgroundColor(getResources().getColor(R.color.blue));
+                    buttonSaveAccount.setBackgroundColor(getResources().getColor(R.color.blue));
                 }
                 else{
-                    btnSaveAccount.setBackgroundColor(getResources().getColor(R.color.grey));
+                    buttonSaveAccount.setBackgroundColor(getResources().getColor(R.color.grey));
                 }
             }
         });
@@ -103,28 +111,28 @@ public class EditAccountPasswordActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!editTextOldPassword.getText().toString().trim().equals("") & !editTextEditPassword.getText().toString().trim().equals("")
+                if(!editTextOldPassword.getText().toString().trim().equals("") &
+                        !editTextEditPassword.getText().toString().trim().equals("")
                         & !editTextConfirmPassword.getText().toString().trim().equals("") ){
-                    btnSaveAccount.setBackgroundColor(getResources().getColor(R.color.blue));
+                    buttonSaveAccount.setBackgroundColor(getResources().getColor(R.color.blue));
                 }
                 else{
-                    btnSaveAccount.setBackgroundColor(getResources().getColor(R.color.grey));
+                    buttonSaveAccount.setBackgroundColor(getResources().getColor(R.color.grey));
                 }
             }
         });
 
-
-        btnSaveAccount.setOnClickListener(new View.OnClickListener() {
+        //Check the changes made are valid and update the user's account in the database.
+        buttonSaveAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                saveChanges(userid);
+                saveChanges(currentUserId);
             }
         });
     }//end onCreate
 
-    public void saveChanges(String userid) {
-        //Get new username and password from editText fields.
+    public void saveChanges(String accountId) {
+        //Get old and new passwords from editText fields.
         String enteredOldPassword = editTextOldPassword.getText().toString();
         String enteredPassword = editTextEditPassword.getText().toString();
         String confirmPassword = editTextConfirmPassword.getText().toString();
@@ -145,8 +153,14 @@ public class EditAccountPasswordActivity extends AppCompatActivity {
             return;
         }//end if
 
+        //Check password isn't too short.
+        else if(enteredPassword.length() < 6){
+            editTextEditPassword.setError("Password is too short.");
+            return;
+        }
+
         //Check passwords match
-        if(enteredOldPassword.equals(password) == false){
+        if(enteredOldPassword.equals(currentPassword) == false){
             Toast.makeText(EditAccountPasswordActivity.this,
                     "Old password incorrect.",Toast.LENGTH_LONG).show();
             return;
@@ -159,7 +173,7 @@ public class EditAccountPasswordActivity extends AppCompatActivity {
         }
 
         //Check password isn't the same as the current one.
-        if(enteredPassword.equals(password)){
+        if(enteredPassword.equals(currentPassword)){
             Toast.makeText(EditAccountPasswordActivity.this,
                     "Cannot use your current password.",Toast.LENGTH_LONG).show();
             return;
@@ -167,11 +181,11 @@ public class EditAccountPasswordActivity extends AppCompatActivity {
 
         //Create the Account object that will update the one in the database.
         AccountResponse accountRequest = new AccountResponse();
-        accountRequest.setUserid(Integer.parseInt(userid));
-        accountRequest.setUsername(username);
+        accountRequest.setUserid(Integer.parseInt(accountId));
+        accountRequest.setUsername(currentUsername);
         accountRequest.setPassword(enteredPassword);
 
-
+        //Make a PUT request to update the database Account table row.
         Call<AccountResponse> userCall = AccountAPIClient.getUserService()
                 .updateAccount(accountRequest);
 
@@ -182,12 +196,12 @@ public class EditAccountPasswordActivity extends AppCompatActivity {
                 Toast.makeText(EditAccountPasswordActivity.this,
                                 "Password updated.", Toast.LENGTH_LONG).show();
 
-                username = response.body().getUsername();
+                //Start the "My Account" activity if password updated successfully.
                 Intent intentViewAccount = new Intent(EditAccountPasswordActivity.this,
                                 ViewAccountActivity.class);
 
-                intentViewAccount.putExtra("currentuserid",userid);
-                intentViewAccount.putExtra("username",username);
+                intentViewAccount.putExtra("currentuserid",accountId);
+                intentViewAccount.putExtra("username", currentUsername);
                 intentViewAccount.putExtra("password",enteredPassword);
                 finish();
                 startActivity(intentViewAccount);
@@ -201,15 +215,17 @@ public class EditAccountPasswordActivity extends AppCompatActivity {
         });
     }//end saveChanges
 
+
+    //Return to previous activity.
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         Intent intentViewAccount = new Intent(EditAccountPasswordActivity.this,
                 ViewAccountActivity.class);
 
-        intentViewAccount.putExtra("currentuserid",userid);
-        intentViewAccount.putExtra("username",username);
-        intentViewAccount.putExtra("password",password);
+        intentViewAccount.putExtra("currentuserid", currentUserId);
+        intentViewAccount.putExtra("username", currentUsername);
+        intentViewAccount.putExtra("password", currentPassword);
         this.finish();
         startActivity(intentViewAccount);
     }

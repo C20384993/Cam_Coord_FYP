@@ -1,4 +1,5 @@
 package models;
+//Data Model for cameras retrieved from the database.
 
 public class CameraResponse {
     private int cameraid;

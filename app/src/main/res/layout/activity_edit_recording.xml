@@ -22,11 +22,11 @@
         app:layout_constraintVertical_bias="0.308" />
 
     <Button
-        android:id="@+id/button_recDownload"
+        android:id="@+id/button_PlayRecording"
         android:layout_width="173dp"
         android:layout_height="65dp"
         android:backgroundTint="@color/blue"
-        android:text="Download Recording"
+        android:text="Play Recording"
         android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,7 +35,7 @@
         app:layout_constraintVertical_bias="0.698" />
 
     <Button
-        android:id="@+id/btn_deleteRecording"
+        android:id="@+id/button_deleteRecording"
         android:layout_width="173dp"
         android:layout_height="65dp"
         android:backgroundTint="@color/red"
@@ -48,7 +48,7 @@
         app:layout_constraintVertical_bias="0.846" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView_RecOptionsTitle"
         android:layout_width="267dp"
         android:layout_height="83dp"
         android:gravity="center"
@@ -63,15 +63,14 @@
 
     <Button
         android:id="@+id/button_saveRecording"
-        android:layout_width="164dp"
-        android:layout_height="72dp"
+        android:layout_width="173dp"
+        android:layout_height="65dp"
         android:backgroundTint="@color/grey"
         android:text="Save Changes"
         android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.546" />
+        app:layout_constraintVertical_bias="0.551" />
 </androidx.constraintlayout.widget.ConstraintLayout>

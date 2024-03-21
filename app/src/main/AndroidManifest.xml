@@ -36,10 +36,10 @@
             android:name=".ViewAccountActivity"
             android:exported="false" />
         <activity
-            android:name=".StreamViewingActivityRemote"
+            android:name=".StreamViewingRemote"
             android:exported="false" />
         <activity
-            android:name=".RTSPS"
+            android:name=".RecordingViewerActivity"
             android:exported="false" />
         <activity
             android:name=".EditRecordingActivity"
@@ -57,7 +57,7 @@
             android:name=".CreateAccountActivity"
             android:exported="false" />
         <activity
-            android:name=".RecordingsOptionsActivity"
+            android:name=".RecordingsAndStreamsPage"
             android:exported="false" />
         <activity
             android:name=".AddCameraActivity"
@@ -66,7 +66,7 @@
             android:name=".CameraListActivity"
             android:exported="false" />
         <activity
-            android:name=".StreamViewingActivity"
+            android:name=".StreamViewingLocal"
             android:exported="false" />
         <activity
             android:name=".HomeScreen"

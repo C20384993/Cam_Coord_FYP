@@ -8,6 +8,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Url;
 
+//Define REST API paths.
 public interface ApiInterface {
 
     @GET

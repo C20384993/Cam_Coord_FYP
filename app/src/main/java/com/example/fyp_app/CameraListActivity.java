@@ -1,12 +1,12 @@
 package com.example.fyp_app;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -23,41 +23,60 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+//Display a list of cameras that the user has added to his account.
 public class CameraListActivity extends AppCompatActivity {
 
-    TextView noDataMessage;
-    FloatingActionButton addCameraBtn;
-    RecyclerView recyclerView;
+    //Layout items
+    TextView textViewNoCamerasAlert;
+    FloatingActionButton buttonAddCamera;
+    RecyclerView recyclerViewCamList;
     ProgressBar progressBar;
     LinearLayoutManager linearLayoutManager;
     CamerasAdapter camerasAdapter;
     List<CameraRecyclerItem> cameraList = new ArrayList<>();
-    final private String RESTURL = "http://192.168.68.131:8081";
+    Button buttonDarkMode;
+
+    //Activity Variables
+    String currentUserId;
+    String currentUsername;
+    String currentPassword;
+    boolean darkMode = false;
+    final private String restUrl = "http://172.166.189.197:8081";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_list);
 
-        String userid = getIntent().getStringExtra("currentuserid");
-        String username = getIntent().getStringExtra("username");
-        String password = getIntent().getStringExtra("password");
+        //Get intent variables.
+        currentUserId = getIntent().getStringExtra("currentuserid");
+        currentUsername = getIntent().getStringExtra("username");
+        currentPassword = getIntent().getStringExtra("password");
 
-        recyclerView = findViewById(R.id.recyclerViewCamList);
-        progressBar = findViewById(R.id.progressBarCamList);
-        addCameraBtn = findViewById(R.id.addCameraBtn);
+        //Locate items from layout.
+        recyclerViewCamList = findViewById(R.id.recyclerView_CamList);
+        progressBar = findViewById(R.id.progressBar_CamList);
+        buttonAddCamera = findViewById(R.id.button_AddCamera);
+        buttonDarkMode = findViewById(R.id.button_DarkMode);
+
         linearLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        noDataMessage = findViewById(R.id.textView_noCameras);
+        recyclerViewCamList.setLayoutManager(linearLayoutManager);
+        textViewNoCamerasAlert = findViewById(R.id.textView_NoCamerasAlert);
+
+        //Set a onItemClick listener for the cameraList. When an item is clicked, open an activity.
         camerasAdapter = new CamerasAdapter(cameraList, new CamerasAdapter.ItemClickListener() {
             @Override
             public void onItemClick(CameraRecyclerItem cameraRecyclerItem) {
                 Intent intentEditCamera =
                         new Intent(CameraListActivity.this, EditCameraActivity.class);
 
-                intentEditCamera.putExtra("userid",userid);
-                intentEditCamera.putExtra("username",username);
-                intentEditCamera.putExtra("password",password);
-                intentEditCamera.putExtra("cameraid",Integer.toString(cameraRecyclerItem.getCameraid()));
+                //Open the edit camera activity.
+                //Pass the current user details and camera item details.
+                intentEditCamera.putExtra("userid", currentUserId);
+                intentEditCamera.putExtra("username", currentUsername);
+                intentEditCamera.putExtra("password", currentPassword);
+                intentEditCamera.putExtra("cameraid",Integer.toString(cameraRecyclerItem
+                        .getCameraid()));
                 intentEditCamera.putExtra("customname",cameraRecyclerItem.getCustomname());
                 intentEditCamera.putExtra("camusername",cameraRecyclerItem.getCamusername());
                 intentEditCamera.putExtra("campassword",cameraRecyclerItem.getCampassword());
@@ -68,31 +87,66 @@ public class CameraListActivity extends AppCompatActivity {
                 startActivity(intentEditCamera);
             }
         });
-        recyclerView.setAdapter(camerasAdapter);
 
-        //Display all cameras managed by the user.
-        fetchCameras(userid);
-        addCameraBtn.setOnClickListener(new View.OnClickListener() {
+        recyclerViewCamList.setAdapter(camerasAdapter);
+
+        //Retrieve data for all cameras managed by the user.
+        fetchCameras(currentUserId);
+
+        //Start the add Camera activity to allow user to create a new camera entry.
+        buttonAddCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intentAddCamera =
                         new Intent(CameraListActivity.this, AddCameraActivity.class);
 
-                intentAddCamera.putExtra("userid",userid);
-                intentAddCamera.putExtra("username",username);
-                intentAddCamera.putExtra("password",password);
+                //Pass current user's details, they are needed to add the camera to his account.
+                intentAddCamera.putExtra("userid", currentUserId);
+                intentAddCamera.putExtra("username", currentUsername);
+                intentAddCamera.putExtra("password", currentPassword);
 
                 finish();
                 startActivity(intentAddCamera);
             }
         });
+
+        //Dark Mode checks
+        if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO){
+            darkMode = false;
+            buttonDarkMode.setText("Dark mode");
+            buttonDarkMode.setBackgroundColor(getResources().getColor(R.color.dark));
+        }
+        else if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES){
+            darkMode = true;
+            buttonDarkMode.setText("Light mode");
+            buttonDarkMode.setBackgroundColor(getResources().getColor(R.color.light_blue));
+        }
+        else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+        buttonDarkMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(darkMode){
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    buttonDarkMode.setText("Dark mode");
+                    darkMode = false;
+                }
+                else{
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    darkMode=true;
+                    buttonDarkMode.setText("Light mode");
+                }
+            }
+        });
     }//end onCreate
 
-    //Fills the RecyclerView with all the cameras associated with the current User ID.
+    //Retrieve all camera rows for the logged in user.
+    //Fill the RecyclerView with all the cameras associated with the current User ID.
     private void fetchCameras(String userid){
         progressBar.setVisibility(View.VISIBLE);
         RetrofitClient.getRetrofitClient()
-                .getCameras(RESTURL+"/Cameras/findall?userid="+userid)
+                .getCameras(restUrl +"/Cameras/findall?userid="+userid)
                 .enqueue(new Callback<List<CameraRecyclerItem>>() {
                     @Override
                     public void onResponse(Call<List<CameraRecyclerItem>> call,
@@ -106,17 +160,17 @@ public class CameraListActivity extends AppCompatActivity {
                             cameraList.addAll(response.body());
                             camerasAdapter.notifyDataSetChanged();
                             progressBar.setVisibility(View.GONE);
-                            noDataMessage.setVisibility(View.VISIBLE);
+                            textViewNoCamerasAlert.setVisibility(View.VISIBLE);
                         }
-
                     }//end onResponse
 
                     @Override
                     public void onFailure(Call<List<CameraRecyclerItem>> call, Throwable t) {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(CameraListActivity.this, "Error:"+t.getMessage(),
+                        Toast.makeText(CameraListActivity.this,
+                                "Error:"+t.getMessage(),
                                 Toast.LENGTH_SHORT).show();
-                    }
+                    }//end onFailure
             });
     }//end fetchCameras
 
