@@ -30,7 +30,6 @@ public class EditAccountPasswordActivity extends AppCompatActivity {
     String currentUserId;
     String currentUsername;
     String currentPassword;
-    final private String restUrl = "http://172.166.189.197:8081";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,7 +185,7 @@ public class EditAccountPasswordActivity extends AppCompatActivity {
         accountRequest.setPassword(enteredPassword);
 
         //Make a PUT request to update the database Account table row.
-        Call<AccountResponse> userCall = AccountAPIClient.getUserService()
+        Call<AccountResponse> userCall = AccountAPIClient.getUserService(getApplicationContext())
                 .updateAccount(accountRequest);
 
         userCall.enqueue(new Callback<AccountResponse>() {
@@ -194,11 +193,11 @@ public class EditAccountPasswordActivity extends AppCompatActivity {
             public void onResponse(Call<AccountResponse> call, Response<AccountResponse> response) {
 
                 Toast.makeText(EditAccountPasswordActivity.this,
-                                "Password updated.", Toast.LENGTH_LONG).show();
+                        "Password updated.", Toast.LENGTH_LONG).show();
 
                 //Start the "My Account" activity if password updated successfully.
                 Intent intentViewAccount = new Intent(EditAccountPasswordActivity.this,
-                                ViewAccountActivity.class);
+                        ViewAccountActivity.class);
 
                 intentViewAccount.putExtra("currentuserid",accountId);
                 intentViewAccount.putExtra("username", currentUsername);

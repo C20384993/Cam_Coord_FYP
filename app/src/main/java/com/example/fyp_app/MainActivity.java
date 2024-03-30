@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Activity variables
     boolean darkMode = false; //Track if darkMode is on/off.
-    final private String restUrl = "http://172.166.189.197:8081"; //REST API URL.
+    final private String restUrl = "https://c20384993fyp.uksouth.cloudapp.azure.com"; //REST API URL.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //Check database for username entered, GET request with entered username.
-        Call<AccountResponse> userCall = AccountAPIClient.getUserService()
+        Call<AccountResponse> userCall = AccountAPIClient.getUserService(getApplicationContext())
                 .getAccount(restUrl +"/Accounts/getbyusername?username="+enteredUsername);
 
         //Returns the Account object from the database as a response.

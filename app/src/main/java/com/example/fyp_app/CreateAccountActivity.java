@@ -29,7 +29,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     Button buttonRegAccount;
 
     //Activity variables
-    final private String restUrl = "http://172.166.189.197:8081";
+    final private String restUrl = "https://c20384993fyp.uksouth.cloudapp.azure.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,7 +170,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         }
 
         //Check the username isn't taken.
-        Call<AccountResponse> userCall = AccountAPIClient.getUserService()
+        Call<AccountResponse> userCall = AccountAPIClient.getUserService(getApplicationContext())
                 .getAccount(restUrl +"/Accounts/getbyusername?username="+enteredUsername);
 
         userCall.enqueue(new Callback<AccountResponse>() {
@@ -209,16 +209,16 @@ public class CreateAccountActivity extends AppCompatActivity {
     //Send POST request containing the model.
     public void post(Account userRequest){
         Call<AccountResponse> accountCreationCall = AccountAPIClient
-                .getUserService().sendAccount(userRequest);
+                .getUserService(getApplicationContext()).sendAccount(userRequest);
         accountCreationCall.enqueue(new Callback<AccountResponse>() {
             @Override
             public void onResponse(Call<AccountResponse> call, Response<AccountResponse> response) {
                 Toast.makeText(CreateAccountActivity.this,
-                            "Account created.",Toast.LENGTH_LONG).show();
-                    //Finish activity and return to landing page.
-                    finish();
-                    startActivity(new Intent(CreateAccountActivity.this,
-                            MainActivity.class));
+                        "Account created.",Toast.LENGTH_LONG).show();
+                //Finish activity and return to landing page.
+                finish();
+                startActivity(new Intent(CreateAccountActivity.this,
+                        MainActivity.class));
             }
 
             @Override

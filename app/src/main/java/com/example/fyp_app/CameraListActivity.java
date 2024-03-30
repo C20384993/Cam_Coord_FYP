@@ -15,9 +15,11 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import clients.RetrofitClient;
 import models.CameraRecyclerItem;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,6 +36,7 @@ public class CameraListActivity extends AppCompatActivity {
     LinearLayoutManager linearLayoutManager;
     CamerasAdapter camerasAdapter;
     List<CameraRecyclerItem> cameraList = new ArrayList<>();
+    Button buttonRefresh;
     Button buttonDarkMode;
 
     //Activity Variables
@@ -41,7 +44,7 @@ public class CameraListActivity extends AppCompatActivity {
     String currentUsername;
     String currentPassword;
     boolean darkMode = false;
-    final private String restUrl = "http://172.166.189.197:8081";
+    final private String restUrl = "https://c20384993fyp.uksouth.cloudapp.azure.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,7 @@ public class CameraListActivity extends AppCompatActivity {
         recyclerViewCamList = findViewById(R.id.recyclerView_CamList);
         progressBar = findViewById(R.id.progressBar_CamList);
         buttonAddCamera = findViewById(R.id.button_AddCamera);
+        buttonRefresh = findViewById(R.id.button_refreshList);
         buttonDarkMode = findViewById(R.id.button_DarkMode);
 
         linearLayoutManager = new LinearLayoutManager(this);
@@ -110,6 +114,18 @@ public class CameraListActivity extends AppCompatActivity {
             }
         });
 
+        buttonRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recyclerViewCamList.setAdapter(null);
+                recyclerViewCamList.setLayoutManager(null);
+                recyclerViewCamList.getRecycledViewPool().clear();
+                recyclerViewCamList.swapAdapter(camerasAdapter, false);
+                recyclerViewCamList.setLayoutManager(linearLayoutManager);
+                camerasAdapter.notifyDataSetChanged();
+            }
+        });
+
         //Dark Mode checks
         if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO){
             darkMode = false;
@@ -131,11 +147,25 @@ public class CameraListActivity extends AppCompatActivity {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                     buttonDarkMode.setText("Dark mode");
                     darkMode = false;
+                    recyclerViewCamList.setAdapter(null);
+                    recyclerViewCamList.setLayoutManager(null);
+                    recyclerViewCamList.getRecycledViewPool().clear();
+                    recyclerViewCamList.swapAdapter(camerasAdapter, false);
+                    recyclerViewCamList.setLayoutManager(linearLayoutManager);
+                    camerasAdapter.notifyDataSetChanged();
+                    fetchCameras(currentUserId);
                 }
                 else{
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                     darkMode=true;
                     buttonDarkMode.setText("Light mode");
+                    recyclerViewCamList.setAdapter(null);
+                    recyclerViewCamList.setLayoutManager(null);
+                    recyclerViewCamList.getRecycledViewPool().clear();
+                    recyclerViewCamList.swapAdapter(camerasAdapter, false);
+                    recyclerViewCamList.setLayoutManager(linearLayoutManager);
+                    camerasAdapter.notifyDataSetChanged();
+                    fetchCameras(currentUserId);
                 }
             }
         });
@@ -145,7 +175,9 @@ public class CameraListActivity extends AppCompatActivity {
     //Fill the RecyclerView with all the cameras associated with the current User ID.
     private void fetchCameras(String userid){
         progressBar.setVisibility(View.VISIBLE);
-        RetrofitClient.getRetrofitClient()
+        // Load the certificate file
+        InputStream certificateInputStream = getResources().openRawResource(R.raw.server);
+        RetrofitClient.getRetrofitClient(certificateInputStream)
                 .getCameras(restUrl +"/Cameras/findall?userid="+userid)
                 .enqueue(new Callback<List<CameraRecyclerItem>>() {
                     @Override

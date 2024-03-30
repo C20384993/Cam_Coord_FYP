@@ -17,22 +17,18 @@ public class RecordingRecyclerItem {
     public String getCustomname() {
         return customname;
     }
-
     public String getRelativefilepath() {
         return relativefilepath;
     }
-
     public String getCreationDate() {
         return creationDate;
     }
-
     public int getRecordingid() {
         return recordingid;
     }
     public int getUserid() {
         return userid;
     }
-
     public int getCameraid() {
         return cameraid;
     }

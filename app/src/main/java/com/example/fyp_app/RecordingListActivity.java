@@ -14,10 +14,12 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 
+import clients.RetrofitClient;
 import models.RecordingRecyclerItem;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,7 +42,7 @@ public class RecordingListActivity extends AppCompatActivity {
     String currentPassword;
     boolean darkMode = false;
     List<RecordingRecyclerItem> recordingList = new ArrayList<>();
-    final private String restUrl = "http://172.166.189.197:8081";
+    final private String restUrl = "https://c20384993fyp.uksouth.cloudapp.azure.com";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -119,7 +121,10 @@ public class RecordingListActivity extends AppCompatActivity {
     //Fills the RecyclerView with all the recordings associated with the current User ID.
     private void fetchRecordings(String userid){
         progressBar.setVisibility(View.VISIBLE);
-        RetrofitClient.getRetrofitClient()
+
+        // Load the certificate file
+        InputStream certificateInputStream = getResources().openRawResource(R.raw.keystore);
+        RetrofitClient.getRetrofitClient(certificateInputStream)
                 .getRecordings(restUrl +"/Recordings/findall?userid="+userid)
                 .enqueue(new Callback<List<RecordingRecyclerItem>>() {
                     @Override

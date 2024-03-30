@@ -19,10 +19,8 @@ public interface RecordingAPIService {
     Call<RecordingResponse> getRecording(@Url String url);
     @POST("/Recordings/create")
     Call<RecordingResponse> sendRecording(@Body Recording recording);
-
     @PUT("/Recordings/update")
     Call<RecordingResponse> updateRecording(@Body RecordingResponse recordingResponse);
-
     @DELETE("/Recordings/delete")
     Call<Void> deleteRecording(@Query("recordingid") String recordingid);
 }

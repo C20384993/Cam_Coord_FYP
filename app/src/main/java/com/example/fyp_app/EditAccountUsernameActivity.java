@@ -1,3 +1,4 @@
+
 package com.example.fyp_app;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,7 +29,7 @@ public class EditAccountUsernameActivity extends AppCompatActivity {
     String currentUserId;
     String currentUsername;
     String currentPassword;
-    final private String restUrl = "http://172.166.189.197:8081";
+    final private String restUrl = "https://c20384993fyp.uksouth.cloudapp.azure.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +111,7 @@ public class EditAccountUsernameActivity extends AppCompatActivity {
         accountRequest.setPassword(currentPassword);
 
         //Check username isn't already being used.
-        Call<AccountResponse> userCall = AccountAPIClient.getUserService()
+        Call<AccountResponse> userCall = AccountAPIClient.getUserService(getApplicationContext())
                 .getAccount(restUrl +"/Accounts/getbyusername?username="+enteredUsername);
 
         userCall.enqueue(new Callback<AccountResponse>() {
@@ -120,7 +121,7 @@ public class EditAccountUsernameActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<AccountResponse> call, Response<AccountResponse> response) {
                 if(response.body().getUserid()==0){
-                    Call<AccountResponse> usernameUpdateCall = AccountAPIClient.getUserService()
+                    Call<AccountResponse> usernameUpdateCall = AccountAPIClient.getUserService(getApplicationContext())
                             .updateAccount(accountRequest);
 
                     usernameUpdateCall.enqueue(new Callback<AccountResponse>() {

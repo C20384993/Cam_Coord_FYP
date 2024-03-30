@@ -1,3 +1,4 @@
+
 package com.example.fyp_app;
 
 import androidx.appcompat.app.AlertDialog;
@@ -6,6 +7,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,7 +15,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.microsoft.azure.storage.CloudStorageAccount;
+import com.microsoft.azure.storage.blob.CloudBlobClient;
+import com.microsoft.azure.storage.blob.CloudBlobContainer;
+import com.microsoft.azure.storage.blob.CloudBlockBlob;
+
 import clients.AccountAPIClient;
+import clients.RecordingAPIClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,6 +43,7 @@ public class ViewAccountActivity extends AppCompatActivity {
     String currentUserId;
     String currentUsername;
     String currentPassword;
+    String storageConnectionString = "DefaultEndpointsProtocol=https;AccountName=c20384993fypstorage;AccountKey=0/AH0LCag12HGTA1hw+kXlCdj/0fJ9sew5o9nytBW3tac4gFiwpmEgwWOqlA+c4C4hHKg5SdgSCm+ASt4ij9LQ==;EndpointSuffix=core.windows.net";
 
 
     @Override
@@ -175,7 +184,7 @@ public class ViewAccountActivity extends AppCompatActivity {
     public void deleteAccount(String userid){
 
         //Delete function call.
-        Call<Void> accountCall = AccountAPIClient.getUserService()
+        Call<Void> accountCall = AccountAPIClient.getUserService(getApplicationContext())
                 .deleteAccount(userid);
 
         accountCall.enqueue(new Callback<Void>() {
@@ -190,6 +199,7 @@ public class ViewAccountActivity extends AppCompatActivity {
 
                 intentMainActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                         | Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                deleteRecordings();
                 finish();
                 startActivity(intentMainActivity);
             }
@@ -216,4 +226,48 @@ public class ViewAccountActivity extends AppCompatActivity {
         this.finish();
         startActivity(intentHomeScreen);
     }
+
+
+    //Delete the user's recordings from Blob storage if he deletes his account.
+    //Database records will be deleted when account is deleted because of cascading delete.
+    public void deleteRecordings(){
+
+        //AsyncTask as it is not possible to perform network tasks on main thread
+        AsyncTask<Void,Void,Boolean> task = new AsyncTask<Void,Void,Boolean>(){
+            @Override
+            protected Boolean doInBackground(Void... params) {
+                boolean success = false;
+                try
+                {
+                    //Retrieve storage account from connection-string.
+                    CloudStorageAccount storageAccount = CloudStorageAccount.parse(storageConnectionString);
+
+                    //Create the blob client.
+                    CloudBlobClient blobClient = storageAccount.createCloudBlobClient();
+
+                    //Retrieve reference to a previously created container.
+                    CloudBlobContainer container = blobClient.getContainerReference("cont"+currentUserId);
+
+                    //Delete the user's recordings folder/container from Blob Storage.
+                    container.delete();
+                    success = true;
+                }
+                catch (Exception e)
+                {
+                    // Output the stack trace.
+                    e.printStackTrace();
+                    Toast.makeText(ViewAccountActivity.this, "Server Unavailable.", Toast.LENGTH_LONG).show();
+                    success = false;
+                }
+                return success;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean success) {
+                super.onPostExecute(success);
+            }
+        };
+
+        task.execute();
+    }//end deleteRecording
 }

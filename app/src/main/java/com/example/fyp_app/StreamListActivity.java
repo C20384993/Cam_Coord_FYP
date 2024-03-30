@@ -13,9 +13,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import clients.RetrofitClient;
 import models.CameraRecyclerItem;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,7 +38,7 @@ public class StreamListActivity extends AppCompatActivity {
     //Activity variables
     String currentUserId;
     boolean darkMode = false;
-    final private String restUrl = "http://172.166.189.197:8081";
+    final private String restUrl = "https://c20384993fyp.uksouth.cloudapp.azure.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +113,9 @@ public class StreamListActivity extends AppCompatActivity {
     //Fills the RecyclerView with all the cameras associated with the current User ID.
     private void fetchStreams(String userid){
         progressBar.setVisibility(View.VISIBLE);
-        RetrofitClient.getRetrofitClient()
+        // Load the certificate file
+        InputStream certificateInputStream = getResources().openRawResource(R.raw.server);
+        RetrofitClient.getRetrofitClient(certificateInputStream)
                 .getCameras(restUrl +"/Cameras/findall?userid="+userid)
                 .enqueue(new Callback<List<CameraRecyclerItem>>() {
                     @Override

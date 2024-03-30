@@ -75,8 +75,6 @@ public class StreamViewingLocal extends AppCompatActivity {
         rtspUrl = Uri.parse(getIntent().getStringExtra("rtspurl"));
         streamPath = getIntent().getStringExtra("streampath");
 
-        Log.e("AZURE","rtspUrl = "+rtspUrl);
-
         //Set the options for the VLC player.
         ArrayList<String> options = new ArrayList<>();
         options.add("--no-drop-late-frames");
@@ -164,7 +162,8 @@ public class StreamViewingLocal extends AppCompatActivity {
             isRecording=false; //Update recording state.
             //Only add the recording to the database if recording stopped gracefully.
             if(forcedClose == false) {
-                Post(createRecordingRequest(Integer.parseInt(currentUserId), cameraId)); //Send the newly created recording info.
+                //Send the newly created recording info.
+                Post(createRecordingRequest(Integer.parseInt(currentUserId), cameraId));
             }
             buttonStartRecording.setText("Start rec");
             super.onPostExecute(result);
@@ -245,7 +244,7 @@ public class StreamViewingLocal extends AppCompatActivity {
 
     //Send the recording details to the database.
     public void Post(Recording recordingRequest){
-        Call<RecordingResponse> recordingCall = RecordingAPIClient.getRecordingService()
+        Call<RecordingResponse> recordingCall = RecordingAPIClient.getRecordingService(getApplicationContext())
                 .sendRecording(recordingRequest);
         recordingCall.enqueue(new Callback<RecordingResponse>() {
             @Override

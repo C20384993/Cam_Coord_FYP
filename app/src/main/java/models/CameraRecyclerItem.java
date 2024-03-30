@@ -2,10 +2,10 @@ package models;
 //Data Model for items in the Recycler View of the CameraListActivity.
 public class CameraRecyclerItem {
 
-    int cameraid;
-    String customname;
-    String camusername;
-    String campassword;
+    private int cameraid;
+    private String customname;
+    private String camusername;
+    private String campassword;
     private String rtspurl;
     private String streampath;
 

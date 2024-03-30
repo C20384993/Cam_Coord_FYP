@@ -36,7 +36,6 @@ public class EditCameraActivity extends AppCompatActivity {
     String cameraId;
     String rtspUrl;
     String streamPath;
-    final private String restUrl = "http://172.166.189.197:8081";
 
 
     @Override
@@ -251,7 +250,7 @@ public class EditCameraActivity extends AppCompatActivity {
         cameraRequest.setUserid(Integer.parseInt(accountId));
 
         //Send the cameraRequest object.
-        Call<CameraResponse> cameraCall = CameraAPIClient.getCameraService()
+        Call<CameraResponse> cameraCall = CameraAPIClient.getCameraService(getApplicationContext())
                 .updateCamera(cameraRequest);
 
         cameraCall.enqueue(new Callback<CameraResponse>() {
@@ -282,7 +281,7 @@ public class EditCameraActivity extends AppCompatActivity {
     //Find and delete the camera entry by its ID.
     public void deleteCamEntry(String cameraid, String accountId){
 
-        Call<Void> cameraCall = CameraAPIClient.getCameraService()
+        Call<Void> cameraCall = CameraAPIClient.getCameraService(getApplicationContext())
                 .deleteCamera(cameraid);
 
         cameraCall.enqueue(new Callback<Void>() {

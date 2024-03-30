@@ -71,7 +71,6 @@ public class StreamViewingRemote extends AppCompatActivity {
         rtspUrl = getIntent().getStringExtra("rtspurl");
         streamPath = getIntent().getStringExtra("streampath");
 
-        //Create a secure connection to the HLS stream.
         HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
             @Override
             public boolean verify(String hostname, SSLSession session) {
@@ -220,7 +219,7 @@ public class StreamViewingRemote extends AppCompatActivity {
 
     //Send the recording details to the database.
     public void Post(Recording recordingRequest){
-        Call<RecordingResponse> recordingCall = RecordingAPIClient.getRecordingService()
+        Call<RecordingResponse> recordingCall = RecordingAPIClient.getRecordingService(getApplicationContext())
                 .sendRecording(recordingRequest);
         recordingCall.enqueue(new Callback<RecordingResponse>() {
             @Override

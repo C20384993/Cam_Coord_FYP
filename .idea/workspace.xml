@@ -10,8 +10,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="89845f0a-d9c3-4e3b-bc58-0d9395f23e2d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/RecordingViewerActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/RecordingsAndStreamsPage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/assets/keystore.p12" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/clients/RetrofitClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/raw/keystore.p12" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.0/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.0/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.0/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/fileHashes/fileHashes.bin" afterDir="false" />
@@ -19,14 +20,9 @@
       <change beforePath="$PROJECT_DIR$/.gradle/8.0/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.0/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/FYP_App.app.main.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/clients/AccountAPIClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/clients/AccountAPIClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/clients/CameraAPIClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/clients/CameraAPIClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/clients/RecordingAPIClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/clients/RecordingAPIClient.java" afterDir="false" />
@@ -38,52 +34,20 @@
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/EditAccountUsernameActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/EditAccountUsernameActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/EditCameraActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/EditCameraActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/EditRecordingActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/EditRecordingActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/HomeScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/HomeScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/RTSPS.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/RecordingListActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/RecordingListActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/RecordingsAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/RecordingsAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/RecordingsOptionsActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/RetrofitClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/RetrofitClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/RetrofitClient.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/StreamListActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/StreamListActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/StreamViewingActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/StreamViewingLocal.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/StreamViewingActivityRemote.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/StreamViewingRemote.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/StreamViewingLocal.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/StreamViewingLocal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/StreamViewingRemote.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/StreamViewingRemote.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/ViewAccountActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/ViewAccountActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/models/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/models/Account.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/models/AccountResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/models/AccountResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/models/Camera.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/models/Camera.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/models/CameraRecyclerItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/models/CameraRecyclerItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/models/CameraResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/models/CameraResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/models/Recording.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/models/Recording.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/models/RecordingRecyclerItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/models/RecordingRecyclerItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/models/RecordingResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/models/RecordingResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/services/AccountAPIService.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/services/AccountAPIService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/services/ApiInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/services/ApiInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/services/CameraAPIService.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/services/CameraAPIService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/services/RecordingAPIService.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/services/RecordingAPIService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_add_camera.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_add_camera.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_camera_list.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_camera_list.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_create_account.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_create_account.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_edit_account_password.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_edit_account_password.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_edit_account_username.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_edit_account_username.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_edit_camera.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_edit_camera.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_edit_recording.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_edit_recording.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_home_screen.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_home_screen.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_recording_list.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_recording_list.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_recordings_options.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_recordings_and_streams.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_rtsps.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_recording_viewer.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_stream_list.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_stream_list.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_stream_viewing_remote.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_stream_remote.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_streamvlc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_stream_local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_view_account.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_view_account.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/list_item_camera.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/list_item_camera.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/list_item_recording.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/list_item_recording.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/recmenu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/menu/homepage_menu.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values-night/themes.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values-night/themes.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/themes.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/themes.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/xml/data_extraction_rules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/xml/data_extraction_rules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/raw/keystore.pem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/xml/network_security_config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/xml/network_security_config.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,14 +71,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "cidr.known.project.marker": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/PC1/AndroidStudioProjects/Cam_Coord_FYP/app/src/main/assets&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\PC1\AndroidStudioProjects\Cam_Coord_FYP\app\src\main\assets" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\PC1\AndroidStudioProjects\Cam_Coord_FYP\app\src\main\res\raw" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="FYP_App.app.main" />

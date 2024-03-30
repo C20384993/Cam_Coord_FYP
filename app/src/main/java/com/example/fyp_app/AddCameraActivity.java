@@ -34,7 +34,6 @@ public class AddCameraActivity extends AppCompatActivity {
     String currentUserId;
     String currentUsername;
     String currentPassword;
-    final private String restUrl = "http://172.166.189.197:8081";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -229,7 +228,7 @@ public class AddCameraActivity extends AppCompatActivity {
 
 
         //Send the cameraRequest object.
-        Call<CameraResponse> cameraCall = CameraAPIClient.getCameraService()
+        Call<CameraResponse> cameraCall = CameraAPIClient.getCameraService(getApplicationContext())
                 .sendCamera(cameraRequest);
 
         cameraCall.enqueue(new Callback<CameraResponse>() {
@@ -249,7 +248,7 @@ public class AddCameraActivity extends AppCompatActivity {
                 cameraRequest.setUserid(Integer.parseInt(accountid));
 
                 //Send the cameraRequest object.
-                Call<CameraResponse> cameraCall = CameraAPIClient.getCameraService()
+                Call<CameraResponse> cameraCall = CameraAPIClient.getCameraService(getApplicationContext())
                         .updateCamera(cameraRequest);
 
                 cameraCall.enqueue(new Callback<CameraResponse>() {
