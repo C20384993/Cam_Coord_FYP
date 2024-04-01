@@ -110,10 +110,10 @@ public class CamerasAdapter extends RecyclerView.Adapter<CamerasAdapter.ViewHold
                 //Create a socket object, attempt to make a connection through it.
                 SocketAddress rtspSocketAddress = new InetSocketAddress(rtspIp, port);
                 Socket rtspSocket = new Socket();
-                int timeoutMs = 2000;   // 2 seconds
+                int timeoutMs = 2000;
                 rtspSocket.connect(rtspSocketAddress, timeoutMs);
                 available = true;
-                rtspSocket.close(); // Close the socket after successful connection
+                rtspSocket.close();
             } catch (IOException e) {
             }
             return available;
@@ -149,10 +149,8 @@ public class CamerasAdapter extends RecyclerView.Adapter<CamerasAdapter.ViewHold
                 HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
                     @Override
                     public boolean verify(String hostname, SSLSession session) {
-                        // Retrieve the actual hostname from the SSL session
                         String actualHostname = session.getPeerHost();
 
-                        // Perform hostname verification by comparing actual hostname with expected hostname
                         return hostname.equalsIgnoreCase(actualHostname);
                     }
                 });

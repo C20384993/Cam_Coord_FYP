@@ -50,7 +50,7 @@ public class AccountAPIClient {
         OkHttpClient okHttpClient = httpClientBuilder.build();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://c20384993fyp.uksouth.cloudapp.azure.com") // Update with your Spring Boot app URL
+                .baseUrl("https://c20384993fyp.uksouth.cloudapp.azure.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
                 .build();
