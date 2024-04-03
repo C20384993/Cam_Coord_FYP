@@ -165,7 +165,7 @@ public class StreamViewingLocal extends AppCompatActivity {
                 //Send the newly created recording info.
                 Post(createRecordingRequest(Integer.parseInt(currentUserId), cameraId));
             }
-            buttonStartRecording.setText("Start rec");
+            buttonStartRecording.setText("Start Recording");
             super.onPostExecute(result);
         }
     }//end RecordTask
@@ -173,7 +173,7 @@ public class StreamViewingLocal extends AppCompatActivity {
     //Set the recording status to true and create the file and directory used to store the recording
     private void startRecording() {
         isRecording = true;
-        buttonStartRecording.setText("Recording");
+        buttonStartRecording.setText("Stop Recording");
 
         //Select directory to save the recorded video to.
         if (!directory.exists()) {

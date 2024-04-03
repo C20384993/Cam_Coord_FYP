@@ -34,6 +34,7 @@ public class RecordingListActivity extends AppCompatActivity {
     ProgressBar progressBar;
     LinearLayoutManager linearLayoutManager;
     RecordingsAdapter recordingsAdapter;
+    Button buttonRefresh;
     Button buttonDarkMode;
 
     //Activity Variables
@@ -59,6 +60,7 @@ public class RecordingListActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewRecList);
         progressBar = findViewById(R.id.progressBarRecList);
         buttonDarkMode = findViewById(R.id.button_DarkMode);
+        buttonRefresh = findViewById(R.id.button_refreshList);
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
 
@@ -114,6 +116,18 @@ public class RecordingListActivity extends AppCompatActivity {
                     darkMode=true;
                     buttonDarkMode.setText("Light mode");
                 }
+            }
+        });
+
+        buttonRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recyclerView.setAdapter(null);
+                recyclerView.setLayoutManager(null);
+                recyclerView.getRecycledViewPool().clear();
+                recyclerView.swapAdapter(recordingsAdapter, false);
+                recyclerView.setLayoutManager(linearLayoutManager);
+                recordingsAdapter.notifyDataSetChanged();
             }
         });
     }//end OnCreate

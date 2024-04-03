@@ -33,6 +33,7 @@ public class StreamListActivity extends AppCompatActivity {
     LinearLayoutManager linearLayoutManager;
     CamerasAdapter camerasAdapter;
     List<CameraRecyclerItem> cameraList = new ArrayList<>();
+    Button buttonRefresh;
     Button buttonDarkMode;
 
     //Activity variables
@@ -53,6 +54,7 @@ public class StreamListActivity extends AppCompatActivity {
         linearLayoutManager = new LinearLayoutManager(this);
 
         buttonDarkMode = findViewById(R.id.button_DarkMode);
+        buttonRefresh = findViewById(R.id.button_refreshList);
         recyclerView.setLayoutManager(linearLayoutManager);
         noDataMessage = findViewById(R.id.textView_NoStreamsAlert);
 
@@ -105,6 +107,18 @@ public class StreamListActivity extends AppCompatActivity {
                     darkMode=true;
                     buttonDarkMode.setText("Light mode");
                 }
+            }
+        });
+
+        buttonRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recyclerView.setAdapter(null);
+                recyclerView.setLayoutManager(null);
+                recyclerView.getRecycledViewPool().clear();
+                recyclerView.swapAdapter(camerasAdapter, false);
+                recyclerView.setLayoutManager(linearLayoutManager);
+                camerasAdapter.notifyDataSetChanged();
             }
         });
 
