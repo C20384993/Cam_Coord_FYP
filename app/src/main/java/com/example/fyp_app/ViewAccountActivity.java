@@ -184,7 +184,7 @@ public class ViewAccountActivity extends AppCompatActivity {
     public void deleteAccount(String userid){
 
         //Delete function call.
-        Call<Void> accountCall = AccountAPIClient.getUserService(getApplicationContext())
+        Call<Void> accountCall = AccountAPIClient.getUserService()
                 .deleteAccount(userid);
 
         accountCall.enqueue(new Callback<Void>() {

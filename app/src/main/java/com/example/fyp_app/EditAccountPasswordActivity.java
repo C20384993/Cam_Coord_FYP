@@ -185,7 +185,7 @@ public class EditAccountPasswordActivity extends AppCompatActivity {
         accountRequest.setPassword(enteredPassword);
 
         //Make a PUT request to update the database Account table row.
-        Call<AccountResponse> userCall = AccountAPIClient.getUserService(getApplicationContext())
+        Call<AccountResponse> userCall = AccountAPIClient.getUserService()
                 .updateAccount(accountRequest);
 
         userCall.enqueue(new Callback<AccountResponse>() {

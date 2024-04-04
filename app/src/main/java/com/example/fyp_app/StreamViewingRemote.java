@@ -22,10 +22,16 @@ import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.microsoft.azure.storage.blob.CloudBlockBlob;
 
 import java.io.File;
+import java.io.InputStream;
+import java.security.KeyStore;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManagerFactory;
 
 import clients.RecordingAPIClient;
 import models.Recording;
@@ -71,17 +77,39 @@ public class StreamViewingRemote extends AppCompatActivity {
         rtspUrl = getIntent().getStringExtra("rtspurl");
         streamPath = getIntent().getStringExtra("streampath");
 
-        HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
-            @Override
-            public boolean verify(String hostname, SSLSession session) {
-                // Retrieve the actual hostname from the SSL session
-                String actualHostname = session.getPeerHost();
-
-                // Perform hostname verification by comparing actual hostname with expected hostname
-                return hostname.equalsIgnoreCase(actualHostname);
+        //Connect to the HLS stream
+        SSLContext sslContext = null;
+        try {
+            //Read the certificate file from res/raw
+            CertificateFactory cf = CertificateFactory.getInstance("X.509");
+            InputStream certInputStream = getResources().openRawResource(R.raw.server); // Replace R.raw.your_certificate_file with your actual certificate file
+            Certificate ca;
+            try {
+                ca = cf.generateCertificate(certInputStream);
+            } finally {
+                certInputStream.close();
             }
-        });
 
+            // Create a KeyStore containing the trusted certificate
+            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+            keyStore.load(null, null);
+            keyStore.setCertificateEntry("ca", ca);
+
+            // Create a TrustManager that trusts the self-signed certificate
+            TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+            tmf.init(keyStore);
+
+            // Initialize SSLContext with the TrustManager
+            sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, tmf.getTrustManagers(), null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Set SSL socket factory to ExoPlayer
+        if (sslContext != null) {
+            HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
+        }
         //Create ExoPlayer
         StyledPlayerView playerView = findViewById(R.id.player_view);
         player = new ExoPlayer.Builder(StreamViewingRemote.this).build();
@@ -219,7 +247,7 @@ public class StreamViewingRemote extends AppCompatActivity {
 
     //Send the recording details to the database.
     public void Post(Recording recordingRequest){
-        Call<RecordingResponse> recordingCall = RecordingAPIClient.getRecordingService(getApplicationContext())
+        Call<RecordingResponse> recordingCall = RecordingAPIClient.getRecordingService()
                 .sendRecording(recordingRequest);
         recordingCall.enqueue(new Callback<RecordingResponse>() {
             @Override

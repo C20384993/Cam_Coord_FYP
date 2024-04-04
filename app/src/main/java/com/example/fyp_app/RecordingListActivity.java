@@ -34,7 +34,6 @@ public class RecordingListActivity extends AppCompatActivity {
     ProgressBar progressBar;
     LinearLayoutManager linearLayoutManager;
     RecordingsAdapter recordingsAdapter;
-    Button buttonRefresh;
     Button buttonDarkMode;
 
     //Activity Variables
@@ -60,7 +59,6 @@ public class RecordingListActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewRecList);
         progressBar = findViewById(R.id.progressBarRecList);
         buttonDarkMode = findViewById(R.id.button_DarkMode);
-        buttonRefresh = findViewById(R.id.button_refreshList);
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
 
@@ -118,27 +116,12 @@ public class RecordingListActivity extends AppCompatActivity {
                 }
             }
         });
-
-        buttonRefresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                recyclerView.setAdapter(null);
-                recyclerView.setLayoutManager(null);
-                recyclerView.getRecycledViewPool().clear();
-                recyclerView.swapAdapter(recordingsAdapter, false);
-                recyclerView.setLayoutManager(linearLayoutManager);
-                recordingsAdapter.notifyDataSetChanged();
-            }
-        });
     }//end OnCreate
 
     //Fills the RecyclerView with all the recordings associated with the current User ID.
     private void fetchRecordings(String userid){
         progressBar.setVisibility(View.VISIBLE);
-
-        // Load the certificate file
-        InputStream certificateInputStream = getResources().openRawResource(R.raw.keystore);
-        RetrofitClient.getRetrofitClient(certificateInputStream)
+        RetrofitClient.getRetrofitClient()
                 .getRecordings(restUrl +"/Recordings/findall?userid="+userid)
                 .enqueue(new Callback<List<RecordingRecyclerItem>>() {
                     @Override

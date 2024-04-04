@@ -233,7 +233,7 @@ public class EditRecordingActivity extends AppCompatActivity {
                     recordingRequest.setCameraid(Integer.parseInt(cameraId));
 
                     //Send the recordingRequest object.
-                    Call<RecordingResponse> recordingCall = RecordingAPIClient.getRecordingService(getApplicationContext())
+                    Call<RecordingResponse> recordingCall = RecordingAPIClient.getRecordingService()
                             .updateRecording(recordingRequest);
 
                     recordingCall.enqueue(new Callback<RecordingResponse>() {
@@ -392,7 +392,7 @@ public class EditRecordingActivity extends AppCompatActivity {
                 super.onPostExecute(success);
                 if (success) {
                     //Now delete from the database.
-                    Call<Void> recordingCall = RecordingAPIClient.getRecordingService(getApplicationContext()).deleteRecording(currentRecordingId);
+                    Call<Void> recordingCall = RecordingAPIClient.getRecordingService().deleteRecording(currentRecordingId);
                     Log.e("AZURE","recordingid = "+ currentRecordingId);
 
                     recordingCall.enqueue(new Callback<Void>() {

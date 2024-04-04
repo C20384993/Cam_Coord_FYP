@@ -244,7 +244,7 @@ public class StreamViewingLocal extends AppCompatActivity {
 
     //Send the recording details to the database.
     public void Post(Recording recordingRequest){
-        Call<RecordingResponse> recordingCall = RecordingAPIClient.getRecordingService(getApplicationContext())
+        Call<RecordingResponse> recordingCall = RecordingAPIClient.getRecordingService()
                 .sendRecording(recordingRequest);
         recordingCall.enqueue(new Callback<RecordingResponse>() {
             @Override

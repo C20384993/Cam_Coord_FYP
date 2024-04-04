@@ -127,9 +127,7 @@ public class StreamListActivity extends AppCompatActivity {
     //Fills the RecyclerView with all the cameras associated with the current User ID.
     private void fetchStreams(String userid){
         progressBar.setVisibility(View.VISIBLE);
-        // Load the certificate file
-        InputStream certificateInputStream = getResources().openRawResource(R.raw.server);
-        RetrofitClient.getRetrofitClient(certificateInputStream)
+        RetrofitClient.getRetrofitClient()
                 .getCameras(restUrl +"/Cameras/findall?userid="+userid)
                 .enqueue(new Callback<List<CameraRecyclerItem>>() {
                     @Override

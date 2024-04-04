@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //Check database for username entered, GET request with entered username.
-        Call<AccountResponse> userCall = AccountAPIClient.getUserService(getApplicationContext())
+        Call<AccountResponse> userCall = AccountAPIClient.getUserService()
                 .getAccount(restUrl +"/Accounts/getbyusername?username="+enteredUsername);
 
         //Returns the Account object from the database as a response.

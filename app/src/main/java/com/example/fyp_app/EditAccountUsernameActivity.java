@@ -111,7 +111,7 @@ public class EditAccountUsernameActivity extends AppCompatActivity {
         accountRequest.setPassword(currentPassword);
 
         //Check username isn't already being used.
-        Call<AccountResponse> userCall = AccountAPIClient.getUserService(getApplicationContext())
+        Call<AccountResponse> userCall = AccountAPIClient.getUserService()
                 .getAccount(restUrl +"/Accounts/getbyusername?username="+enteredUsername);
 
         userCall.enqueue(new Callback<AccountResponse>() {
@@ -121,7 +121,7 @@ public class EditAccountUsernameActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<AccountResponse> call, Response<AccountResponse> response) {
                 if(response.body().getUserid()==0){
-                    Call<AccountResponse> usernameUpdateCall = AccountAPIClient.getUserService(getApplicationContext())
+                    Call<AccountResponse> usernameUpdateCall = AccountAPIClient.getUserService()
                             .updateAccount(accountRequest);
 
                     usernameUpdateCall.enqueue(new Callback<AccountResponse>() {

@@ -21,49 +21,14 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 public class RetrofitClient {
-    private static final String BASE_URL = "https://172.166.189.197:443/";
     private static Retrofit retrofit = null;
 
-    public static ApiInterface getRetrofitClient(InputStream certificateInputStream) {
-        if (retrofit == null) {
-            OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+    public static ApiInterface getRetrofitClient() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://c20384993fyp.uksouth.cloudapp.azure.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-            try {
-                char[] password = "password".toCharArray();
-                CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-                X509Certificate certificate = (X509Certificate) certificateFactory.generateCertificate(certificateInputStream);
-
-                KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-                keyStore.load(certificateInputStream, password);
-                keyStore.setCertificateEntry("tomcat", certificate);
-
-                TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-                trustManagerFactory.init(keyStore);
-
-                SSLContext sslContext = SSLContext.getInstance("TLS");
-                sslContext.init(null, trustManagerFactory.getTrustManagers(), null);
-
-                httpClient.sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustManagerFactory.getTrustManagers()[0]);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
-                @Override
-                public void log(@NotNull String message) {
-                    Log.d("OkHttp", message);
-                }
-            });
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-            httpClient.addInterceptor(logging);
-
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .client(httpClient.build())
-                    .build();
-        }
         return retrofit.create(ApiInterface.class);
     }
 }

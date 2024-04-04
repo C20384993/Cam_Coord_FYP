@@ -19,48 +19,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import services.CameraAPIService;
 
 public class CameraAPIClient {
-    private static Retrofit getRetrofit(Context context) {
-        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
-        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-        OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
-        httpClientBuilder.addInterceptor(httpLoggingInterceptor);
-
-        try {
-            CertificateFactory cf = CertificateFactory.getInstance("X.509");
-            InputStream certInputStream = context.getResources().openRawResource(R.raw.fullchain);
-            Certificate certificate = cf.generateCertificate(certInputStream);
-
-            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            keyStore.load(null, null);
-            keyStore.setCertificateEntry("certificate", certificate);
-
-            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
-                    TrustManagerFactory.getDefaultAlgorithm());
-            trustManagerFactory.init(keyStore);
-
-            SSLContext sslContext = SSLContext.getInstance("TLS");
-            sslContext.init(null, trustManagerFactory.getTrustManagers(), null);
-
-            httpClientBuilder.sslSocketFactory(sslContext.getSocketFactory(),
-                    (javax.net.ssl.X509TrustManager) trustManagerFactory.getTrustManagers()[0]);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        OkHttpClient okHttpClient = httpClientBuilder.build();
-
+    private static Retrofit getRetrofit() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://c20384993fyp.uksouth.cloudapp.azure.com")
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(okHttpClient)
                 .build();
 
         return retrofit;
     }
 
-    public static CameraAPIService getCameraService(Context context){
-        CameraAPIService cameraAPIService = getRetrofit(context).create(CameraAPIService.class);
+    public static CameraAPIService getCameraService(){
+        CameraAPIService cameraAPIService = getRetrofit().create(CameraAPIService.class);
 
         return cameraAPIService;
     }

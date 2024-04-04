@@ -228,7 +228,7 @@ public class AddCameraActivity extends AppCompatActivity {
 
 
         //Send the cameraRequest object.
-        Call<CameraResponse> cameraCall = CameraAPIClient.getCameraService(getApplicationContext())
+        Call<CameraResponse> cameraCall = CameraAPIClient.getCameraService()
                 .sendCamera(cameraRequest);
 
         cameraCall.enqueue(new Callback<CameraResponse>() {
@@ -248,7 +248,7 @@ public class AddCameraActivity extends AppCompatActivity {
                 cameraRequest.setUserid(Integer.parseInt(accountid));
 
                 //Send the cameraRequest object.
-                Call<CameraResponse> cameraCall = CameraAPIClient.getCameraService(getApplicationContext())
+                Call<CameraResponse> cameraCall = CameraAPIClient.getCameraService()
                         .updateCamera(cameraRequest);
 
                 cameraCall.enqueue(new Callback<CameraResponse>() {
