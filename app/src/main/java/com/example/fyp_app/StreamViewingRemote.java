@@ -174,7 +174,7 @@ public class StreamViewingRemote extends AppCompatActivity {
         @Override
         protected Integer doInBackground(Void... params) {
             //Form the FFmpeg command used to record the RTSP stream
-            String[] command = {"-y", "-i", rtspUrl.toString(),
+            String[] command = {"-y", "-i", streamPath.toString(),
                     "-acodec", "copy", "-vcodec", "copy", "-fflags", "nobuffer",
                     directory.getAbsolutePath()+"/"+outputFile.toString()};
 
