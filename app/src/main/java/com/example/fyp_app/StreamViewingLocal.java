@@ -108,8 +108,10 @@ public class StreamViewingLocal extends AppCompatActivity {
                     startRecording();
                 }//end if
                 else if(isRecording==true){
+                    Log.d("ADebugTag", "In else if");
                     forcedClose = false;
                     FFmpeg.cancel(); //Stop the FFmpeg command executing, which stops the recording.
+                    Log.d("ADebugTag", "after cancel");
                 }
             }
         });

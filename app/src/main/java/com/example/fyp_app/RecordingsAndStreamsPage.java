@@ -20,6 +20,7 @@ public class RecordingsAndStreamsPage extends AppCompatActivity {
     String currentUserId;
     String currentUsername;
     String currentPassword;
+    String currentSalt;
     boolean darkMode = false;
 
     @Override
@@ -31,6 +32,7 @@ public class RecordingsAndStreamsPage extends AppCompatActivity {
         currentUserId = getIntent().getStringExtra("currentuserid");
         currentUsername = getIntent().getStringExtra("username");
         currentPassword = getIntent().getStringExtra("password");
+        currentSalt = getIntent().getStringExtra("salt");
 
         //Locate items from layout.
         buttonViewStreams = findViewById(R.id.button_ViewStreams);
@@ -45,8 +47,9 @@ public class RecordingsAndStreamsPage extends AppCompatActivity {
                         StreamListActivity.class);
 
                 intentStreamList.putExtra("currentuserid", currentUserId);
-                intentStreamList.putExtra("username", currentUserId);
-                intentStreamList.putExtra("password", currentUserId);
+                intentStreamList.putExtra("username", currentUsername);
+                intentStreamList.putExtra("password", currentPassword);
+                intentStreamList.putExtra("salt", currentSalt);
                 startActivity(intentStreamList);
             }
         });
@@ -59,8 +62,9 @@ public class RecordingsAndStreamsPage extends AppCompatActivity {
                         RecordingListActivity.class);
 
                 intentRecordingList.putExtra("currentuserid", currentUserId);
-                intentRecordingList.putExtra("username", currentUserId);
-                intentRecordingList.putExtra("password", currentUserId);
+                intentRecordingList.putExtra("username", currentUsername);
+                intentRecordingList.putExtra("password", currentPassword);
+                intentRecordingList.putExtra("salt", currentSalt);
                 startActivity(intentRecordingList);
             }
         });

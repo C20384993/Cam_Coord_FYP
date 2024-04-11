@@ -29,6 +29,7 @@ public class EditAccountUsernameActivity extends AppCompatActivity {
     String currentUserId;
     String currentUsername;
     String currentPassword;
+    String currentSalt;
     final private String restUrl = "https://c20384993fyp.uksouth.cloudapp.azure.com";
 
     @Override
@@ -44,6 +45,7 @@ public class EditAccountUsernameActivity extends AppCompatActivity {
         currentUserId = getIntent().getStringExtra("currentuserid");
         currentUsername = getIntent().getStringExtra("username");
         currentPassword = getIntent().getStringExtra("password");
+        currentSalt = getIntent().getStringExtra("salt");
 
         //TextWatcher, tracks if the username textfield is empty.
         //If it is empty, the button turns grey.
@@ -109,6 +111,7 @@ public class EditAccountUsernameActivity extends AppCompatActivity {
         accountRequest.setUserid(Integer.parseInt(userid));
         accountRequest.setUsername(enteredUsername);
         accountRequest.setPassword(currentPassword);
+        accountRequest.setSalt(currentSalt);
 
         //Check username isn't already being used.
         Call<AccountResponse> userCall = AccountAPIClient.getUserService()
@@ -141,6 +144,7 @@ public class EditAccountUsernameActivity extends AppCompatActivity {
                             intentViewAccount.putExtra("currentuserid",userid);
                             intentViewAccount.putExtra("username", currentUsername);
                             intentViewAccount.putExtra("password", currentPassword);
+                            intentViewAccount.putExtra("salt", currentSalt);
                             finish();
                             startActivity(intentViewAccount);
                         }
@@ -179,6 +183,7 @@ public class EditAccountUsernameActivity extends AppCompatActivity {
         intentViewAccount.putExtra("currentuserid", currentUserId);
         intentViewAccount.putExtra("username", currentUsername);
         intentViewAccount.putExtra("password", currentPassword);
+        intentViewAccount.putExtra("salt", currentSalt);
         this.finish();
         startActivity(intentViewAccount);
     }

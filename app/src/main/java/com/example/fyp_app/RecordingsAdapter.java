@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import models.CameraRecyclerItem;
 import models.RecordingRecyclerItem;
 
 //Used in the RecordingListActivity for the Recycler View.
@@ -22,6 +23,11 @@ public class RecordingsAdapter extends RecyclerView.Adapter<RecordingsAdapter.Vi
         this.recordingList = recordingList;
         this.mItemListener = itemClickListener;
     }//end RecordingsAdapter
+
+    public void setFilteredList(List<RecordingRecyclerItem> filteredList){
+        this.recordingList = filteredList;
+        notifyDataSetChanged();
+    }
 
     @NonNull
     @Override

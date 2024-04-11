@@ -1,7 +1,7 @@
 package com.example.fyp_app;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,14 +35,14 @@ public class CameraListActivity extends AppCompatActivity {
     LinearLayoutManager linearLayoutManager;
     CamerasAdapter camerasAdapter;
     List<CameraRecyclerItem> cameraList = new ArrayList<>();
+    SearchView searchView;
     Button buttonRefresh;
-    Button buttonDarkMode;
 
     //Activity Variables
     String currentUserId;
     String currentUsername;
     String currentPassword;
-    boolean darkMode = false;
+    String currentSalt;
     final private String restUrl = "https://c20384993fyp.uksouth.cloudapp.azure.com";
 
     @Override
@@ -55,13 +54,15 @@ public class CameraListActivity extends AppCompatActivity {
         currentUserId = getIntent().getStringExtra("currentuserid");
         currentUsername = getIntent().getStringExtra("username");
         currentPassword = getIntent().getStringExtra("password");
+        currentSalt = getIntent().getStringExtra("salt");
 
         //Locate items from layout.
         recyclerViewCamList = findViewById(R.id.recyclerView_CamList);
+        searchView = findViewById(R.id.searchView_CameraList);
+        searchView.clearFocus();
         progressBar = findViewById(R.id.progressBar_CamList);
         buttonAddCamera = findViewById(R.id.button_AddCamera);
         buttonRefresh = findViewById(R.id.button_refreshList);
-        buttonDarkMode = findViewById(R.id.button_DarkMode);
 
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerViewCamList.setLayoutManager(linearLayoutManager);
@@ -79,6 +80,7 @@ public class CameraListActivity extends AppCompatActivity {
                 intentEditCamera.putExtra("userid", currentUserId);
                 intentEditCamera.putExtra("username", currentUsername);
                 intentEditCamera.putExtra("password", currentPassword);
+                intentEditCamera.putExtra("salt", currentSalt);
                 intentEditCamera.putExtra("cameraid",Integer.toString(cameraRecyclerItem
                         .getCameraid()));
                 intentEditCamera.putExtra("customname",cameraRecyclerItem.getCustomname());
@@ -108,7 +110,7 @@ public class CameraListActivity extends AppCompatActivity {
                 intentAddCamera.putExtra("userid", currentUserId);
                 intentAddCamera.putExtra("username", currentUsername);
                 intentAddCamera.putExtra("password", currentPassword);
-
+                intentAddCamera.putExtra("salt", currentSalt);
                 finish();
                 startActivity(intentAddCamera);
             }
@@ -126,47 +128,16 @@ public class CameraListActivity extends AppCompatActivity {
             }
         });
 
-        //Dark Mode checks
-        if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO){
-            darkMode = false;
-            buttonDarkMode.setText("Dark mode");
-            buttonDarkMode.setBackgroundColor(getResources().getColor(R.color.dark));
-        }
-        else if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES){
-            darkMode = true;
-            buttonDarkMode.setText("Light mode");
-            buttonDarkMode.setBackgroundColor(getResources().getColor(R.color.light_blue));
-        }
-        else{
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        }
-        buttonDarkMode.setOnClickListener(new View.OnClickListener() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onClick(View v) {
-                if(darkMode){
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    buttonDarkMode.setText("Dark mode");
-                    darkMode = false;
-                    recyclerViewCamList.setAdapter(null);
-                    recyclerViewCamList.setLayoutManager(null);
-                    recyclerViewCamList.getRecycledViewPool().clear();
-                    recyclerViewCamList.swapAdapter(camerasAdapter, false);
-                    recyclerViewCamList.setLayoutManager(linearLayoutManager);
-                    camerasAdapter.notifyDataSetChanged();
-                    fetchCameras(currentUserId);
-                }
-                else{
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    darkMode=true;
-                    buttonDarkMode.setText("Light mode");
-                    recyclerViewCamList.setAdapter(null);
-                    recyclerViewCamList.setLayoutManager(null);
-                    recyclerViewCamList.getRecycledViewPool().clear();
-                    recyclerViewCamList.swapAdapter(camerasAdapter, false);
-                    recyclerViewCamList.setLayoutManager(linearLayoutManager);
-                    camerasAdapter.notifyDataSetChanged();
-                    fetchCameras(currentUserId);
-                }
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterList(newText);
+                return true;
             }
         });
     }//end onCreate
@@ -203,6 +174,16 @@ public class CameraListActivity extends AppCompatActivity {
                     }//end onFailure
             });
     }//end fetchCameras
+
+    private void filterList(String text){
+        List<CameraRecyclerItem> filteredList = new ArrayList<>();
+        for(CameraRecyclerItem cameraRecyclerItem : cameraList){
+            if(cameraRecyclerItem.getCustomname().toLowerCase().contains(text.toLowerCase())){
+                filteredList.add(cameraRecyclerItem);
+            }
+        }
+        camerasAdapter.setFilteredList(filteredList);
+    }//end filterList
 
     @Override
     public void onBackPressed() {

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ public class AddCameraActivity extends AppCompatActivity {
     String currentUserId;
     String currentUsername;
     String currentPassword;
+    String currentSalt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,7 @@ public class AddCameraActivity extends AppCompatActivity {
         currentUserId = getIntent().getStringExtra("userid");
         currentUsername = getIntent().getStringExtra("username");
         currentPassword = getIntent().getStringExtra("password");
+        currentSalt = getIntent().getStringExtra("salt");
 
         //Locate items from layout.
         editTextCamName = findViewById(R.id.editText_AddCamName);
@@ -180,6 +183,7 @@ public class AddCameraActivity extends AppCompatActivity {
                 intentCameraList.putExtra("currentuserid",currentUserId);
                 intentCameraList.putExtra("username",currentUsername);
                 intentCameraList.putExtra("password",currentPassword);
+                intentCameraList.putExtra("salt",currentSalt);
                 finish();
                 startActivity(intentCameraList);
             }
@@ -214,6 +218,12 @@ public class AddCameraActivity extends AppCompatActivity {
         }
         if(enteredLocalIP.isEmpty()){
             editTextRtspUrl.setError("Please enter camera Local IP");
+            return;
+        }
+
+        //IP format check
+        if(!Patterns.IP_ADDRESS.matcher(enteredLocalIP).matches()){
+            editTextRtspUrl.setError("Please enter a valid IPv4 address");
             return;
         }
 

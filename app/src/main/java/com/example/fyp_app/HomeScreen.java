@@ -28,6 +28,7 @@ public class HomeScreen extends AppCompatActivity {
     String currentUserId;
     String currentUsername;
     String currentPassword;
+    String currentSalt;
     boolean darkMode = false;
 
     @Override
@@ -40,6 +41,7 @@ public class HomeScreen extends AppCompatActivity {
         currentUserId = getIntent().getStringExtra("currentuserid");
         currentUsername = getIntent().getStringExtra("username");
         currentPassword = getIntent().getStringExtra("password");
+        currentSalt = getIntent().getStringExtra("salt");
 
         //Locate items from layout
         buttonCameraList = findViewById(R.id.button_CameraList);
@@ -59,6 +61,7 @@ public class HomeScreen extends AppCompatActivity {
                 intentCameraList.putExtra("currentuserid", currentUserId);
                 intentCameraList.putExtra("username", currentUsername);
                 intentCameraList.putExtra("password", currentPassword);
+                intentCameraList.putExtra("salt", currentSalt);
                 startActivity(intentCameraList);
             }
         });
@@ -74,6 +77,7 @@ public class HomeScreen extends AppCompatActivity {
                 intentRecOpt.putExtra("currentuserid", currentUserId);
                 intentRecOpt.putExtra("username", currentUsername);
                 intentRecOpt.putExtra("password", currentPassword);
+                intentRecOpt.putExtra("salt", currentSalt);
                 startActivity(intentRecOpt);
             }
         });
@@ -163,6 +167,7 @@ public class HomeScreen extends AppCompatActivity {
             intentEditAccount.putExtra("currentuserid", currentUserId);
             intentEditAccount.putExtra("username", currentUsername);
             intentEditAccount.putExtra("password", currentPassword);
+            intentEditAccount.putExtra("salt", currentSalt);
             startActivity(intentEditAccount);
         }
         //Return user to Main Activity (Landing page) and finish() to remove the current details.

@@ -5,6 +5,7 @@ public class AccountResponse {
     private int userid;
     private String username;
     private String password;
+    private String salt;
 
     public int getUserid() {
         return userid;
@@ -28,5 +29,13 @@ public class AccountResponse {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 }

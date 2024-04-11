@@ -12,6 +12,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Base64;
+
 import clients.AccountAPIClient;
 import models.Account;
 import models.AccountResponse;
@@ -201,8 +206,11 @@ public class CreateAccountActivity extends AppCompatActivity {
     //Create a model containing the values to be put into the JSON object for the POST request.
     public Account createAccountRequest(String enteredUsername, String enteredPassword){
         Account accountRequest = new Account();
+        //Create a salt value for the account.
+        byte[] salt = generateSalt();
         accountRequest.setUsername(enteredUsername);
-        accountRequest.setPassword(enteredPassword);
+        accountRequest.setPassword(hashPassword(enteredPassword, salt));
+        accountRequest.setSalt(Base64.getEncoder().encodeToString(salt));
         return accountRequest;
     }
 
@@ -228,4 +236,34 @@ public class CreateAccountActivity extends AppCompatActivity {
             }
         });
     }//end post
+
+    public static String hashPassword(String password, byte[] salt) {
+        try {
+            //Create MessageDigest instance for SHA-512. Use salt value to increase hash length
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
+            messageDigest.update(salt);
+            messageDigest.update(password.getBytes());
+            byte[] hashedBytes = messageDigest.digest();
+
+            //Combine the salt value to the hashed password to increase complexity.
+            byte[] combined = new byte[salt.length + hashedBytes.length];
+            System.arraycopy(salt, 0, combined, 0, salt.length);
+            System.arraycopy(hashedBytes, 0, combined, salt.length, hashedBytes.length);
+
+            //Convert bytes to Base64 format, allows it to be stored in Varchar.
+            return Base64.getEncoder().encodeToString(combined);
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }//end hashPassword
+
+    private static byte[] generateSalt() {
+        //Generate a salt value using the SecureRandom class.
+        SecureRandom secureRandom = new SecureRandom();
+        byte[] salt = new byte[16]; //16 bytes = 128-bits, minimum value for decent security.
+        secureRandom.nextBytes(salt);
+        return salt;
+    }//end generateSalt
 }

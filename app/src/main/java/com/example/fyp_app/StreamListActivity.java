@@ -2,6 +2,7 @@ package com.example.fyp_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,16 +30,15 @@ public class StreamListActivity extends AppCompatActivity {
     //Layout items
     TextView noDataMessage;
     RecyclerView recyclerView;
+    SearchView searchView;
     ProgressBar progressBar;
     LinearLayoutManager linearLayoutManager;
     CamerasAdapter camerasAdapter;
     List<CameraRecyclerItem> cameraList = new ArrayList<>();
     Button buttonRefresh;
-    Button buttonDarkMode;
 
     //Activity variables
     String currentUserId;
-    boolean darkMode = false;
     final private String restUrl = "https://c20384993fyp.uksouth.cloudapp.azure.com";
 
     @Override
@@ -50,10 +50,10 @@ public class StreamListActivity extends AppCompatActivity {
         currentUserId = getIntent().getStringExtra("currentuserid");
         recyclerView = findViewById(R.id.recyclerViewStreamList);
         progressBar = findViewById(R.id.progressBarStreamList);
+        searchView = findViewById(R.id.searchView_StreamList);
 
         linearLayoutManager = new LinearLayoutManager(this);
 
-        buttonDarkMode = findViewById(R.id.button_DarkMode);
         buttonRefresh = findViewById(R.id.button_refreshList);
         recyclerView.setLayoutManager(linearLayoutManager);
         noDataMessage = findViewById(R.id.textView_NoStreamsAlert);
@@ -80,36 +80,6 @@ public class StreamListActivity extends AppCompatActivity {
         //Display all cameras managed by the user.
         fetchStreams(currentUserId);
 
-        //Dark Mode checks
-        if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO){
-            darkMode = false;
-            buttonDarkMode.setText("Dark mode");
-            buttonDarkMode.setBackgroundColor(getResources().getColor(R.color.dark));
-        }
-        else if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES){
-            darkMode = true;
-            buttonDarkMode.setText("Light mode");
-            buttonDarkMode.setBackgroundColor(getResources().getColor(R.color.light_blue));
-        }
-        else{
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        }
-        buttonDarkMode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(darkMode){
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    buttonDarkMode.setText("Dark mode");
-                    darkMode = false;
-                }
-                else{
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    darkMode=true;
-                    buttonDarkMode.setText("Light mode");
-                }
-            }
-        });
-
         buttonRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,6 +89,19 @@ public class StreamListActivity extends AppCompatActivity {
                 recyclerView.swapAdapter(camerasAdapter, false);
                 recyclerView.setLayoutManager(linearLayoutManager);
                 camerasAdapter.notifyDataSetChanged();
+            }
+        });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterList(newText);
+                return true;
             }
         });
 
@@ -154,5 +137,15 @@ public class StreamListActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-    }//end fetchCameras
+    }//end fetchStreams
+
+    private void filterList(String text){
+        List<CameraRecyclerItem> filteredList = new ArrayList<>();
+        for(CameraRecyclerItem cameraRecyclerItem : cameraList){
+            if(cameraRecyclerItem.getCustomname().toLowerCase().contains(text.toLowerCase())){
+                filteredList.add(cameraRecyclerItem);
+            }
+        }
+        camerasAdapter.setFilteredList(filteredList);
+    }//end filterList
 }

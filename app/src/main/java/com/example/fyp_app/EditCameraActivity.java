@@ -33,6 +33,7 @@ public class EditCameraActivity extends AppCompatActivity {
     String currentUserId;
     String currentUsername;
     String currentPassword;
+    String currentSalt;
     String cameraId;
     String rtspUrl;
     String streamPath;
@@ -47,6 +48,7 @@ public class EditCameraActivity extends AppCompatActivity {
         currentUserId = getIntent().getStringExtra("userid");
         currentUsername = getIntent().getStringExtra("username");
         currentPassword = getIntent().getStringExtra("password");
+        currentSalt = getIntent().getStringExtra("salt");
         cameraId = getIntent().getStringExtra("cameraid");
         rtspUrl = getIntent().getStringExtra("rtspurl");
         streamPath = getIntent().getStringExtra("streampath");
@@ -266,6 +268,7 @@ public class EditCameraActivity extends AppCompatActivity {
                 intentCameraList.putExtra("currentuserid",accountId);
                 intentCameraList.putExtra("username", currentUsername);
                 intentCameraList.putExtra("password", currentPassword);
+                intentCameraList.putExtra("salt", currentSalt);
                 finish();
                 startActivity(intentCameraList);
             }
@@ -296,6 +299,7 @@ public class EditCameraActivity extends AppCompatActivity {
                 intentCamList.putExtra("currentuserid",accountId);
                 intentCamList.putExtra("username", currentUsername);
                 intentCamList.putExtra("password", currentPassword);
+                intentCamList.putExtra("salt", currentSalt);
                 finish();
                 startActivity(intentCamList);
             }
@@ -317,6 +321,7 @@ public class EditCameraActivity extends AppCompatActivity {
         intentCamList.putExtra("currentuserid", currentUserId);
         intentCamList.putExtra("username", currentUsername);
         intentCamList.putExtra("password", currentPassword);
+        intentCamList.putExtra("salt", currentSalt);
         this.finish();
         startActivity(intentCamList);
     }

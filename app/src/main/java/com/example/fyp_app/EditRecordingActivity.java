@@ -43,6 +43,7 @@ public class EditRecordingActivity extends AppCompatActivity {
     String currentUserId;
     String currentUsername;
     String currentPassword;
+    String currentSalt;
     String currentRecordingId;
     String cameraId;
     String creationDate;
@@ -63,6 +64,7 @@ public class EditRecordingActivity extends AppCompatActivity {
         currentUserId = getIntent().getStringExtra("userid");
         currentUsername = getIntent().getStringExtra("username");
         currentPassword = getIntent().getStringExtra("password");
+        currentSalt = getIntent().getStringExtra("salt");
         currentRecordingId = getIntent().getStringExtra("recordingid");
         cameraId = getIntent().getStringExtra("cameraid");
         customName = getIntent().getStringExtra("customname");
@@ -247,6 +249,7 @@ public class EditRecordingActivity extends AppCompatActivity {
                             intentRecList.putExtra("currentuserid",currentUserId);
                             intentRecList.putExtra("username", currentUsername);
                             intentRecList.putExtra("password", currentPassword);
+                            intentRecList.putExtra("salt", currentSalt);
                             finish();
                             startActivity(intentRecList);
                         }
@@ -338,6 +341,7 @@ public class EditRecordingActivity extends AppCompatActivity {
                     intentViewRecording.putExtra("userid",userid);
                     intentViewRecording.putExtra("username", currentUsername);
                     intentViewRecording.putExtra("password", currentPassword);
+                    intentViewRecording.putExtra("salt", currentSalt);
                     intentViewRecording.putExtra("cameraid", cameraId);
                     intentViewRecording.putExtra("recordingname", originalCustomName);
                     intentViewRecording.putExtra("recordingid", currentRecordingId);
@@ -406,6 +410,7 @@ public class EditRecordingActivity extends AppCompatActivity {
                             intentRecList.putExtra("currentuserid",currentUserId);
                             intentRecList.putExtra("username", currentUsername);
                             intentRecList.putExtra("password", currentPassword);
+                            intentRecList.putExtra("salt", currentSalt);
                             finish();
                             startActivity(intentRecList);
                         }
@@ -435,6 +440,7 @@ public class EditRecordingActivity extends AppCompatActivity {
         intentRecList.putExtra("currentuserid", currentUserId);
         intentRecList.putExtra("username", currentUsername);
         intentRecList.putExtra("password", currentPassword);
+        intentRecList.putExtra("salt", currentSalt);
         this.finish();
         startActivity(intentRecList);
     }

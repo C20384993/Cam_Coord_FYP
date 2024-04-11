@@ -102,6 +102,15 @@ public class StreamViewingRemote extends AppCompatActivity {
             // Initialize SSLContext with the TrustManager
             sslContext = SSLContext.getInstance("TLS");
             sslContext.init(null, tmf.getTrustManagers(), null);
+
+            // Set a hostname verifier to verify the server hostname
+            HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                    // Allow any hostname
+                    return true;
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +20,7 @@ import java.util.List;
 
 
 import clients.RetrofitClient;
+import models.CameraRecyclerItem;
 import models.RecordingRecyclerItem;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,16 +32,16 @@ public class RecordingListActivity extends AppCompatActivity {
     //Layout items
     TextView textViewNoDataMessage;
     RecyclerView recyclerView;
+    SearchView searchView;
     ProgressBar progressBar;
     LinearLayoutManager linearLayoutManager;
     RecordingsAdapter recordingsAdapter;
-    Button buttonDarkMode;
 
     //Activity Variables
     String currentUserId;
     String currentUsername;
     String currentPassword;
-    boolean darkMode = false;
+    String currentSalt;
     List<RecordingRecyclerItem> recordingList = new ArrayList<>();
     final private String restUrl = "https://c20384993fyp.uksouth.cloudapp.azure.com";
 
@@ -52,12 +54,13 @@ public class RecordingListActivity extends AppCompatActivity {
         currentUserId = getIntent().getStringExtra("currentuserid");
         currentUsername = getIntent().getStringExtra("username");
         currentPassword = getIntent().getStringExtra("password");
+        currentSalt = getIntent().getStringExtra("salt");
 
         //Locate items from layout.
         textViewNoDataMessage = findViewById(R.id.textView_NoRecordings);
-        recyclerView = findViewById(R.id.recyclerViewRecList);
+        recyclerView = findViewById(R.id.recyclerView_RecList);
+        searchView = findViewById(R.id.searchView_RecordingList);
         progressBar = findViewById(R.id.progressBarRecList);
-        buttonDarkMode = findViewById(R.id.button_DarkMode);
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
 
@@ -71,6 +74,7 @@ public class RecordingListActivity extends AppCompatActivity {
                 intentRecordingCamera.putExtra("userid", currentUserId);
                 intentRecordingCamera.putExtra("username", currentUsername);
                 intentRecordingCamera.putExtra("password", currentPassword);
+                intentRecordingCamera.putExtra("salt", currentSalt);
                 intentRecordingCamera.putExtra("cameraid",Integer.toString(recordingRecyclerItem.getCameraid()));
                 intentRecordingCamera.putExtra("customname",recordingRecyclerItem.getCustomname());
                 intentRecordingCamera.putExtra("relativefilepath",recordingRecyclerItem.getRelativefilepath());
@@ -86,33 +90,16 @@ public class RecordingListActivity extends AppCompatActivity {
         //Retrieve the list of recordings for the user's account.
         fetchRecordings(currentUserId);
 
-        //Dark Mode checks.
-        if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO){
-            darkMode = false;
-            buttonDarkMode.setText("Dark mode");
-            buttonDarkMode.setBackgroundColor(getResources().getColor(R.color.dark));
-        }
-        else if(AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES){
-            darkMode = true;
-            buttonDarkMode.setText("Light mode");
-            buttonDarkMode.setBackgroundColor(getResources().getColor(R.color.light_blue));
-        }
-        else{
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        }
-        buttonDarkMode.setOnClickListener(new View.OnClickListener() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onClick(View v) {
-                if(darkMode){
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    buttonDarkMode.setText("Dark mode");
-                    darkMode = false;
-                }
-                else{
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    darkMode=true;
-                    buttonDarkMode.setText("Light mode");
-                }
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterList(newText);
+                return true;
             }
         });
     }//end OnCreate
@@ -148,6 +135,16 @@ public class RecordingListActivity extends AppCompatActivity {
                     }//end onFailure
                 });
     }//end fetchRecordings
+
+    private void filterList(String text){
+        List<RecordingRecyclerItem> filteredList = new ArrayList<>();
+        for(RecordingRecyclerItem recordingRecyclerItem : recordingList){
+            if(recordingRecyclerItem.getCustomname().toLowerCase().contains(text.toLowerCase())){
+                filteredList.add(recordingRecyclerItem);
+            }
+        }
+        recordingsAdapter.setFilteredList(filteredList);
+    }//end filterList
 
     @Override
     public void onBackPressed() {

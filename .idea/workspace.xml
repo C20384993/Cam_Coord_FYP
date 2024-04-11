@@ -18,7 +18,28 @@
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/AddCameraActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/AddCameraActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/CameraListActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/CameraListActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/CamerasAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/CamerasAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/CreateAccountActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/CreateAccountActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/EditAccountPasswordActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/EditAccountPasswordActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/EditAccountUsernameActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/EditAccountUsernameActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/EditCameraActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/EditCameraActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/EditRecordingActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/EditRecordingActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/HomeScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/HomeScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/RecordingListActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/RecordingListActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/RecordingsAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/RecordingsAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/RecordingsAndStreamsPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/RecordingsAndStreamsPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/StreamListActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/StreamListActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/StreamViewingLocal.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/StreamViewingLocal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/StreamViewingRemote.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/StreamViewingRemote.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/ViewAccountActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/fyp_app/ViewAccountActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/models/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/models/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/models/AccountResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/models/AccountResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_camera_list.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_camera_list.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_recording_list.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_recording_list.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_stream_list.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_stream_list.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

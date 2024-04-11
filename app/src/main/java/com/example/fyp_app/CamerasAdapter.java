@@ -34,6 +34,11 @@ public class CamerasAdapter extends RecyclerView.Adapter<CamerasAdapter.ViewHold
         this.mItemListener = itemClickListener;
     }//end Constructor
 
+    public void setFilteredList(List<CameraRecyclerItem> filteredList){
+        this.cameraList = filteredList;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -53,10 +58,10 @@ public class CamerasAdapter extends RecyclerView.Adapter<CamerasAdapter.ViewHold
         cameraIp = cameraIp.substring(cameraIp.indexOf("@") + 1);
         cameraIp = cameraIp.substring(0, cameraIp.indexOf(":"));
 
-        // Check RTSP URL availability
+        //Check RTSP stream and Media Server availability
         new CheckRTSPTask(holder, cameraIp).execute();
-
         new CheckHLSTask(holder, cameraList.get(position).getStreampath()).execute();
+
 
         holder.itemView.setOnClickListener(view -> {
             mItemListener.onItemClick(cameraList.get(position)); //Returns item position.
@@ -110,7 +115,7 @@ public class CamerasAdapter extends RecyclerView.Adapter<CamerasAdapter.ViewHold
                 //Create a socket object, attempt to make a connection through it.
                 SocketAddress rtspSocketAddress = new InetSocketAddress(rtspIp, port);
                 Socket rtspSocket = new Socket();
-                int timeoutMs = 2000;
+                int timeoutMs = 100;
                 rtspSocket.connect(rtspSocketAddress, timeoutMs);
                 available = true;
                 rtspSocket.close();
@@ -158,7 +163,7 @@ public class CamerasAdapter extends RecyclerView.Adapter<CamerasAdapter.ViewHold
                 //Create a connection to the HLS streaming URL to test if it is up.
                 URL remoteUrl = new URL(hlsUrl);
                 remoteStreamConnection = (HttpsURLConnection) remoteUrl.openConnection();
-                remoteStreamConnection.setConnectTimeout(2000);
+                remoteStreamConnection.setConnectTimeout(100);
                 remoteStreamConnection.connect();
                 exists = true;
             } catch (IOException e) {

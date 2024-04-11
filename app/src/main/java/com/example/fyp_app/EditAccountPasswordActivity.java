@@ -11,6 +11,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Base64;
+
 import clients.AccountAPIClient;
 import models.AccountResponse;
 import retrofit2.Call;
@@ -30,6 +35,7 @@ public class EditAccountPasswordActivity extends AppCompatActivity {
     String currentUserId;
     String currentUsername;
     String currentPassword;
+    String currentSalt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +52,7 @@ public class EditAccountPasswordActivity extends AppCompatActivity {
         currentUserId = getIntent().getStringExtra("currentuserid");
         currentUsername = getIntent().getStringExtra("username");
         currentPassword = getIntent().getStringExtra("password");
+        currentSalt = getIntent().getStringExtra("salt");
 
         //TextWatcher, tracks if the password textfields are empty.
         //If all are empty, the button turns grey.
@@ -181,8 +188,10 @@ public class EditAccountPasswordActivity extends AppCompatActivity {
         //Create the Account object that will update the one in the database.
         AccountResponse accountRequest = new AccountResponse();
         accountRequest.setUserid(Integer.parseInt(accountId));
+        byte[] salt = generateSalt(); //Generate a new salt value for the account
         accountRequest.setUsername(currentUsername);
-        accountRequest.setPassword(enteredPassword);
+        accountRequest.setPassword(hashPassword(enteredPassword, salt));
+        accountRequest.setSalt(Base64.getEncoder().encodeToString(salt));
 
         //Make a PUT request to update the database Account table row.
         Call<AccountResponse> userCall = AccountAPIClient.getUserService()
@@ -202,6 +211,7 @@ public class EditAccountPasswordActivity extends AppCompatActivity {
                 intentViewAccount.putExtra("currentuserid",accountId);
                 intentViewAccount.putExtra("username", currentUsername);
                 intentViewAccount.putExtra("password",enteredPassword);
+                intentViewAccount.putExtra("salt",salt);
                 finish();
                 startActivity(intentViewAccount);
             }
@@ -213,6 +223,35 @@ public class EditAccountPasswordActivity extends AppCompatActivity {
             }
         });
     }//end saveChanges
+
+    public static String hashPassword(String password, byte[] salt) {
+        try {
+            //Create MessageDigest instance for SHA-512. Use salt value to increase hash length
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
+            messageDigest.update(salt);
+            messageDigest.update(password.getBytes());
+            byte[] hashedBytes = messageDigest.digest();
+
+            //Combine the salt value to the hashed password to increase complexity.
+            byte[] combined = new byte[salt.length + hashedBytes.length];
+            System.arraycopy(salt, 0, combined, 0, salt.length);
+            System.arraycopy(hashedBytes, 0, combined, salt.length, hashedBytes.length);
+
+            //Convert bytes to Base64 format, allows it to be stored in Varchar.
+            return Base64.getEncoder().encodeToString(combined);
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }//end hashPassword
+    private static byte[] generateSalt() {
+        //Generate a salt value using the SecureRandom class.
+        SecureRandom secureRandom = new SecureRandom();
+        byte[] salt = new byte[16]; //16 bytes = 128-bits, minimum value for decent security.
+        secureRandom.nextBytes(salt);
+        return salt;
+    }//end generateSalt
 
 
     //Return to previous activity.

@@ -14,6 +14,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
+
 import clients.AccountAPIClient;
 import models.AccountResponse;
 import retrofit2.Call;
@@ -176,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
                     //Get the username, password, and ID of the returned account.
                     String responseUsername = response.body().getUsername();
                     String responsePassword = response.body().getPassword();
+                    String responseSalt = response.body().getSalt();
                     int responseUserid = response.body().getUserid();
 
                     //The REST API will return a userID of 0 if an account with the entered
@@ -186,14 +191,16 @@ public class MainActivity extends AppCompatActivity {
                         return;
                     }
 
+                    //Hash the entered password with SHA512 and salt and compare to responsePassword
                     //Check passwords match, and if they do then pass user details to the
                     //HomeScreen Activity.
-                    if(enteredPassword.equals(responsePassword)){
+                    if(hashPassword(enteredPassword, Base64.getDecoder().decode(responseSalt)).equals(responsePassword)){
                         Intent intentHomeScreen = new Intent(MainActivity.this,
                                 HomeScreen.class);
 
                         intentHomeScreen.putExtra("username",responseUsername);
-                        intentHomeScreen.putExtra("password",responsePassword);
+                        intentHomeScreen.putExtra("password",enteredPassword);
+                        intentHomeScreen.putExtra("salt",responseSalt);
                         intentHomeScreen.putExtra("currentuserid",
                                 String.valueOf(responseUserid));
                         startActivity(intentHomeScreen);
@@ -221,4 +228,31 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }//end login
+    public static String hashPassword(String password, byte[] salt) {
+        try {
+            // Create MessageDigest instance for SHA-512
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
+
+            // Add salt bytes to digest
+            messageDigest.update(salt);
+
+            // Add password bytes to digest
+            messageDigest.update(password.getBytes());
+
+            // Get the hashed bytes
+            byte[] hashedBytes = messageDigest.digest();
+
+            // Combine the salt and hashed password
+            byte[] combined = new byte[salt.length + hashedBytes.length];
+            System.arraycopy(salt, 0, combined, 0, salt.length);
+            System.arraycopy(hashedBytes, 0, combined, salt.length, hashedBytes.length);
+
+            // Convert bytes to Base64 format
+            return Base64.getEncoder().encodeToString(combined);
+        } catch (NoSuchAlgorithmException e) {
+            // Handle NoSuchAlgorithmException
+            e.printStackTrace();
+            return null;
+        }
+    }//end hashPassword
 }

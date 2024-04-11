@@ -43,6 +43,7 @@ public class ViewAccountActivity extends AppCompatActivity {
     String currentUserId;
     String currentUsername;
     String currentPassword;
+    String currentSalt;
     String storageConnectionString = "DefaultEndpointsProtocol=https;AccountName=c20384993fypstorage;AccountKey=0/AH0LCag12HGTA1hw+kXlCdj/0fJ9sew5o9nytBW3tac4gFiwpmEgwWOqlA+c4C4hHKg5SdgSCm+ASt4ij9LQ==;EndpointSuffix=core.windows.net";
 
 
@@ -63,6 +64,7 @@ public class ViewAccountActivity extends AppCompatActivity {
         currentUserId = getIntent().getStringExtra("currentuserid");
         currentUsername = getIntent().getStringExtra("username");
         currentPassword = getIntent().getStringExtra("password");
+        currentSalt = getIntent().getStringExtra("salt");
 
         //Hide the user's password by showing an empty string by default.
         String hiddenPassword = "";
@@ -81,6 +83,7 @@ public class ViewAccountActivity extends AppCompatActivity {
                 intentEditUsername.putExtra("currentuserid", currentUserId);
                 intentEditUsername.putExtra("username", currentUsername);
                 intentEditUsername.putExtra("password", currentPassword);
+                intentEditUsername.putExtra("salt", currentSalt);
                 finish();
                 startActivity(intentEditUsername);
             }
@@ -96,6 +99,7 @@ public class ViewAccountActivity extends AppCompatActivity {
                 intentEditPassword.putExtra("currentuserid", currentUserId);
                 intentEditPassword.putExtra("username", currentUsername);
                 intentEditPassword.putExtra("password", currentPassword);
+                intentEditPassword.putExtra("salt", currentSalt);
                 finish();
                 startActivity(intentEditPassword);
             }
@@ -115,14 +119,10 @@ public class ViewAccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(textViewAccountPassword.getText().equals("Password: "+hiddenPassword)){
-                    Log.e("AZURE","in if");
-                    Log.e("AZURE","gettext = "+ textViewAccountPassword.getText());
                     textViewAccountPassword.setText("Password: "+ currentPassword);
                     textViewRevealPass.setText("Click to hide");
                 }
                 else{
-                    Log.e("AZURE","in else");
-                    Log.e("AZURE","gettext = "+ textViewAccountPassword.getText());
                     textViewAccountPassword.setText("Password: "+hiddenPassword);
                     textViewRevealPass.setText("Click to show");
                 }
@@ -222,6 +222,7 @@ public class ViewAccountActivity extends AppCompatActivity {
         intentHomeScreen.putExtra("currentuserid", currentUserId);
         intentHomeScreen.putExtra("username", currentUsername);
         intentHomeScreen.putExtra("password", currentPassword);
+        intentHomeScreen.putExtra("salt", currentSalt);
         super.onBackPressed();
         this.finish();
         startActivity(intentHomeScreen);
@@ -269,5 +270,5 @@ public class ViewAccountActivity extends AppCompatActivity {
         };
 
         task.execute();
-    }//end deleteRecording
+    }//end deleteRecordings
 }

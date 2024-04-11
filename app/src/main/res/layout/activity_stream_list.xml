@@ -6,10 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".StreamListActivity">
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView_StreamList"
+        android:layout_width="363dp"
+        android:layout_height="47dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.461"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.765"
+        app:queryHint="Search by Camera Name"
+        app:iconifiedByDefault="false"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewStreamList"
-        android:layout_width="368dp"
-        android:layout_height="486dp"
+        android:layout_width="363dp"
+        android:layout_height="397dp"
         android:layout_marginTop="65dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,19 +64,6 @@
         app:layout_constraintVertical_bias="0.062" />
 
     <Button
-        android:id="@+id/button_DarkMode"
-        android:layout_width="145dp"
-        android:layout_height="51dp"
-        android:backgroundTint="@color/dark"
-        android:text="Darkmode"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.109"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.866" />
-
-    <Button
         android:id="@+id/button_refreshList"
         android:layout_width="135dp"
         android:layout_height="51dp"
@@ -71,9 +71,8 @@
         android:text="Refresh List"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.835"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.866" />
+        app:layout_constraintVertical_bias="0.895" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
